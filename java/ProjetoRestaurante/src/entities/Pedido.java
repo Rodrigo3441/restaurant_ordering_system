@@ -17,7 +17,6 @@ public class Pedido {
 	 */
 	public Pedido(String status, String cpfEntregador, String cnpjRestaurante,
 			String cpfCliente) {
-		this.numeroPedido = numeroPedido;
 		this.status = status;
 		this.cpfEntregador = cpfEntregador;
 		this.cnpjRestaurante = cnpjRestaurante;

@@ -5,16 +5,9 @@ public class ItemPedido {
 	private Integer codigoProduto;
 	private Integer quantidade;
 	
-	/**
-	 * 
-	 * @param numeroPedido
-	 * @param codigoProduto
-	 * @param quantidade
-	 */
-	public ItemPedido(Integer numeroPedido, Integer codigoProduto, Integer quantidade) {
-		this.numeroPedido = numeroPedido;
-		this.codigoProduto = codigoProduto;
-		this.quantidade = quantidade;
+	
+	public ItemPedido() {
+		
 	}
 
 	/**
