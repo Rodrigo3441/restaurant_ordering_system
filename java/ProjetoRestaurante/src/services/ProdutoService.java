@@ -1,7 +1,7 @@
 package services;
 
 import database.ProdutoDAO;
-import database.DatabaseConnection;
+import java.sql.Connection;
 import entities.Produto;
 
 /**
@@ -19,10 +19,10 @@ import entities.Produto;
  */
 public class ProdutoService {
 	//conexão com o banco de dados que será usada em todas as operações
-	private ProdutoDAO dao = new ProdutoDAO(DatabaseConnection.getConnection());
+	private ProdutoDAO dao;
 	
-	public ProdutoService() {
-		
+	public ProdutoService(Connection conn) {
+		this.dao = new ProdutoDAO(conn);
 	}
 
 	/**
@@ -82,38 +82,18 @@ public class ProdutoService {
 		return dao.inserirProduto(p);
 	}
 	
-	/**
-	 * 
-	 * @param nome
-	 * @return
-	 */
 	private boolean nomeValido(String nome) {
 		return nome.length() >= 3 && nome.length() < 40;
 	}
 	
-	/**
-	 * 
-	 * @param descricao
-	 * @return
-	 */
 	private boolean descricaoValida(String descricao) {
 		return descricao.length() < 255;
 	}
 	
-	/**
-	 * 
-	 * @param codigo
-	 * @return
-	 */
 	private boolean codigoValido(int codigo) {
 		return codigo > 0 && codigo < 2_000_000_000;
 	}
 	
-	/**
-	 * 
-	 * @param codigo
-	 * @return
-	 */
 	private boolean codigoDisponivel(int codigo) {
 		return dao.retornarProdutoPorId(codigo) == null;
 	}

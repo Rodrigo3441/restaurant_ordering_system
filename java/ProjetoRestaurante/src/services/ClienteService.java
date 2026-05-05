@@ -1,5 +1,7 @@
 package services;
 
+import java.sql.Connection;
+
 import database.ClienteDAO;
 import entities.Cliente;
 
@@ -26,8 +28,8 @@ public class ClienteService {
 	 * 
 	 * @param dao objeto AccesoDadosCliente
 	 */
-	public ClienteService(ClienteDAO dao) {
-		this.dao = dao;
+	public ClienteService(Connection conn) {
+		this.dao = new ClienteDAO(conn);
 	}
 	
 	/**
@@ -209,91 +211,52 @@ public class ClienteService {
 	}
 	
 	/**
-	 * Método cadastrarCliente
-	 * @param r
-	 * @return êxito ou não
+	 * cadastra um cliente no sistema
+	 * @param c objeto cliente
+	 * @return boolean
 	 */
 	public boolean cadastrarCliente(Cliente c) {
 		return dao.inserirCliente(c);
 	}
 	
 	/**
-	 * Método retornarCliente
+	 * retorna um cliente baseado em seu cpf
 	 * @param cnpj
-	 * @return êxito ou não
+	 * @return Cliente
 	 */
 	public Cliente retornarCliente(String cpf) {
 		return dao.retornarCliente(cpf);
 	}
 	
-	/**
-	 * Método cpfValido
-	 * @param cnpj
-	 * @return êxito ou não
-	 */
 	private boolean cpfValido(String cpf) {	
 		return cpf.length() == 11 && cpf.matches("^[0-9]+$");
 	}
 	
-	/**
-	 * Método cpfDisponivel
-	 * @param cnpj
-	 * @return êxito ou não
-	 */
 	private boolean cpfDisponivel(String cpf) {
 		return dao.retornarCliente(cpf) == null;
 	}
 	
-	/**
-	 * Método primeiroNomeValido
-	 * @param primeiroNome
-	 * @return êxito ou não
-	 */
 	private boolean primeiroNomeValido(String primeiroNome) {
 		return primeiroNome.length() >= 3 && primeiroNome.length() <= 20 && primeiroNome.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 	
-	/**
-	 * Método nomeMeioValido
-	 * @param nomeMeio
-	 * @return êxito ou não
-	 */
+
 	private boolean nomeMeioValido(String nomeMeio) {
 		return nomeMeio.length() >= 3 && nomeMeio.length() <= 20 && nomeMeio.matches("^[A-Za-zÀ-ÿ ]+$");
 	}
-	
-	/**
-	 * Método ultimoNomeValido
-	 * @param ultimoNome
-	 * @return êxito ou não
-	 */
+
 	private boolean ultimoNomeValido(String ultimoNome) {
 		return ultimoNome.length() >= 3 && ultimoNome.length() <= 20 && ultimoNome.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 	
-	/**
-	 * Método telefoneValido
-	 * @param telefone
-	 * @return êxito ou não
-	 */
 	private boolean telefoneValido(String telefone) {
 		return telefone.length() <= 11 && telefone.matches("^[0-9]+$");
 	}
 	
-	/**
-	 * Método emailValido
-	 * @param email
-	 * @return êxito ou não
-	 */
 	private boolean emailValido(String email) {
 		return email.length() <= 255 && email.contains("@");
 	}
 	
-	/**
-	 * Método senhaValida
-	 * @param senha do cliente
-	 * @return êxito ou não
-	 */
 	private boolean senhaValida(String senha) {
 		return senha.length() < 255;
 	}	

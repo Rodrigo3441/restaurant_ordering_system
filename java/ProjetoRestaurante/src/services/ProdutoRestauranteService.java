@@ -1,16 +1,20 @@
 package services;
 
+import java.sql.Connection;
 import java.util.ArrayList;
-
 import database.ProdutoRestauranteDAO;
-import database.DatabaseConnection;
 import entities.ProdutoRestaurante;
 import view.ProdutoRestauranteView;
 
 public class ProdutoRestauranteService {
 
 	//conexão com o banco de dados que será usada em todas as operações
-	private ProdutoRestauranteDAO dao = new ProdutoRestauranteDAO(DatabaseConnection.getConnection());
+	private ProdutoRestauranteDAO dao;
+	
+	
+	public ProdutoRestauranteService(Connection conn) {
+		this.dao = new ProdutoRestauranteDAO(conn);
+	}
 	
 	/**
 	 * 
@@ -84,29 +88,14 @@ public class ProdutoRestauranteService {
 		return dao.retornarTodoProdutoRestaurante(cnpj);
 	}
 	
-	/**
-	 * 
-	 * @param quantidadeEstoque
-	 * @return
-	 */
 	private boolean quantidadeEstoqueValida(int quantidadeEstoque) {
 		return quantidadeEstoque >= 0;
 	}
 	
-	/**
-	 * 
-	 * @param preco
-	 * @return
-	 */
 	private boolean precoProdutoValido(double preco) {
 		return preco > 0;
 	}
 	
-	/**
-	 * 
-	 * @param codigo
-	 * @return
-	 */
 	private boolean codigoProdutoValido(int codigo) {
 		return codigo > 0 && codigo < 2_000_000_000;
 	}

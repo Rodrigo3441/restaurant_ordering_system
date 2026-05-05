@@ -1,8 +1,7 @@
 package services;
 
+import java.sql.Connection;
 import java.util.ArrayList;
-
-import database.DatabaseConnection;
 import database.EntregadorDAO;
 import entities.Entregador;
 
@@ -22,7 +21,11 @@ import entities.Entregador;
 
 public class EntregadorService {
 	//conexão com o banco de dados que será usada em todas as operações
-	private EntregadorDAO dao = new EntregadorDAO(DatabaseConnection.getConnection());
+	private EntregadorDAO dao;
+	
+	public EntregadorService(Connection conn) {
+		this.dao = new EntregadorDAO(conn);
+	}
 	
 	/**
 	 * Responsável por verificar disponibilidade de CPF e se é válido
@@ -198,54 +201,26 @@ public class EntregadorService {
 		return dao.deletarEntregador(cpf);
 	}
 	
-	/**
-	 * válida se um cpf tem tamanho 11 e somente números
-	 * @param cnpj
-	 * @return boolean
-	 */
 	private boolean cpfValido(String cpf) {	
 		return cpf.length() == 11 && cpf.matches("^[0-9]+$");
 	}
-	
-	/**
-	 * verifica se o cpf informado está livre para uso no banco de dados
-	 * @param cpf do entregador
-	 * @return boolean
-	 */
+
 	private boolean cpfDisponivel(String cpf) {
 		return dao.retornarEntregador(cpf) == null;
 	}
 	
-	/**
-	 * @param primeiroNome
-	 * @return boolean
-	 */
 	private boolean primeiroNomeValido(String primeiroNome) {
 		return primeiroNome.length() >= 3 && primeiroNome.length() <= 20 && primeiroNome.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 	
-	/**
-	 * @param nomeMeio
-	 * @return boolean
-	 */
 	private boolean nomeMeioValido(String nomeMeio) {
 		return nomeMeio.length() >= 3 && nomeMeio.length() <= 20 && nomeMeio.matches("^[A-Za-zÀ-ÿ ]+$");
 	}
 	
-	/**
-	 * 
-	 * @param ultimoNome
-	 * @return boolean
-	 */
 	private boolean ultimoNomeValido(String ultimoNome) {
 		return ultimoNome.length() >= 3 && ultimoNome.length() <= 20 && ultimoNome.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 	
-	/**
-	 * Verifica se o telefone possui no máximo 11 caracteres e somente números
-	 * @param telefone
-	 * @return boolean
-	 */
 	private boolean telefoneValido(String telefone) {
 		return telefone.length() <= 11 && telefone.matches("^[0-9]+$");
 	}

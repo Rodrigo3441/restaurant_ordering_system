@@ -1,5 +1,8 @@
 package services;
 
+import java.sql.Connection;
+import java.util.ArrayList;
+
 import database.RestauranteDAO;
 import entities.Restaurante;
 
@@ -25,8 +28,8 @@ public class RestauranteService {
 	 * Construtor que recebe o objeto para conexão com a camada de dados
 	 * @param dao objeto AcessoDadosRestaurante
 	 */
-	public RestauranteService(RestauranteDAO dao) {
-		this.dao = dao;
+	public RestauranteService(Connection conn) {
+		this.dao = new RestauranteDAO(conn);
 	}
 	
 	/**
@@ -144,46 +147,29 @@ public class RestauranteService {
 	}
 	
 	/**
-	 * Método cnpjValido
-	 * @param cnpj do restaurante
-	 * @return true or false
+	 * Método listarRestaurantes
+	 * @return arraylist
 	 */
+	public ArrayList<Restaurante> listarRestaurantes(){
+		return dao.listarRestaurantes();
+	}
+
 	private boolean cnpjValido(String cnpj) {	
 		return cnpj.length() == 14 && cnpj.matches("^[0-9]+$");
 	}
-	
-	/**
-	 * Método cpfDisponivel
-	 * @param cnpj do restaurante
-	 * @return true or false
-	 */
+
 	private boolean cnpjDisponivel(String cnpj) {
 		return dao.retornarRestaurante(cnpj) == null;
 	}
 	
-	/**
-	 * Método nomeValido
-	 * @param nome do restaurante
-	 * @return true or false
-	 */
 	private boolean nomeValido(String nome) {
 		return nome.length() >= 3 && nome.length() <= 40;
 	}
-	
-	/**
-	 * Método telefoneValido
-	 * @param telefone
-	 * @return true or false
-	 */
+
 	private boolean telefoneValido(String telefone) {
 		return telefone.length() <= 11 && telefone.matches("^[0-9]+$");
 	}
 		
-	/**
-	 * Método senhaValida
-	 * @param senha do restaurante
-	 * @return true or false
-	 */
 	private boolean senhaValida(String senha) {
 		return senha.length() < 255;
 	}	

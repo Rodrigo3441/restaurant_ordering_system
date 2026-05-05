@@ -1,6 +1,6 @@
 package services;
 
-import database.DatabaseConnection;
+import java.sql.Connection;
 import entities.EnderecoCliente;
 import entities.EnderecoRestaurante;
 import database.EnderecoDAO;
@@ -20,37 +20,10 @@ import database.EnderecoDAO;
 
 public class EnderecoService {
 		
-	private EnderecoDAO dao = new EnderecoDAO(DatabaseConnection.getConnection());
+	private EnderecoDAO dao;
 	
-	public EnderecoService() {
-		
-	}
-	
-	/**
-	 * Verifica se o CEP possui até 8 dígitos numéricos
-	 * @param cep do endereço
-	 * @return true or false
-	 */
-	private boolean cepValido(String cep) {
-		return cep.length() <= 8 && cep.matches("^[0-9]+$");
-	}
-	
-	/**
-	 * Valida se o nome contém apenas letras e espaços, com até 100 caracteres
-	 * @param nome do endereço
-	 * @return true ou false
-	 */
-	private boolean nomeValido(String nome) {
-		return nome.length() <= 100 && nome.matches("^[a-zA-ZÀ-ÿ ]+$");
-	}
-	
-	/**
-	 * Verifica se o número é maior ou igual a zero
-	 * @param numero
-	 * @return
-	 */
-	private boolean numeroValido(int numero) {
-		return numero >= 0;
+	public EnderecoService(Connection conn) {
+		this.dao = new EnderecoDAO(conn);
 	}
 	
 	/**
@@ -202,5 +175,17 @@ public class EnderecoService {
 		
 		er.setNumero(numero);
 		return dao.atualizarEnderecoRestaurante(er);
+	}
+	
+	private boolean cepValido(String cep) {
+		return cep.length() <= 8 && cep.matches("^[0-9]+$");
+	}
+	
+	private boolean nomeValido(String nome) {
+		return nome.length() <= 100 && nome.matches("^[a-zA-ZÀ-ÿ ]+$");
+	}
+	
+	private boolean numeroValido(int numero) {
+		return numero >= 0;
 	}
 }
