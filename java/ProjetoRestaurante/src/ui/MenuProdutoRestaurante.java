@@ -1,8 +1,8 @@
 package ui;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import entities.Produto;
 import entities.ProdutoRestaurante;
 import entities.Restaurante;
@@ -27,8 +27,14 @@ import view.ProdutoRestauranteView;
 public class MenuProdutoRestaurante {
 	
 	private Scanner sc = new Scanner(System.in);
-	private ProdutoService servicoproduto = new ProdutoService();
-	private ProdutoRestauranteService servicoprodutorestaurante = new ProdutoRestauranteService();
+	private ProdutoService servicoproduto;
+	private ProdutoRestauranteService servicoprodutorestaurante;
+	
+	
+	public MenuProdutoRestaurante(Connection conn) {
+		this.servicoprodutorestaurante = new ProdutoRestauranteService(conn);
+		this.servicoproduto = new ProdutoService(conn);
+	}
 	
 	/**
 	 * Exibir o menu para o restaurante poder gerenciar os produtos de seu catálogo

@@ -1,5 +1,6 @@
 package ui;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Scanner;
 import entities.Entregador;
@@ -22,7 +23,13 @@ import services.EntregadorService;
 public class MenuEntregadorRestaurante {
 	
 	private Scanner sc = new Scanner(System.in);
-	private EntregadorService servicoentregador = new EntregadorService();
+	private EntregadorService servicoentregador;
+	private Connection conn;
+	
+	public MenuEntregadorRestaurante(Connection conn) {
+		this.servicoentregador = new EntregadorService(conn);
+		this.conn = conn;
+	}
 	
 	/**
 	 * Método mostrarMenuPrincipal
@@ -320,7 +327,7 @@ public class MenuEntregadorRestaurante {
 		Entregador entregador = servicoentregador.retornarEntregador(cpf);
 		
 		if (entregador != null) {
-			MenuPerfilEntregador menu = new MenuPerfilEntregador();
+			MenuPerfilEntregador menu = new MenuPerfilEntregador(conn);
 			menu.mostrarMenuPerfil(entregador);
 			
 		} else {

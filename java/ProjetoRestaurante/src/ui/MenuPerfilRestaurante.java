@@ -1,5 +1,6 @@
 package ui;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 import entities.Restaurante;
@@ -22,13 +23,15 @@ public class MenuPerfilRestaurante {
 	
 	private Scanner sc = new Scanner(System.in);
 	private RestauranteService servicorestaurante;
+	private Connection conn;
 	
 	/**
 	 * 
 	 * @param servicorestaurante
 	 */
-	public MenuPerfilRestaurante(RestauranteService servicorestaurante) {
+	public MenuPerfilRestaurante(RestauranteService servicorestaurante, Connection conn) {
 		this.servicorestaurante = servicorestaurante;
+		this.conn = conn;
 	}
 	
 
@@ -79,7 +82,7 @@ public class MenuPerfilRestaurante {
 					this.atualizarSenha(r);
 					break;
 				case 4:
-					MenuEnderecoRestaurante menuendereco = new MenuEnderecoRestaurante();
+					MenuEnderecoRestaurante menuendereco = new MenuEnderecoRestaurante(conn);
 					menuendereco.mostrar(r);
 					break;
 				case 5:

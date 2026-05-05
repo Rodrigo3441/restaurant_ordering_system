@@ -1,10 +1,8 @@
 package ui;
 
+import java.sql.Connection;
 import java.util.Scanner;
-
-import entities.Cliente;
 import entities.Entregador;
-import services.ClienteService;
 import services.EntregadorService;
 
 /**
@@ -24,8 +22,12 @@ import services.EntregadorService;
 public class MenuPerfilEntregador {
 	
 	private Scanner sc = new Scanner(System.in);
-	private EntregadorService servicoentregador = new EntregadorService();
+	private EntregadorService servicoentregador;
 
+	public MenuPerfilEntregador(Connection conn) {
+		this.servicoentregador = new EntregadorService(conn);
+	}
+	
 	/**
 	 * Método mostrarMenuPerfil
 	 * 

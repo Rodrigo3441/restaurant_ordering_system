@@ -1,5 +1,6 @@
 package ui;
 
+import java.sql.Connection;
 import java.util.Scanner;
 
 import entities.EnderecoRestaurante;
@@ -24,11 +25,11 @@ public class MenuEnderecoRestaurante {
 
 	private Scanner sc = new Scanner(System.in);
 	private EnderecoRestaurante endereco;
-	private EnderecoService servicoendereco = new EnderecoService();
+	private EnderecoService servicoendereco;
 	
 	
-	public MenuEnderecoRestaurante() {
-
+	public MenuEnderecoRestaurante(Connection conn) {
+		this.servicoendereco = new EnderecoService(conn);
 	}
 
 	/**

@@ -2,7 +2,6 @@ package ui;
 
 import java.sql.Connection;
 import java.util.Scanner;
-import database.ClienteDAO;
 import entities.Cliente;
 import services.ClienteService;
 
@@ -23,6 +22,7 @@ public class MenuCliente {
 	
 	private Scanner sc = new Scanner(System.in);
 	private ClienteService servicocliente;
+	private Connection conn;
 	
 	/**
 	 * Recebe uma conexão para permitir comunicação com banco de dados
@@ -30,7 +30,8 @@ public class MenuCliente {
 	 * @param conn
 	 */
 	public MenuCliente(Connection conn) {
-		this.servicocliente = new ClienteService(new ClienteDAO(conn));
+		this.servicocliente = new ClienteService(conn);
+		this.conn = conn;
 	}
 	
 	/**
@@ -317,14 +318,15 @@ public class MenuCliente {
 			
 			switch (option) {
 				case 1:
-					MenuPerfilCliente menuperfil = new MenuPerfilCliente(servicocliente);
+					MenuPerfilCliente menuperfil = new MenuPerfilCliente(servicocliente, conn);
 					menuperfil.mostrarMenuPerfil(c);
 					break;
 				case 2:
 					
 					break;
 				case 3:
-					
+					MenuPedidoClienteSelecaoRestaurante menupedido = new MenuPedidoClienteSelecaoRestaurante(conn, c);
+					menupedido.mostrarRestaurantes();
 					break;
 				case 4:
 					System.out.println("Até uma próxima.");

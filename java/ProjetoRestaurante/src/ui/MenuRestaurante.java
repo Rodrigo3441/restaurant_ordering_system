@@ -2,7 +2,6 @@ package ui;
 
 import java.sql.Connection;
 import java.util.Scanner;
-import database.RestauranteDAO;
 import entities.Restaurante;
 import services.RestauranteService;
 
@@ -23,6 +22,7 @@ public class MenuRestaurante {
 	
 	private Scanner sc = new Scanner(System.in);
 	private RestauranteService servicorestaurante;
+	private Connection conn;
 	
 	/**
 	 * Recebe uma conexão para permitir comunicação com banco de dados
@@ -30,7 +30,8 @@ public class MenuRestaurante {
 	 * @param conn
 	 */
 	public MenuRestaurante(Connection conn) {
-		this.servicorestaurante = new RestauranteService(new RestauranteDAO(conn));
+		this.servicorestaurante = new RestauranteService(conn);
+		this.conn = conn;
 	}
 	
 	/**
@@ -269,15 +270,15 @@ public class MenuRestaurante {
 			
 			switch (option) {
 				case 1:
-					MenuPerfilRestaurante menuperfil = new MenuPerfilRestaurante(servicorestaurante);
+					MenuPerfilRestaurante menuperfil = new MenuPerfilRestaurante(servicorestaurante, conn);
 					menuperfil.mostrarMenuPerfil(r);
 					break;
 				case 2:
-					MenuEntregadorRestaurante menuentregador = new MenuEntregadorRestaurante();
+					MenuEntregadorRestaurante menuentregador = new MenuEntregadorRestaurante(conn);
 					menuentregador.mostrarMenuEntregador();
 					break;
 				case 3:
-					MenuProdutoRestaurante menuproduto = new MenuProdutoRestaurante();
+					MenuProdutoRestaurante menuproduto = new MenuProdutoRestaurante(conn);
 					menuproduto.mostrarMenuProdutos(r);
 					break;
 				case 4:
