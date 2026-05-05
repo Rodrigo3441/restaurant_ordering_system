@@ -76,4 +76,12 @@ public class ProdutoRestauranteView {
 		       " | Descrição: " + descricao;
 	}
 	
+	public String formatarParaCliente() {
+		return " Nome: " + nomeProduto +
+			   " | Descrição: " + descricao +
+		       " | Preço: R$ " + precoProduto +
+		       " | Estoque: " + quantidadeEstoque;
+		       
+	}
+	
 }
