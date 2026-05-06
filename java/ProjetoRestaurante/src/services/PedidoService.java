@@ -31,26 +31,26 @@ public class PedidoService {
 	}
 	
 	/**
-	 * valida se o indice inserido pelo usuário está no intervalo de restaurantes disponíveis
-	 * @param listaRestaurantes
-	 * @param index
+	 * método genérico para validar se o índice informado é valido para listas do tipo ArrayList de qualquer valor
+	 * @param lista a ser validada
+	 * @param index informado
 	 */
-	public void validarIndex(ArrayList<Restaurante> listaRestaurantes, int index) {
-		if(!indexValido(listaRestaurantes, index)) {
+	public <T> void validarIndex(ArrayList<T> lista, int index) {
+		if(!indexValido(lista, index)) {
 			throw new IllegalArgumentException("Informe um índice válido");
 		}
 	}
 	
-	/**
-	 * valida se o indice inserido pelo usuário está no intervalo de produtos disponíveis
-	 * @param listaProdutos
-	 * @param index
-	 */
-	public void validarIndexProduto(ArrayList<ProdutoRestauranteView> listaProdutos, int index) {
-		if (!indexProdutoValido(listaProdutos, index)) {
-			throw new IllegalArgumentException("Informe um índice válido");
-		}
-	}
+//	/**
+//	 * valida se o indice inserido pelo usuário está no intervalo de produtos disponíveis
+//	 * @param listaProdutos
+//	 * @param index
+//	 */
+//	public void validarIndexProduto(ArrayList<ProdutoRestauranteView> listaProdutos, int index) {
+//		if (!indexValido(listaProdutos, index)) {
+//			throw new IllegalArgumentException("Informe um índice válido");
+//		}
+//	}
 	
 	/**
 	 * valida se a quantidade informada pelo usuário é válida
@@ -115,13 +115,32 @@ public class PedidoService {
 		return null;
 	}
 	
-
-	private boolean indexValido(ArrayList<Restaurante> listaRestaurantes, int index) {
-		return index >= 0 && index < listaRestaurantes.size();
+	/**
+	 * calcula o desconto para o valor total do pedido de um cliente
+	 * @param valorTotal do pedido do cliente
+	 * @return o valor com o desconto aplicado
+	 */
+	public double calcularDesconto(double valorTotal) {
+		if (valorTotal > 300) {
+			return valorTotal * 0.85;
+			
+		} else if (valorTotal > 200){
+			return valorTotal * 0.90;
+			
+		} else if (valorTotal > 100) {
+			return valorTotal * 0.95;
+		} else {
+			return valorTotal;
+		}
 	}
 	
-	private boolean indexProdutoValido(ArrayList<ProdutoRestauranteView> listaProdutos, int index) {
-		return index >= 0 && index < listaProdutos.size();
+	public double adicionarTaxaEntrega(double valorTotal) {
+		return valorTotal + 8.00;
+	}
+	
+
+	private <T> boolean indexValido(ArrayList<T> lista, int index) {
+		return index >= 0 && index < lista.size();
 	}
 	
 	private boolean quantidadeValida(ProdutoRestauranteView produtoTemp, int quantidade) {
