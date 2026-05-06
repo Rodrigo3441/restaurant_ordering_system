@@ -325,7 +325,7 @@ public class MenuCliente {
 					
 					break;
 				case 3:
-					MenuPedidoClienteSelecaoRestaurante menupedido = new MenuPedidoClienteSelecaoRestaurante(conn, c);
+					MenuSelecaoRestaurante menupedido = new MenuSelecaoRestaurante(conn, c);
 					menupedido.mostrarRestaurantes();
 					break;
 				case 4:
