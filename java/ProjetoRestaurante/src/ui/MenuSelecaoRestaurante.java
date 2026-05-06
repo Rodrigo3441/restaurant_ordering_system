@@ -9,7 +9,7 @@ import services.PedidoService;
 import services.RestauranteService;
 
 /**
- * Classe: MenuPedidoClienteSelecaoRestaurante
+ * Classe: MenuSelecaoRestaurante
  *
  * Descrição:
  * Classe responsável por oferecer a interface para o cliente escolher
@@ -22,7 +22,7 @@ import services.RestauranteService;
  * @since 04-05-2026
  */
 
-public class MenuPedidoClienteSelecaoRestaurante {
+public class MenuSelecaoRestaurante {
 	private Scanner sc = new Scanner(System.in);
 	private RestauranteService servicorestaurante;
 	private PedidoService servicopedido;
@@ -33,7 +33,7 @@ public class MenuPedidoClienteSelecaoRestaurante {
 	 * Construtor com argumentos
 	 * @param conn
 	 */
-	public MenuPedidoClienteSelecaoRestaurante(Connection conn, Cliente cliente) {
+	public MenuSelecaoRestaurante(Connection conn, Cliente cliente) {
 		this.servicorestaurante = new RestauranteService(conn);
 		this.servicopedido = new PedidoService(conn);
 		this.cliente = cliente;
@@ -87,7 +87,7 @@ public class MenuPedidoClienteSelecaoRestaurante {
 		//pega da lista o restaurante escolhido pelo usuário com base no índice
 		Restaurante r = listaRestaurantes.get(index);
 
-		MenuPedidoClienteSelecaoProduto menuselecaoproduto = new MenuPedidoClienteSelecaoProduto(conn);
+		MenuSelecaoProduto menuselecaoproduto = new MenuSelecaoProduto(conn);
 		menuselecaoproduto.mostrarProdutos(r, cliente);
 		
 	}	
