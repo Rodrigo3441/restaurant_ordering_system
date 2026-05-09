@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import entities.ProdutoRestaurante;
-import entities.Restaurante;
 import view.ItemPedidoView;
 import view.ProdutoRestauranteView;
 
@@ -164,6 +163,33 @@ public class ProdutoRestauranteDAO {
 		} catch (SQLException e) {
 			System.err.println("Erro na operação de PRODUTO_RESTAURANTE");
 		    e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public boolean atualizarProdutoRestaurante(Connection conn, ProdutoRestaurante pr) {
+		String sqlQuery = "UPDATE PRODUTO_RESTAURANTE " +
+				"SET pdr_qtde_estoque = ?, " +
+				"pdr_preco = ? " +
+				"WHERE pk_fk_res_cnpj = ? "
+				+ "AND pk_fk_prd_codigo = ?";
+
+		//preparação da query antes da execução
+		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
+		
+			//vinculação dos atributos à query preparada
+			stmt.setInt(1, pr.getQuantidadeEstoque());
+			stmt.setDouble(2, pr.getPreco());
+			stmt.setString(3, pr.getCnpjRestaurante());
+			stmt.setInt(4, pr.getCodigoProduto());
+						
+			int linhasAfetadas = stmt.executeUpdate();
+			return linhasAfetadas > 0;
+		
+		} catch (SQLException e) {
+			System.err.println("Erro na operação de PRODUTO_RESTAURANTE");
+			e.printStackTrace();
 		}
 		
 		return false;

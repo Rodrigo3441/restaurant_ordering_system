@@ -172,18 +172,61 @@ public class PedidoDAO {
 	 * @param status desejado
 	 * @return ArrayList com todos os pedidos
 	 */
-	public ArrayList<Pedido> listarPedidos(Connection conn, String cnpj, String status){
+	public ArrayList<Pedido> listarPedidosPorRestaurante(Connection conn, String cnpj, String status){
 		
 		//Lista para armazenar todos as instâncias de pedido
 		ArrayList<Pedido> listaPedidos = new ArrayList<Pedido>();
 		
-		String sqlQuery = "SELECT * FROM PEDIDO WHERE fk_res_cnpj = ? AND ped_status = ?";
+		String sqlQuery = "SELECT * FROM PEDIDO WHERE fk_res_cnpj = ? AND ped_status = ? ORDER BY ped_data ASC";
 		
 		//preparação da query antes da execução
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			stmt.setString(1, cnpj);
 			stmt.setString(2, status);
+			
+			ResultSet resultado = stmt.executeQuery();
+			
+			//armazenando todos os restaurantes encontrados na lista dinânica de pedidos
+			while (resultado.next()) {
+				Pedido p = new Pedido();
+				
+				p.setNumeroPedido(resultado.getInt("pk_ped_numero"));
+				p.setStatus(resultado.getString("ped_status"));
+				p.setCpfEntregador(resultado.getString("fk_etg_cpf"));
+				p.setCnpjRestaurante(resultado.getString("fk_res_cnpj"));
+				p.setCpfCliente(resultado.getString("fk_cli_cpf"));
+				p.setDataPedido(resultado.getTimestamp("ped_data").toLocalDateTime());
+				
+				listaPedidos.add(p);
+			}
+			
+			
+		} catch (SQLException e) {
+			System.err.println("Erro na operação de PEDIDO");
+		    e.printStackTrace();
+		}
+		
+		return listaPedidos;
+	}
+	
+	/**
+	 * responsável por trazer informações de todos os pedidos que um cliente já fez no sistema
+	 * @param objeto de conexão
+	 * @param cpf do cliente
+	 * @return ArrayList com todos os pedidos
+	 */
+	public ArrayList<Pedido> listarPedidosPorCliente(Connection conn, String cpf){
+		
+		//Lista para armazenar todos as instâncias de pedido
+		ArrayList<Pedido> listaPedidos = new ArrayList<Pedido>();
+		
+		String sqlQuery = "SELECT * FROM PEDIDO WHERE fk_cli_cpf = ? ORDER BY ped_data DESC";
+		
+		//preparação da query antes da execução
+		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
+			
+			stmt.setString(1, cpf);
 			
 			ResultSet resultado = stmt.executeQuery();
 			
