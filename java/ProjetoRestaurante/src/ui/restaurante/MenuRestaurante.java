@@ -1,4 +1,4 @@
-package ui;
+package ui.restaurante;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -20,37 +20,39 @@ import services.RestauranteService;
 
 public class MenuRestaurante {
 	
-	private Scanner sc = new Scanner(System.in);
 	private RestauranteService servicorestaurante;
 	private Connection conn;
+	private Scanner sc;
 	
 	/**
 	 * Recebe uma conexão para permitir comunicação com banco de dados
 	 * 
 	 * @param conn
 	 */
-	public MenuRestaurante(Connection conn) {
+	public MenuRestaurante(Connection conn, Scanner sc) {
 		this.servicorestaurante = new RestauranteService(conn);
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	/**
-	 * Método mostrarMenuPrincipal
-	 * 
 	 * Responsável por oferecer opções inciais para o restaurante acessar ou cadastrar uma conta
-	 * 
 	 */
 	public void mostrarMenuPrincipal() {
 			
 			int option = 9;
 			
 			//validação da entrada de opção pelo usuário
-			do {
+			while (true) {
 				
-				System.out.println("MENU RESTAURANTE");
+				System.out.println("\nMENU RESTAURANTE");
+				System.out.println("================================================");
 				System.out.println("1- Iniciar Sessão");
 				System.out.println("2- Fazer cadastro de restaurante");
 				System.out.println("3- Voltar ao menu principal");
+				System.out.println("================================================\n");
+				
+				System.out.print("Informe a ação desejada: ");
 				
 				try {
 					
@@ -85,18 +87,14 @@ public class MenuRestaurante {
 					default: 
 						System.out.println("Opção inválida, tente novamente: ");
 				}
-	
 				
-			} while (option != 3);
+			}
 			
 		}
 	
 	
 	/**
-	 * Método fazerCadastro
-	 * 
 	 * Responsável por fornecer a interface de cadastro para o restaurante
-	 * 
 	 */
 	private void fazerCadastro() {
 		
@@ -105,7 +103,7 @@ public class MenuRestaurante {
 		String telefone;
 		String senha;
 		
-		System.out.println("CADASTRO DE NOVO RESTAURANTE");
+		System.out.println("\nCADASTRO DE NOVO RESTAURANTE");
 		
 		//campo para validação de CPF
 		while (true) {
@@ -159,11 +157,14 @@ public class MenuRestaurante {
 		    }
 		}
 		
-		System.out.println("Confirmando informações: ");
+		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("================================================");
 		System.out.printf("CNPJ: %s\n", cnpj);
 		System.out.printf("Nome do restaurante: %s\n", nome);
 		System.out.printf("Telefone: %s\n", telefone);
-		System.out.printf("Senha do restaurante: %s\n\n", senha);
+		System.out.printf("Senha do restaurante: %s\n", senha);
+		System.out.println("================================================\n");
+		
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
 		//validação da escolha do usuário
@@ -201,10 +202,7 @@ public class MenuRestaurante {
 	}
 	
 	/**
-	 * Método fazerLogin
-	 * 
 	 * Responsável por receber credenciais do restaurante e passá-las para a camada de serviço
-	 * 
 	 */
 	private void fazerLogin() {
 		System.out.print("Digite o seu CNPJ para poder inciar sessão: ");
@@ -236,22 +234,24 @@ public class MenuRestaurante {
 	}
 	
 	/**
-	 * Método menuClienteLogado
-	 * 
-	 * Responsável por oferecer o menu de ações para o cliente em sessão
-	 * 
-	 * @param c objeto Cliente
+	 * Responsável por oferecer o menu de ações para o restaurante em sessão
+	 * @param r objeto restaurante
 	 */
 	private void menuRestauranteLogado(Restaurante r) {
 		int option = -1;
-		do {
-			System.out.println("MENU GERENCIADOR DO RESTAURANTE");
+		
+		while (true) {
+			System.out.println("\nMENU GERENCIADOR DO RESTAURANTE");
+			System.out.println("================================================");
 			System.out.println("O que deseja fazer?");
 			System.out.println("1- Editar informações do restaurante");
 			System.out.println("2- Gerenciar entregadores");
 			System.out.println("3- Gerenciar produtos");
 			System.out.println("4- Gerenciar pedidos");
 			System.out.println("5- Fazer Logoff");
+			System.out.println("================================================\n");
+			
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -270,26 +270,27 @@ public class MenuRestaurante {
 			
 			switch (option) {
 				case 1:
-					MenuPerfilRestaurante menuperfil = new MenuPerfilRestaurante(servicorestaurante, conn);
-					menuperfil.mostrarMenuPerfil(r);
+					MenuPerfilRestaurante menuPerfil = new MenuPerfilRestaurante(servicorestaurante, conn, sc);
+					menuPerfil.mostrarMenuPerfil(r);
 					break;
 				case 2:
-					MenuEntregadorRestaurante menuentregador = new MenuEntregadorRestaurante(conn);
-					menuentregador.mostrarMenuEntregador();
+					MenuEntregadorRestaurante menuEntregador = new MenuEntregadorRestaurante(conn, sc);
+					menuEntregador.mostrarMenuEntregador();
 					break;
 				case 3:
-					MenuProdutoRestaurante menuproduto = new MenuProdutoRestaurante(conn);
-					menuproduto.mostrarMenuProdutos(r);
+					MenuProdutoRestaurante menuProduto = new MenuProdutoRestaurante(conn, sc);
+					menuProduto.mostrarMenuProdutos(r);
 					break;
 				case 4:
-					
+					MenuPedidoRestaurante menuPedido = new MenuPedidoRestaurante(conn, sc);
+					menuPedido.mostrarMenuPedidos(r);
 					break;
 				case 5:
 					System.out.println("Até uma próxima.");
 					return;
 			}
 			
-		} while (option != 5);
+		}
 		
 	}
 

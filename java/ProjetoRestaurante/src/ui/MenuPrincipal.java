@@ -3,6 +3,9 @@ package ui;
 import java.sql.Connection;
 import java.util.Scanner;
 
+import ui.cliente.MenuCliente;
+import ui.restaurante.MenuRestaurante;
+
 /**
  * Classe: MenuPrincipal
  *
@@ -19,15 +22,16 @@ import java.util.Scanner;
 
 public class MenuPrincipal {
 	
-	private Scanner sc = new Scanner(System.in);
+	private Scanner sc;
 	private Connection conn;
 	
 	/**
 	 * 
 	 * @param conn
 	 */
-	public MenuPrincipal(Connection conn) {
+	public MenuPrincipal(Connection conn, Scanner sc) {
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	/**
@@ -42,12 +46,18 @@ public class MenuPrincipal {
 		int option = 9;
 		
 		//validação da entrada de opção pelo usuário
-		do {
+		while (true) {
 			
+			System.out.println("\nMENU PRINCIPAL");
+			System.out.println("================================================");
 			System.out.println("Fred Food - Delivery");
+			System.out.println("Seja bem vindo ao nosso sistema!\n");
+			
 			System.out.println("1- Acessar menu para clientes");
 			System.out.println("2- Acessar menu para restaurantes");
 			System.out.println("3- Sair do sistema");
+			System.out.println("================================================\n");
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -67,22 +77,21 @@ public class MenuPrincipal {
 			//acesso as opções do menu			
 			switch (option) {
 				case 1:
-					MenuCliente menucliente = new MenuCliente(conn);
+					MenuCliente menucliente = new MenuCliente(conn, sc);
 					menucliente.mostrarMenuPrincipal();
 					break;
 	
 				case 2:
-					MenuRestaurante menurestaurante = new MenuRestaurante(conn);
+					MenuRestaurante menurestaurante = new MenuRestaurante(conn, sc);
 					menurestaurante.mostrarMenuPrincipal();
 					break;
 					
 				case 3:
 					System.out.println("Obrigado por utilizar o Fred Food Delivery");
-					break;
+					return;
 			}
 
-			
-		} while (option != 3);
+		}
 				
 	}
 	

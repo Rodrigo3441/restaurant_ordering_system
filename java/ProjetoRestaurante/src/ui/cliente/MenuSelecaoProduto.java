@@ -1,4 +1,4 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -25,20 +25,17 @@ import view.ProdutoRestauranteView;
  */
 
 public class MenuSelecaoProduto {
-	private Scanner sc = new Scanner(System.in);
+	
 	private PedidoService servicopedido;
 	private ProdutoRestauranteService servicoprodutorestaurante;
 	private Connection conn;
+	private Scanner sc;
 
-	
-	/**
-	 * 
-	 * @param conn
-	 */
-	public MenuSelecaoProduto(Connection conn) {
+	public MenuSelecaoProduto(Connection conn, Scanner sc) {
 		this.servicopedido = new PedidoService(conn);
 		this.servicoprodutorestaurante = new ProdutoRestauranteService(conn);
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	
@@ -103,7 +100,7 @@ public class MenuSelecaoProduto {
 						break;
 					}
 					
-					MenuConfirmacaoPedido menuconfirmacao = new MenuConfirmacaoPedido(conn);
+					MenuConfirmacaoPedido menuconfirmacao = new MenuConfirmacaoPedido(conn, sc);
 						
 					//chama o método e armazena se o pedido foi realizado ou não
 					boolean pedidoRealizado = menuconfirmacao.mostrarDetalhesPedido(r, c, carrinhoCompras);
@@ -131,11 +128,14 @@ public class MenuSelecaoProduto {
 	private int exibirMenuAcao() {
 		int option;
 	
+		System.out.println("================================================");
 		System.out.println("1- adicionar produto ao carrinho");
 		System.out.println("2- Remover produto do carrinho");
 		System.out.println("3- Encerrar Compra");
 		System.out.println("4- Cancelar compra");
-		System.out.print("Digite o número da ação desejada: ");
+		System.out.println("================================================\n");
+		
+		System.out.print("Informe a ação desejada: ");
 			
 		while (true) {
 			try {
@@ -189,6 +189,12 @@ public class MenuSelecaoProduto {
 		
 		//armazena o produto escolhido só no momento de adicionar ao carrinho
 		ProdutoRestauranteView produtoTemp = listaProdutos.get(index);
+		
+		//verificação para impedir de um produto sem estoque ser selecionado
+		if (produtoTemp.getQuantidadeEstoque() == 0) {
+			System.out.println("Esse produto está sem estoque!");
+			return;
+		}
 		
 		System.out.printf("Produto escolhido: %s\n", produtoTemp.getNomeProduto());
 		System.out.print("Deseja adicionar esse produto ao seu carrinho? (s-sim/n-não): ");

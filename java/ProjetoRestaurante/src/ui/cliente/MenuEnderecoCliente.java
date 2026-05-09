@@ -1,9 +1,10 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.Scanner;
 
 import entities.Cliente;
+import entities.Endereco;
 import entities.EnderecoCliente;
 import services.EnderecoService;
 
@@ -22,23 +23,21 @@ import services.EnderecoService;
  */
 
 public class MenuEnderecoCliente {
-
-	private Scanner sc = new Scanner(System.in);
-	private EnderecoCliente endereco;
+	
+	private Scanner sc;
+	private Endereco enderecoCliente;
 	private EnderecoService servicoendereco;
 	
 	
-	public MenuEnderecoCliente(Connection conn) {
+	public MenuEnderecoCliente(Connection conn, Scanner sc) {
 		this.servicoendereco = new EnderecoService(conn);
+		this.sc = sc;
 	}
 
 	/**
-	 * Método mostrar
-	 * 
-	 * Responsável por exibir a interface de endereço para o cliente pode gerenciar
+	 * exibe a interface de endereço para o cliente pode gerenciar
 	 * tem dois estados:
 	 * se o cliente possui um endereço exibe um menu, caso contrário outro
-	 * 
 	 * @param c objeto cliente
 	 */
 	public void mostrar(Cliente c) {
@@ -46,16 +45,16 @@ public class MenuEnderecoCliente {
 		int option = 9;
 		
 		//armazena o endereço do cliente
-		endereco = servicoendereco.retornarEnderecoCliente(c.getCpf());
+		enderecoCliente = servicoendereco.retornarEnderecoCliente(c.getCpf());
 		
-		if (endereco == null) {
+		if (enderecoCliente == null) {
 			System.out.println("Você não possui um endereço cadastrado!");
 			System.out.println("O que deseja fazer?");
 			System.out.println("1- Adicionar endereço");
 			System.out.println("2- Voltar ao menu anterior");
 			
 			//escolha para menu sem endereço cadastrado 
-			do {
+			while (true) {
 				try {
 					
 					option = sc.nextInt();
@@ -78,23 +77,26 @@ public class MenuEnderecoCliente {
 						return;
 					
 					case 2:
+						System.out.println("Voltando ao menu anterior");
 						return;
 					}
 			
-			} while (option != 2);
+			}
 			
 		} else {
 			
-			do {
-				System.out.println("ENDERECO ATUAL CLIENTE:");
-				System.out.println("CEP: " + endereco.getCep());
-				System.out.println("Nome rua: " + endereco.getNome());
-				System.out.println("Número do restaurante: " + endereco.getNumero());
+			while (true) {
+				System.out.println("\nENDERECO ATUAL CLIENTE:");
+				System.out.println("================================================");
+				System.out.println(enderecoCliente.formatarEndereco());
+				System.out.println("================================================");
 				System.out.println("1- Atualizar CEP");
 				System.out.println("2- Atualizar nome da rua");
 				System.out.println("3- Atualizar o número da rua");
 				System.out.println("4- voltar ao menu anterior");
-				System.out.print("O que deseja fazer? ");
+				System.out.println("================================================\n");
+				
+				System.out.print("Informe a ação desejada: ");
 				
 				// escolha para menu com endereço já cadastrado
 				try {
@@ -116,13 +118,13 @@ public class MenuEnderecoCliente {
 				//acesso as opções do menu			
 				switch (option) {
 					case 1:
-						this.atualizarCepCliente(endereco);
+						this.atualizarCepCliente(enderecoCliente);
 						break;
 					case 2:
-						this.atualizarNomeEnderecoCliente(endereco);
+						this.atualizarNomeEnderecoCliente(enderecoCliente);
 						break;
 					case 3:
-						this.atualizarNumeroEnderecoCliente(endereco);
+						this.atualizarNumeroEnderecoCliente(enderecoCliente);
 						break;
 					case 4:
 						System.out.println("Voltando ao menu anterior");
@@ -132,7 +134,7 @@ public class MenuEnderecoCliente {
 						System.out.println("Opção inválida, tente novamente: ");
 				}
 				
-			} while (option != 4);		
+			}		
 			
 
 		} 
@@ -140,10 +142,7 @@ public class MenuEnderecoCliente {
 	}	
 	
 	/**
-	 * Método cadastrarEndereco
-	 * 
 	 * Implementa o cadastro de um endereço para um cliente
-	 * 
 	 * @param c objeto cliente
 	 */
 	private void cadastrarEndereco(Cliente c) {
@@ -194,10 +193,12 @@ public class MenuEnderecoCliente {
 		    }
 		}
 		
-		System.out.println("Confirmando informações: ");
+		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("================================================");
 		System.out.printf("CEP: %s\n", cep);
 		System.out.printf("Nome da rua: %s\n", nome);
 		System.out.printf("Número: %d\n", numero);
+		System.out.println("================================================\n");
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
 		//validação da escolha do usuário
@@ -238,13 +239,10 @@ public class MenuEnderecoCliente {
 	}
 
 	/**
-	 * Método atualizarCepCliente
-	 * 
-	 * Implementa a edição de apenas o Cep
-	 * 
+	 * Implementa a atualização do CEP
 	 * @param ec objeto enderecoCliente
 	 */
-	private void atualizarCepCliente(EnderecoCliente ec) {
+	private void atualizarCepCliente(Endereco ec) {
 		
 		//campo para validação do CEP
 		while (true) {
@@ -267,13 +265,10 @@ public class MenuEnderecoCliente {
 	}
 	
 	/**
-	 * Método atualizarNomeEnderecoCliente
-	 * 
-	 * Implementa a edição de apenas o Nome
-	 * 
+	 * Implementa a atualização do nome do endereço
 	 * @param ec objeto enderecocliente
 	 */
-	private void atualizarNomeEnderecoCliente(EnderecoCliente ec) {
+	private void atualizarNomeEnderecoCliente(Endereco ec) {
 		
 		//campo para validação do nome da rua
 		while (true) {
@@ -295,13 +290,10 @@ public class MenuEnderecoCliente {
 	}
 	
 	/**
-	 * Método atualizarNumeroEnderecoCliente
-	 * 
-	 * Implementa a edição de apenas o Numero
-	 * 
+	 * Implementa a atualização do número do endereço do cliente
 	 * @param ec objeto enderecocliente
 	 */
-	private void atualizarNumeroEnderecoCliente(EnderecoCliente ec) {
+	private void atualizarNumeroEnderecoCliente(Endereco ec) {
 		
 		//campo para validação do número da rua
 		while (true) {

@@ -1,4 +1,4 @@
-package ui;
+package ui.restaurante;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -22,13 +22,14 @@ import services.EntregadorService;
 
 public class MenuEntregadorRestaurante {
 	
-	private Scanner sc = new Scanner(System.in);
+	private Scanner sc;
 	private EntregadorService servicoentregador;
 	private Connection conn;
 	
-	public MenuEntregadorRestaurante(Connection conn) {
+	public MenuEntregadorRestaurante(Connection conn, Scanner sc) {
 		this.servicoentregador = new EntregadorService(conn);
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	/**
@@ -44,12 +45,16 @@ public class MenuEntregadorRestaurante {
 			//validação da entrada de opção pelo usuário
 			do {
 				
-				System.out.println("MENU GERENCIADOR DE ENTREGADORES");
+				System.out.println("\nMENU GERENCIADOR DE ENTREGADORES");
+				System.out.println("================================================");
 				System.out.println("1- Cadastrar um novo entregador");
 				System.out.println("2- Listar todos os entregadores");
 				System.out.println("3- Atualizar informação de algum entregador");
 				System.out.println("4- Apagar um entregador do sistema de entregas");
 				System.out.println("5- Voltar ao menu anterior");
+				System.out.println("================================================\n");
+				
+				System.out.print("Informe a ação desejada: ");
 				
 				try {
 					
@@ -189,13 +194,16 @@ public class MenuEntregadorRestaurante {
 		    }
 		}
 		
-		System.out.println("Confirmando informações: ");
+		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("================================================");
 		System.out.printf("CPF: %s\n", cpf);
 		System.out.printf("Primeiro nome: %s\n", primeiroNome);
 		System.out.printf("Nome do meio: %s\n", nomeMeio);
 		System.out.printf("Ultimo nome: %s\n", ultimoNome);
 		System.out.printf("Telefone: %s\n", telefone);
 		System.out.printf("Placa do veículo: %s\n", placaVeiculo);
+		System.out.println("================================================\n");
+		
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
 		//validação da escolha do usuário
@@ -247,11 +255,13 @@ public class MenuEntregadorRestaurante {
 			return;
 		}
 		
-		System.out.println("Exibindo todos os entregadores do sistema:");
+		System.out.println("\nTODOS OS ENTREGADORES DO SISTEMA:");
+		System.out.println("================================================");
 		//Imprime cada produto para aquele restaurante
 		for (Entregador e: listaEntregadores) {
 			System.out.println(e);
 		}
+		System.out.println("================================================\n");
 		
 	}
 	
@@ -327,7 +337,7 @@ public class MenuEntregadorRestaurante {
 		Entregador entregador = servicoentregador.retornarEntregador(cpf);
 		
 		if (entregador != null) {
-			MenuPerfilEntregador menu = new MenuPerfilEntregador(conn);
+			MenuPerfilEntregador menu = new MenuPerfilEntregador(conn, sc);
 			menu.mostrarMenuPerfil(entregador);
 			
 		} else {

@@ -44,11 +44,14 @@ public class MenuPedidoRestaurante {
 		
 		while (true) {
 		
-			System.out.println("MENU GERENCIADOR DE PEDIDOS");
+			System.out.println("\nMENU GERENCIADOR DE PEDIDOS");
+			System.out.println("================================================");
 			System.out.println("1- Gerenciar pedidos em preparo");
 			System.out.println("2- Gerenciar pedidos que saíram para entrega");
 			System.out.println("3- Visualizar pedidos concluídos");
 			System.out.println("4- Voltar ao menu anterior");
+			System.out.println("================================================\n");
+			
 			System.out.print("Informe a ação desejada: ");
 				
 			while (true) {
@@ -97,7 +100,7 @@ public class MenuPedidoRestaurante {
 	private void gerenciarPedidosEmPreparo(String cnpj) {
 
 		//lista com todos os pedidos para permitir o acesso à primeira posição (pedido mais antigo)
-		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidos(cnpj, "Em preparo");
+		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Em preparo");
 		
 		//impede operações se a lista estiver vazia
 		if (listaPedidos.isEmpty()) {
@@ -105,7 +108,7 @@ public class MenuPedidoRestaurante {
 			return;
 		}
 		
-		System.out.println("Exibindo todos os pedidos em preparo do restaurante: ");
+		System.out.println("EXIBINDO PEDIDOS EM PREPARO PELO RESTAURANTE: ");
 		System.out.println("\n============================================================================");
 		
 		//inverte a lista para exibir os pedidos mais antigos em cima
@@ -151,7 +154,7 @@ public class MenuPedidoRestaurante {
 		
 		//impede qualquer operação se a lista de entregadores estiver vazia
 		if (listaEntregadores.isEmpty()) {
-			System.out.println("Não há nenhum pedido em entrega no momento!");
+			System.out.println("Não há nenhum entregador disponível no momento!");
 			return;
 		}
 		
@@ -162,7 +165,7 @@ public class MenuPedidoRestaurante {
 			}
 		}
 		
-		System.out.println("ENTREGADORES DISPONÍVEIS PARA ENTREGA");
+		System.out.println("\nENTREGADORES DISPONÍVEIS PARA ENTREGA");
 		System.out.println("============================================================================");
 				
 		for (int i = 0; i < listaEntregadores.size(); i++) {
@@ -224,14 +227,14 @@ public class MenuPedidoRestaurante {
 	 */
 	private void gerenciarPedidosEnviados(String cnpj) {
 		
-		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidos(cnpj, "Saiu entrega");
+		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Saiu entrega");
 		
 		if (listaPedidos.isEmpty()) {
 			System.out.println("Não há nenhum pedido concluído no momento!");
 			return;
 		}
 		
-		System.out.println("Exibindo todos os pedidos enviados do restaurante: ");
+		System.out.println("PRODUTOS QUE SAÍRAM PARA ENTREGA: ");
 		System.out.println("\n============================================================================");
 		
 		//inverte a lista para exibir os pedidos mais antigos em cima
@@ -322,7 +325,7 @@ public class MenuPedidoRestaurante {
 	 */
 	private void visualizarPedidosConcluidos(String cnpj) {
 		
-		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidos(cnpj, "Entregue");
+		ArrayList<Pedido> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Entregue");
 		
 		//impede operações se a lista estiver vazia
 		if (listaPedidos.isEmpty()) {
@@ -330,7 +333,7 @@ public class MenuPedidoRestaurante {
 			return;
 		}
 		
-		System.out.println("Exibindo todos os pedidos concluídos do restaurante: ");
+		System.out.println("PEDIDOS QUE JÁ FORAM CONCLUÍDOS: ");
 		System.out.println("\n============================================================================");
 		
 		//inverte a lista para exibir os pedidos mais antigos em cima

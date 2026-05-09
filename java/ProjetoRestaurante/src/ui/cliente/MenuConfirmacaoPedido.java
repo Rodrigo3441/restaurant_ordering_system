@@ -1,4 +1,4 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -8,14 +8,29 @@ import entities.Restaurante;
 import services.PedidoService;
 import view.ItemPedidoView;
 
+/**
+ * Classe: MenuConfirmacaoPedido
+ *
+ * Descrição:
+ * Classe responsável por fornecer um relatório do pedido do cliente antes do mesmo confirmar a compra
+ *
+ * Responsabilidades:
+ * - fornecer interface
+ * - comunicar com a camada serviço
+ *
+ * @author Rodrigo
+ * @since 05-05-2026
+ */
+
+
 public class MenuConfirmacaoPedido {
-	private Scanner sc = new Scanner(System.in);
-	private PedidoService servicopedido;
-	private Connection conn;
 	
-	public MenuConfirmacaoPedido(Connection conn) {
+	private PedidoService servicopedido;
+	private Scanner sc;
+	
+	public MenuConfirmacaoPedido(Connection conn, Scanner sc) {
 		this.servicopedido = new PedidoService(conn);
-		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	
@@ -29,7 +44,7 @@ public class MenuConfirmacaoPedido {
 	public boolean mostrarDetalhesPedido(Restaurante r, Cliente c, ArrayList<ItemPedidoView> carrinhoCompras) {
 		double valorTotal = 0;
 		
-		System.out.println("============================================================================");
+		System.out.println("\n============================================================================");
 		System.out.println("RESUMO DETALHADO DO PEDIDO");
 		System.out.println("============================================================================");
 		System.out.printf("Nome do cliente: %s %s\n", c.getPrimeiroNome(), c.getUltimoNome());
@@ -69,7 +84,8 @@ public class MenuConfirmacaoPedido {
 		
 		switch (escolhaUsuario) {
 			case 1:
-				System.out.println("Order placed");
+				System.out.println("Pedido concluído com sucesso!");
+				servicopedido.cadastrarPedido(r, c, carrinhoCompras);
 				return true;
 			case 2:
 				System.out.println("Voltando ao menu de pedidos");
@@ -85,9 +101,12 @@ public class MenuConfirmacaoPedido {
 	private int exibirMenuAcao() {
 		int option;
 	
+		System.out.println("================================================");
 		System.out.println("1- Confirmar pedido");
 		System.out.println("2- Voltar ao menu de produtos");
-		System.out.print("Digite o número da ação desejada: ");
+		System.out.println("================================================\n");
+		
+		System.out.print("Informe a ação desejada: ");
 			
 		while (true) {
 			try {

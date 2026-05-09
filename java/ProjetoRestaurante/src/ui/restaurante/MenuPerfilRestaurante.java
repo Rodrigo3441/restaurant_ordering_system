@@ -1,4 +1,4 @@
-package ui;
+package ui.restaurante;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -21,22 +21,18 @@ import services.RestauranteService;
 
 public class MenuPerfilRestaurante {
 	
-	private Scanner sc = new Scanner(System.in);
 	private RestauranteService servicorestaurante;
 	private Connection conn;
+	private Scanner sc;
 	
-	/**
-	 * 
-	 * @param servicorestaurante
-	 */
-	public MenuPerfilRestaurante(RestauranteService servicorestaurante, Connection conn) {
+	public MenuPerfilRestaurante(RestauranteService servicorestaurante, Connection conn, Scanner sc) {
 		this.servicorestaurante = servicorestaurante;
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 
 	/**
-	 * Método mostrarMenuPerfil
 	 * Responsável por exibir as ações de personalização do perfil do restaurante
 	 * @param r objeto Restaurante
 	 */
@@ -44,15 +40,18 @@ public class MenuPerfilRestaurante {
 		int option = 9;
 		
 		//validação da entrada de opção pelo usuário
-		do {
+		while (true) {
 			
-			System.out.println("MENU EDITAR PERFIL DO RESTAURANTE");
+			System.out.println("\nMENU EDITAR PERFIL DO RESTAURANTE");
+			System.out.println("================================================");
 			System.out.println("1- Atualizar nome");
 			System.out.println("2- Atualizar telefone");
 			System.out.println("3- Atualizar senha");
 			System.out.println("4- Atualizar endereço");
-			System.out.println("5- Atualizar categoria");
-			System.out.println("6- Sair da edição de perfil");
+			System.out.println("5- Sair da edição de perfil");
+			System.out.println("================================================\n");
+			
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -82,23 +81,20 @@ public class MenuPerfilRestaurante {
 					this.atualizarSenha(r);
 					break;
 				case 4:
-					MenuEnderecoRestaurante menuendereco = new MenuEnderecoRestaurante(conn);
+					MenuEnderecoRestaurante menuendereco = new MenuEnderecoRestaurante(conn, sc);
 					menuendereco.mostrar(r);
 					break;
 				case 5:
-					
-					break;
-				case 6:
+					System.out.println("Voltando ao menu anterior");
 					return;
 				
 			}
 
-		} while (option != 6);
+		} 
 		
 	}
 	
 	/**
-	 * Método atualizarNome
 	 * Responsável por atualizar o nome do restaurante
 	 * @param r objeto restaurante
 	 */
@@ -124,7 +120,6 @@ public class MenuPerfilRestaurante {
 	}
 	
 	/**
-	 * Método atualizarTelefone
 	 * Responsável por atualizar o telefone do restaurante
 	 * @param r objeto restaurante
 	 */
@@ -149,7 +144,6 @@ public class MenuPerfilRestaurante {
 	}
 	
 	/**
-	 * Método atualizarSenha
 	 * Responsável por atualizar a senha do restaurante 
 	 * @param r
 	 */

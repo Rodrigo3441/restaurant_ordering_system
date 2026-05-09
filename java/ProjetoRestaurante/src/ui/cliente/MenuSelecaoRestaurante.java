@@ -1,4 +1,4 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -23,21 +23,19 @@ import services.RestauranteService;
  */
 
 public class MenuSelecaoRestaurante {
-	private Scanner sc = new Scanner(System.in);
+	
 	private RestauranteService servicorestaurante;
 	private PedidoService servicopedido;
 	private Connection conn;
 	private Cliente cliente;
+	private Scanner sc;
 
-	/**
-	 * Construtor com argumentos
-	 * @param conn
-	 */
-	public MenuSelecaoRestaurante(Connection conn, Cliente cliente) {
+	public MenuSelecaoRestaurante(Connection conn, Cliente cliente, Scanner sc) {
 		this.servicorestaurante = new RestauranteService(conn);
 		this.servicopedido = new PedidoService(conn);
 		this.cliente = cliente;
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	
@@ -56,13 +54,14 @@ public class MenuSelecaoRestaurante {
 			return;
 		}
 		
-		System.out.println("MENU FAZER PEDIDO");
-		System.out.println("Listando todos os restaurantes:");
+		System.out.println("\nLISTA DE RESTAURANTES PARA FAZER UM PEDIDO");
+		System.out.println("================================================");
 		
 		for (Restaurante r: listaRestaurantes) {
 			System.out.println(contador + "- " + r.getNome());
 			contador++;
 		}
+		System.out.println("================================================\n");
 		
 		System.out.print("Informe o índice de qual restaurante você deseja comprar: ");
 		
@@ -87,7 +86,7 @@ public class MenuSelecaoRestaurante {
 		//pega da lista o restaurante escolhido pelo usuário com base no índice
 		Restaurante r = listaRestaurantes.get(index);
 
-		MenuSelecaoProduto menuselecaoproduto = new MenuSelecaoProduto(conn);
+		MenuSelecaoProduto menuselecaoproduto = new MenuSelecaoProduto(conn, sc);
 		menuselecaoproduto.mostrarProdutos(r, cliente);
 		
 	}	

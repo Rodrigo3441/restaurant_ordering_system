@@ -1,4 +1,4 @@
-package ui;
+package ui.restaurante;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -21,27 +21,26 @@ import services.EntregadorService;
 
 public class MenuPerfilEntregador {
 	
-	private Scanner sc = new Scanner(System.in);
 	private EntregadorService servicoentregador;
+	private Scanner sc;
 
-	public MenuPerfilEntregador(Connection conn) {
+	public MenuPerfilEntregador(Connection conn, Scanner sc) {
 		this.servicoentregador = new EntregadorService(conn);
+		this.sc = sc;
 	}
 	
 	/**
-	 * Método mostrarMenuPerfil
-	 * 
 	 * Responsável por exibir as ações de personalização do perfil
-	 * 
 	 * @param c objeto Cliente
 	 */
 	public void mostrarMenuPerfil(Entregador entregador) {
 		int option = 9;
 		
 		//validação da entrada de opção pelo usuário
-		do {
+		while (true) {
 			
-			System.out.println("MENU DE EDIÇÃO DE ENTREGADOR");
+			System.out.println("\nMENU DE EDIÇÃO DE ENTREGADOR");
+			System.out.println("================================================");
 			System.out.println("Editando:");
 			System.out.println(entregador);
 			System.out.println("1- Atualizar primeiro nome");
@@ -50,6 +49,9 @@ public class MenuPerfilEntregador {
 			System.out.println("4- Atualizar telefone");
 			System.out.println("5- Atualizar placa do veículo");
 			System.out.println("6- Sair da edição de perfil");
+			System.out.println("================================================\n");
+			
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -89,14 +91,13 @@ public class MenuPerfilEntregador {
 				
 			}
 
-		} while (option != 6);
+		}
 		
 	}
 	
 	/**
-	 * Método atualizarPrimeiroNome
-	 * Responsável por atualizar o primeiro nome do cliente
-	 * @param c objeto cliente
+	 * Responsável por atualizar o primeiro nome do entregador
+	 * @param entregador objeto entregador
 	 */
 	private void atualizarPrimeiroNome(Entregador entregador) {
 
@@ -120,9 +121,8 @@ public class MenuPerfilEntregador {
 	}
 	
 	/**
-	 * Método atualizarNomeMeio
-	 * Responsável por atualizar o nome do meio do cliente
-	 * @param c objeto cliente
+	 * Responsável por atualizar o nome do meio do entregador
+	 * @param entregador objeto entregador
 	 */
 	private void atualizarNomeMeio(Entregador entregador) {
 
@@ -147,9 +147,8 @@ public class MenuPerfilEntregador {
 	}
 	
 	/**
-	 * Método atualizarUltimoNome
-	 * Responsável por atualizar o ultimo nome do cliente
-	 * @param c objeto cliente
+	 * Responsável por atualizar o ultimo nome do entregador
+	 * @param entregador objeto entregador
 	 */
 	private void atualizarUltimoNome(Entregador entregador) {
 
@@ -173,9 +172,8 @@ public class MenuPerfilEntregador {
 	}
 	
 	/**
-	 * Método atualizarTelefone
-	 * Responsável por atualizar o telefone do cliente
-	 * @param c objeto cliente
+	 * Responsável por atualizar o telefone do entregador
+	 * @param entregador objeto entregador
 	 */
 	private void atualizarTelefone(Entregador entregador) {
 
@@ -199,9 +197,8 @@ public class MenuPerfilEntregador {
 	}
 		
 	/**
-	 * Método atualizarEmail
-	 * Responsável por atualizar o email do usuário
-	 * @param c objeto cliente
+	 * Responsável por atualizar a placa do veículo do entregador
+	 * @param entregador objeto entregador
 	 */
 	private void atualizarPlacaVeiculo(Entregador entregador) {
 

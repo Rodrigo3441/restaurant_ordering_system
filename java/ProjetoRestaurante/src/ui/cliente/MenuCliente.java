@@ -1,4 +1,4 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -20,37 +20,39 @@ import services.ClienteService;
 
 public class MenuCliente {
 	
-	private Scanner sc = new Scanner(System.in);
 	private ClienteService servicocliente;
 	private Connection conn;
+	private Scanner sc;
 	
 	/**
 	 * Recebe uma conexão para permitir comunicação com banco de dados
 	 * 
 	 * @param conn
 	 */
-	public MenuCliente(Connection conn) {
+	public MenuCliente(Connection conn, Scanner sc) {
 		this.servicocliente = new ClienteService(conn);
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 	/**
-	 * Método mostrarMenuPrincipal
-	 * 
 	 * Responsável por oferecer opções inciais para o cliente acessar ou cadastrar uma conta
-	 * 
 	 */
 	public void mostrarMenuPrincipal() {
 			
 			int option = 9;
 			
 			//validação da entrada de opção pelo usuário
-			do {
+			while (true) {
 				
-				System.out.println("MENU CLIENTE");
+				System.out.println("\nMENU CLIENTE");
+				System.out.println("================================================");
 				System.out.println("1- Iniciar Sessão");
 				System.out.println("2- Fazer cadastro de cliente");
 				System.out.println("3- Voltar ao menu principal");
+				System.out.println("================================================\n");
+				System.out.print("Informe a ação desejada: ");
+
 				
 				try {
 					
@@ -86,17 +88,13 @@ public class MenuCliente {
 						System.out.println("Opção inválida, tente novamente: ");
 				}
 	
-				
-			} while (option != 3);
-			
+			}
+		
 		}
 	
 	
 	/**
-	 * Método fazerCadastro
-	 * 
 	 * Responsável por fornecer a interface de cadastro para o cliente
-	 * 
 	 */
 	private void fazerCadastro() {
 		
@@ -108,7 +106,7 @@ public class MenuCliente {
 		String email;
 		String senha;
 		
-		System.out.println("CADASTRO DE NOVO CLIENTE");
+		System.out.println("\nCADASTRO DE NOVO CLIENTE");
 		
 		//campo para validação de CPF
 		while (true) {
@@ -201,14 +199,16 @@ public class MenuCliente {
 		    }
 		}
 		
-		System.out.println("Confirmando informações: ");
+		System.out.println("\nCONFIRMANDO AS INFORMAÇÕES: ");
+		System.out.println("================================================");
 		System.out.printf("CPF: %s\n", cpf);
 		System.out.printf("Primeiro nome: %s\n", primeiroNome);
 		System.out.printf("Nome do meio: %s\n", nomeMeio);
 		System.out.printf("Ultimo nome: %s\n", ultimoNome);
 		System.out.printf("Telefone: %s\n", telefone);
 		System.out.printf("Email: %s\n", email);
-		System.out.printf("Senha da conta: %s\n\n", senha);
+		System.out.printf("Senha da conta: %s\n", senha);
+		System.out.println("================================================\n");
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
 		//validação da escolha do usuário
@@ -249,10 +249,7 @@ public class MenuCliente {
 	}
 	
 	/**
-	 * Método fazerLogin
-	 * 
 	 * Responsável por receber credenciais do usuário e passá-las para a camada de serviço
-	 * 
 	 */
 	private void fazerLogin() {
 		System.out.print("Digite o seu CPF para poder inciar sessão: ");
@@ -284,21 +281,23 @@ public class MenuCliente {
 	}
 	
 	/**
-	 * Método menuClienteLogado
-	 * 
 	 * Responsável por oferecer o menu de ações para o cliente em sessão
-	 * 
 	 * @param c objeto Cliente
 	 */
 	private void menuClienteLogado(Cliente c) {
 		int option = -1;
-		do {
-			System.out.println("MENU DO CLIENTE");
+		
+		while (true) {
+			System.out.println("\nMENU DO CLIENTE");
+			System.out.println("================================================");
 			System.out.printf("O que deseja fazer hoje, %s?\n", c.getPrimeiroNome());
 			System.out.println("1- Editar perfil");
 			System.out.println("2- Visualizar pedidos");
 			System.out.println("3- Fazer um pedido");
 			System.out.println("4- Fazer Logoff");
+			System.out.println("================================================\n");
+			
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -318,22 +317,23 @@ public class MenuCliente {
 			
 			switch (option) {
 				case 1:
-					MenuPerfilCliente menuperfil = new MenuPerfilCliente(servicocliente, conn);
-					menuperfil.mostrarMenuPerfil(c);
+					MenuPerfilCliente menuPerfil = new MenuPerfilCliente(servicocliente, conn, sc);
+					menuPerfil.mostrarMenuPerfil(c);
 					break;
 				case 2:
-					
+					MenuPedidoCliente menuPedidos = new MenuPedidoCliente(conn, sc);
+					menuPedidos.mostrarPedidosCliente(c);
 					break;
 				case 3:
-					MenuSelecaoRestaurante menupedido = new MenuSelecaoRestaurante(conn, c);
-					menupedido.mostrarRestaurantes();
+					MenuSelecaoRestaurante menuCompras = new MenuSelecaoRestaurante(conn, c, sc);
+					menuCompras.mostrarRestaurantes();
 					break;
 				case 4:
 					System.out.println("Até uma próxima.");
 					return;
 			}
 			
-		} while (option != 4);
+		}
 		
 	}
 

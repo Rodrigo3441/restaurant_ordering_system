@@ -1,4 +1,4 @@
-package ui;
+package ui.cliente;
 
 import java.sql.Connection;
 import java.util.Scanner;
@@ -21,34 +21,29 @@ import services.ClienteService;
 
 public class MenuPerfilCliente {
 	
-	private Scanner sc = new Scanner(System.in);
+	private Scanner sc;
 	private ClienteService servicocliente;
 	private Connection conn;
 	
-	/**
-	 * 
-	 * @param servicocliente
-	 */
-	public MenuPerfilCliente(ClienteService servicocliente, Connection conn) {
+	public MenuPerfilCliente(ClienteService servicocliente, Connection conn, Scanner sc) {
 		this.servicocliente = servicocliente;
 		this.conn = conn;
+		this.sc = sc;
 	}
 	
 
 	/**
-	 * Método mostrarMenuPerfil
-	 * 
 	 * Responsável por exibir as ações de personalização do perfil
-	 * 
 	 * @param c objeto Cliente
 	 */
 	public void mostrarMenuPerfil(Cliente c) {
 		int option = 9;
 		
 		//validação da entrada de opção pelo usuário
-		do {
+		while (true) {
 			
-			System.out.println("MENU DE EDIÇÃO DE PERFIL");
+			System.out.println("\nMENU DE EDIÇÃO DE PERFIL");
+			System.out.println("================================================");
 			System.out.println("1- Atualizar primeiro nome");
 			System.out.println("2- Atualizar nome do meio");
 			System.out.println("3- Atualizar ultimo nome");
@@ -57,6 +52,8 @@ public class MenuPerfilCliente {
 			System.out.println("6- Atualizar senha");
 			System.out.println("7- Atualizar endereço");
 			System.out.println("8- Sair da edição de perfil");
+			System.out.println("================================================\n");
+			System.out.print("Informe a ação desejada: ");
 			
 			try {
 				
@@ -95,20 +92,20 @@ public class MenuPerfilCliente {
 					this.atualizarSenha(c);		
 					break;
 				case 7:
-					MenuEnderecoCliente menuenderecocliente = new MenuEnderecoCliente(conn);
+					MenuEnderecoCliente menuenderecocliente = new MenuEnderecoCliente(conn, sc);
 					menuenderecocliente.mostrar(c);
 					break;
 				case 8:
+					System.out.println("Voltando ao menu anterior");
 					return;
 				
 			}
 
-		} while (option != 8);
+		}
 		
 	}
 	
 	/**
-	 * Método atualizarPrimeiroNome
 	 * Responsável por atualizar o primeiro nome do cliente
 	 * @param c objeto cliente
 	 */
@@ -134,7 +131,6 @@ public class MenuPerfilCliente {
 	}
 	
 	/**
-	 * Método atualizarNomeMeio
 	 * Responsável por atualizar o nome do meio do cliente
 	 * @param c objeto cliente
 	 */
@@ -161,7 +157,6 @@ public class MenuPerfilCliente {
 	}
 	
 	/**
-	 * Método atualizarUltimoNome
 	 * Responsável por atualizar o ultimo nome do cliente
 	 * @param c objeto cliente
 	 */
@@ -187,7 +182,6 @@ public class MenuPerfilCliente {
 	}
 	
 	/**
-	 * Método atualizarTelefone
 	 * Responsável por atualizar o telefone do cliente
 	 * @param c objeto cliente
 	 */
@@ -213,7 +207,6 @@ public class MenuPerfilCliente {
 	}
 		
 	/**
-	 * Método atualizarEmail
 	 * Responsável por atualizar o email do usuário
 	 * @param c objeto cliente
 	 */
@@ -239,7 +232,6 @@ public class MenuPerfilCliente {
 	}
 		
 	/**
-	 * Método atualizarSenha
 	 * Responsável por atualizar a senha do usuário
 	 * @param c objeto cliente
 	 */
