@@ -1,26 +1,25 @@
 package entities;
 
+/**
+ * Entidade: Entregador
+ *
+ * Descrição:
+ * Representa um entregador cadastrado no sistema.
+ *
+ * Responsabilidades:
+ * - Armazenar informações pessoais do entregador
+ * - Manter dados do veículo utilizado para entregas
+ * - Controlar a disponibilidade do entregador
+ * - Exibir informações formatadas do entregador
+ *
+ * @author Rodrigo
+ * @since 20-04-2026
+ */
+
 public class Entregador extends Usuario {
 	private String veiculo;
 	private Short disponibilidade;
-	
-	/**
-	 * Construtor com argumentos
-	 * @param cpf
-	 * @param primeiroNome
-	 * @param nomeMeio
-	 * @param ultimoNome
-	 * @param telefone
-	 * @param veiculo
-	 * @param disponibilidade
-	 */
-	public Entregador(String cpf, String primeiroNome, String nomeMeio, String ultimoNome, String telefone,
-			String veiculo, Short disponibilidade) {
-		super(cpf, primeiroNome, nomeMeio, ultimoNome, telefone);
-		this.veiculo = veiculo;
-		this.disponibilidade = disponibilidade;
-	}
-	
+		
 	/**
 	 * Construtor sem argumentos
 	 */
@@ -28,42 +27,26 @@ public class Entregador extends Usuario {
 		super();
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getVeiculo() {
 		return veiculo;
 	}
 
-	/**
-	 * 
-	 * @param veiculo
-	 */
 	public void setVeiculo(String veiculo) {
 		this.veiculo = veiculo;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public short getDisponibilidade() {
 		return disponibilidade;
 	}	
-	
+
 	/**
-	 * 
-	 * @return
+	 * Retorna uma mensagem de disponibilidade do entregador baseado no índice de disponibilidade
+	 * @return uma string com os dois possíveis status de disponibilidade
 	 */
 	public String getDisponibilidadeString() {
 		return (this.disponibilidade == 0) ? "Livre" : "Ocupado";
 	}
 
-	/**
-	 * 
-	 * @param disponibilidade
-	 */
 	public void setDisponibilidade(Short disponibilidade) {
 		this.disponibilidade = disponibilidade;
 	}

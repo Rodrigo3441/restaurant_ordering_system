@@ -1,59 +1,53 @@
 package entities;
 
+/**
+ * Entidade: ItemPedido
+ *
+ * Descrição:
+ * Representa um item associado a um pedido do sistema.
+ *
+ * Responsabilidades:
+ * - Armazenar informações do produto vinculado ao pedido
+ * - Registrar a quantidade solicitada do produto
+ * - Relacionar produtos aos pedidos realizados
+ *
+ * @author Rodrigo
+ * @since 20-04-2026
+ */
+
 public class ItemPedido {
 	private Integer numeroPedido;
 	private Integer codigoProduto;
 	private Integer quantidade;
 	
 	
+	/**
+	 * Construtor sem argumentos
+	 */
 	public ItemPedido() {
 		
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Integer getNumeroPedido() {
 		return numeroPedido;
 	}
 
-	/**
-	 * 
-	 * @param numeroPedido
-	 */
 	public void setNumeroPedido(Integer numeroPedido) {
 		this.numeroPedido = numeroPedido;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Integer getCodigoProduto() {
 		return codigoProduto;
 	}
 
-	/**
-	 * 
-	 * @param codigoProduto
-	 */
 	public void setCodigoProduto(Integer codigoProduto) {
 		this.codigoProduto = codigoProduto;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Integer getQuantidade() {
 		return quantidade;
 	}
 
-	/**
-	 * 
-	 * @param quantidade
-	 */
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
 	}

@@ -1,5 +1,20 @@
 package entities;
 
+/**
+ * Entidade: Produto
+ *
+ * Descrição:
+ * Representa um produto cadastrado no sistema.
+ *
+ * Responsabilidades:
+ * - Armazenar informações do produto
+ * - Manter descrição e identificação do produto
+ * - Associar o produto a uma categoria
+ *
+ * @author Rodrigo
+ * @since 20-04-2026
+ */
+
 public class Produto {
 	private Integer codigo;
 	private String nome;
@@ -7,88 +22,42 @@ public class Produto {
 	private Integer idCategoria;
 	
 	/**
-	 * 
-	 * @param codigo
-	 * @param nome
-	 * @param descricao
-	 * @param idCategoria
+	 * Construtor sem argumentos
 	 */
-	public Produto(Integer codigo, String nome, String descricao, Integer idCategoria) {
-		this.codigo = codigo;
-		this.nome = nome;
-		this.descricao = descricao;
-		this.idCategoria = idCategoria;
-	}
-	
 	public Produto() {
 		
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Integer getCodigo() {
 		return codigo;
 	}
 
-	/**
-	 * 
-	 * @param codigo
-	 */
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getNome() {
 		return nome;
 	}
 	
-	/**
-	 * 
-	 * @param nome
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public String getDescricao() {
 		return descricao;
 	}
 
-	/**
-	 * 
-	 * @param descricao
-	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
 	public Integer getIdCategoria() {
 		return idCategoria;
 	}
 
-	/**
-	 * 
-	 * @param idCategoria
-	 */
 	public void setIdCategoria(Integer idCategoria) {
 		this.idCategoria = idCategoria;
 	}
-	
-	
-	
-	
+
 }

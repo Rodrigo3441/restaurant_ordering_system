@@ -1,85 +1,93 @@
 package entities;
 
-public class Endereco {
+/**
+ * Classe Abstrata: Endereco
+ *
+ * Descrição:
+ * Representa uma entidade base para endereços do sistema.
+ *
+ * Responsabilidades:
+ * - armazenar dados comuns dos endereços
+ * - definir comportamentos compartilhados
+ *
+ * @author Rodrigo
+ * @since 20-04-2026
+ */
+
+public abstract class Endereco {
 	protected String cep;
 	protected String nome;
 	protected Integer numero;
 	
-	
 	/**
-	 * 
-	 * @param cep
-	 * @param nomeRua
-	 * @param numeroRua
+	 * Construtor sem argumentos
 	 */
-	protected Endereco(String cep, String nomeRua, Integer numeroRua) {
-		this.cep = cep;
-		this.nome = nomeRua;
-		this.numero = numeroRua;
-	}
-	
 	protected Endereco() {
 		
 	}
 
 	/**
+	 * retorna o CEP do endereço.
+	 * Caso não exista CEP cadastrado, retorna uma mensagem padrão
 	 * 
-	 * @return
+	 * @return CEP do endereço ou mensagem informando ausência de CEP
 	 */
 	public String getCep() {
 		if (cep != null) {
 			return cep;
-		} else {
-			return "Sem cep cadastrado";
-		}
+		} 
+		return "Sem cep cadastrado";
 	}
 
-	/**
-	 * 
-	 * @param cep
-	 */
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Retorna o nome da rua.
+	 * Caso não exista nome cadastrado, retorna uma mensagem padrão.
+	 *
+	 * @return nome da rua ou mensagem informando ausência de cadastro
 	 */
 	public String getNome() {
 		if (nome != null) {
 			return nome;
-		} else {
-			return "Sem nome de rua cadastrado";
-		}	}
+		} 
+		return "Sem nome de rua cadastrado";
+	}
 
-	/**
-	 * 
-	 * @param nome
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Retorna o número do endereço.
+	 * Caso não exista número cadastrado, retorna 0.
+	 *
+	 * @return número do endereço ou 0
 	 */
 	public Integer getNumero() {
 		if (numero != null) {
 			return numero;
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
-	/**
-	 * 
-	 * @param numero
-	 */
 	public void setNumero(Integer numero) {
 		this.numero = numero;
 	}
+	
+	/**
+	 * Retorna uma string formatada do endereço
+	 * @return String de endereço formatada
+	 */
+	public abstract String formatarEndereco();
+	
+	/**
+	 * Retorna a identificação de quem o endereço pertence
+	 * @return String com identificação cpf/cnpj
+	 */
+	public abstract String getIdentificacao();
 	
 	
 }
