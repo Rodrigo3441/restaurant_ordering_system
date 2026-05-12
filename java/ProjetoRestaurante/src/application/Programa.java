@@ -35,5 +35,8 @@ public class Programa {
 		//Instanciação do menu principal para o início da aplicação
 		MenuPrincipal mn = new MenuPrincipal(conn, sc);
 		mn.mostrar();
+		
+		//fecha o scanner ao término de execução da aplicação
+		sc.close();
 	}
 }
