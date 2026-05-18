@@ -47,9 +47,10 @@ public class MenuSelecaoProduto {
 	 */
 	public void mostrarProdutos(Restaurante r, Cliente c) {
 
-		//armazena todos os produtos do restaurante escolhido pelo usuário
+		//Armazena todos os produtos oferecidos pelo restaurante escolhido pelo cliente
 		ArrayList<ProdutoRestauranteView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(r.getCnpj());
 		
+		//armazena todos os produtos do restaurante escolhido pelo usuário
 		ArrayList<ItemPedidoView> carrinhoCompras = new ArrayList<ItemPedidoView>();
 		
 		//interrompe se o restaurante não tiver pelo menos um produto
