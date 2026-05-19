@@ -1,7 +1,3 @@
-CREATE DATABASE Fred_Food;
-USE Fred_Food;
-
-
 -- Tabela Cliente
 CREATE TABLE CLIENTE (
 	pk_cli_cpf VARCHAR(11) PRIMARY KEY,
