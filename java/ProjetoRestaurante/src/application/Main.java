@@ -7,7 +7,7 @@ import ui.MainMenu;
 import java.util.Locale;
 
 /**
- * Class: Programa
+ * Class: Main
  *
  * Description:
  * Main class responsible only for starting the application
