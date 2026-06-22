@@ -1,14 +1,14 @@
 package view;
 /**
- * Classe: ProdutoRestauranteView
+ * Class: RestaurantProductView
  *
- * Descrição:
- * Representa a visualização de um produto associado a um restaurante,
- * contendo informações combinadas como nome, descrição, preço e quantidade em estoque.
+ * Description:
+ * Represents the view of a restaurant product,
+ * containing combined information such as name, description, price, and stock quantity.
  *
- * Responsabilidades:
- * - Armazenar dados resultantes de consultas com JOIN entre PRODUTO e PRODUTO_RESTAURANTE
- * - Servir como modelo para exibição de produtos ao restaurante
+ * Responsibilities:
+ * - Store data resulting from JOIN query between PRODUCT and PRODUCT_RESTAURANT
+ * - Serve as a model for displaying products to the restaurant
  *
  * @author rodrigo
  * @since 28-04-2026
@@ -21,7 +21,7 @@ public class RestaurantProductView {
 	private String descricao;
 	
 	/**
-	 * Construtor sem argumentos
+	 * No-argument constructor
 	 */
 	public RestaurantProductView() {
 		

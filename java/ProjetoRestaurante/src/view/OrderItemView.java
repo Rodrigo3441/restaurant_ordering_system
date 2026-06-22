@@ -1,20 +1,20 @@
 package view;
 /**
- * Classe: ItemPedidoView
+ * Class: OrderItemView
  *
- * Descrição:
- * Representa um item presente no carrinho de compras do cliente,
- * contendo informações básicas do produto selecionado, como nome,
- * preço, código e quantidade desejada.
+ * Description:
+ * Represents an item in the customer's shopping cart, containing basic
+ * information about the selected product such as name, price, code, and
+ * desired quantity.
  *
- * Responsabilidades:
- * - Armazenar os dados de um produto adicionado ao carrinho
- * - Controlar a quantidade escolhida pelo cliente
- * - Servir como modelo para exibição dos itens do pedido na interface
+ * Responsibilities:
+ * - Hold the data for a product added to the cart
+ * - Manage the quantity chosen by the customer
+ * - Serve as a model for displaying order items in the UI
  *
- * Observações:
- * - Cada instância representa um único produto no carrinho
- * - A quantidade pode ser alterada conforme interação do usuário
+ * Notes:
+ * - Each instance represents a single product in the cart
+ * - Quantity may be modified through user interaction
  *
  * @author rodrigo
  * @since 04-05-2026
