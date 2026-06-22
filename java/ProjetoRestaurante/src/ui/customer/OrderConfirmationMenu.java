@@ -9,14 +9,14 @@ import services.OrderService;
 import view.OrderItemView;
 
 /**
- * Classe: MenuConfirmacaoPedido
+ * Class: OrderConfirmationMenu
  *
- * Descrição:
- * Classe responsável por fornecer um relatório do pedido do cliente antes do mesmo confirmar a compra
+ * Description:
+ * Class responsible for providing a summary of the customer's order before they confirm the purchase
  *
- * Responsabilidades:
- * - fornecer interface
- * - comunicar com a camada serviço
+ * Responsibilities:
+ * - provide interface
+ * - communicate with the service layer
  *
  * @author Rodrigo
  * @since 05-05-2026
@@ -35,11 +35,11 @@ public class OrderConfirmationMenu {
 	
 	
 	/**
-	 * exibe todos os detalhes do pedido do usuário, solicita confirmação e retorna se o pedido foi confirmado ou não
-	 * @param r objeto restaurante
-	 * @param c objeto cliente
-	 * @param carrinhoCompras do cliente
-	 * @return true se o pedido foi criado
+	 * Displays all order details for the user, asks for confirmation, and returns whether the order was confirmed or not
+	 * @param r restaurant object
+	 * @param c customer object
+	 * @param carrinhoCompras customer's shopping cart
+	 * @return true if the order was created
 	 */
 	public boolean mostrarDetalhesPedido(Restaurant r, Customer c, ArrayList<OrderItemView> carrinhoCompras) {
 		double valorTotal = 0;
@@ -95,8 +95,8 @@ public class OrderConfirmationMenu {
 	}
 	
 	/**
-	 * Exibe o menu das ações disponíveis para o usuário confirmar o pedido, cancelar ou adicionar mais algum produto
-	 * @return número da ação desejada
+	 * Displays the action menu for the user to confirm the order, cancel, or add more products
+	 * @return selected action number
 	 */
 	private int exibirMenuAcao() {
 		int option;
@@ -113,9 +113,9 @@ public class OrderConfirmationMenu {
 				option = sc.nextInt();
 				sc.nextLine();
 				
-				//verificar se a opção do usuário está fora do intervalo permitido
+				// check if the user's option is outside the allowed range
 				if (option >= 1 && option <= 2) {
-					//retorna a ação desejada do usuário
+					// return the user's chosen action
 					return option; 
 				} else {
 					System.out.println("Digite uma opção válida: ");

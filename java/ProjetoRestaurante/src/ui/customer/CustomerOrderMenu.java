@@ -10,13 +10,13 @@ import services.OrderService;
 import view.OrderItemView;
 
 /**
- * Classe: MenuPedidoCliente
+ * Class: CustomerOrderMenu
  *
- * Descrição:
- * Classe responsável por listar todos os pedidos que o cliente já realizou
+ * Description:
+ * Class responsible for displaying all orders that the customer has already made
  *
- * Responsabilidades:
- * - oferecer menus interativos para o usuário
+ * Responsibilities:
+ * - provide interactive menus for the user
  *
  * @author Rodrigo
  * @since 08-05-2026
@@ -33,8 +33,8 @@ public class CustomerOrderMenu {
 	}
 	
 	/**
-	 * Exibe todos os pedidos que o cliente já realizou no sistema
-	 * @param c objeto Cliente
+	 * Displays all orders that the customer has already made in the system
+	 * @param c Customer object
 	 */
 	public void mostrarPedidosCliente(Customer c) {
 		int option;
@@ -69,7 +69,7 @@ public class CustomerOrderMenu {
 					option = sc.nextInt();
 					sc.nextLine();
 					
-					//verificar se a opção do usuário está fora do intervalo permitido
+					// Check if the user's option is outside the allowed range
 					if (option >= 1 && option <= 2) {
 						break;
 					} else {
@@ -97,21 +97,21 @@ public class CustomerOrderMenu {
 	}
 	
 	/**
-	 * Exibe todos os itens que estão em determinado pedido
-	 * @param listaPedidos lista com todos os pedidos
+	 * Displays all items in a specific order
+	 * @param listaPedidos list containing all orders
 	 */
 	private void detalharPedido(ArrayList<Order> listaPedidos) {
 		int index;
 		double valorTotal = 0;
 		System.out.print("Digite o índice do pedido que você deseja visualizar detalhes: ");
 		
-		//campo para validação entrada pelo usuário
+		// Field for validating user input
 		while (true) {
 		    try {
 		    	index = sc.nextInt();
 			    sc.nextLine();
 			    
-			    index--; //usuário enxerga de (1)à(N). Computador enxerga de (0)à(N-1)
+			    index--; // User sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
 		        servicoPedido.validarIndex(listaPedidos, index);
 		        break;
@@ -123,10 +123,10 @@ public class CustomerOrderMenu {
 		    }
 		}
 		
-		//armazena o código do pedido para evitar repetição de código
+		// Stores the order code to avoid code repetition
 		int codigoPedido = listaPedidos.get(index).getNumeroPedido();
 		
-		//armazena todos os itens do pedido que o usuário escolheu
+		// Stores all items from the order the user chose
 		ArrayList<OrderItemView> listaItensPedido = servicoPedido.retornarItensPedido(codigoPedido);
 		
 		System.out.printf("\nEXIBINDO ITENS DO PEDIDO %d:\n", codigoPedido);

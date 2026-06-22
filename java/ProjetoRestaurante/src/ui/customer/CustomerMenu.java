@@ -6,13 +6,13 @@ import entities.Customer;
 import services.CustomerService;
 
 /**
- * Classe: MenuCliente
+ * Class: CustomerMenu
  *
- * Descrição:
- * Classe responsável por oferecer a interface do sistema para o cliente
+ * Description:
+ * Provides the user interface for customer interactions.
  *
- * Responsabilidades:
- * - oferecer menus interativos para o cliente
+ * Responsibilities:
+ * - present interactive menus for customers
  *
  * @author Rodrigo
  * @since 24-04-2026
@@ -25,9 +25,9 @@ public class CustomerMenu {
 	private Scanner sc;
 	
 	/**
-	 * Recebe uma conexão para permitir comunicação com banco de dados
-	 * 
-	 * @param conn
+	 * Receives a database connection to allow communication with the DB
+	 *
+	 * @param conn database connection
 	 */
 	public CustomerMenu(Connection conn, Scanner sc) {
 		this.servicocliente = new CustomerService(conn);
@@ -36,13 +36,13 @@ public class CustomerMenu {
 	}
 	
 	/**
-	 * Responsável por oferecer opções inciais para o cliente acessar ou cadastrar uma conta
+	 * Presents initial options for a customer to log in or register an account
 	 */
 	public void mostrarMenuPrincipal() {
 			
 			int option = 9;
 			
-			//validação da entrada de opção pelo usuário
+			// validate user's menu option input
 			while (true) {
 				
 				System.out.println("\nMENU CLIENTE");
@@ -59,7 +59,7 @@ public class CustomerMenu {
 					option = sc.nextInt();
 					sc.nextLine();
 					
-					//verificar se a opção do usuário está fora do intervalo permitido
+					// check if the user's option is outside the allowed range
 					if (!(option >= 0 && option <= 3)) {
 						System.out.println("Digite uma opção válida: ");
 					}
@@ -70,7 +70,7 @@ public class CustomerMenu {
 					option = -1;
 				}
 				
-				//acesso as opções do menu			
+				//access the corresponding method based on the user's choice			
 				switch (option) {
 					case 1:
 						this.fazerLogin();
@@ -94,7 +94,7 @@ public class CustomerMenu {
 	
 	
 	/**
-	 * Responsável por fornecer a interface de cadastro para o cliente
+	 * Provides the registration interface for a new customer
 	 */
 	private void fazerCadastro() {
 		
@@ -108,7 +108,7 @@ public class CustomerMenu {
 		
 		System.out.println("\nCADASTRO DE NOVO CLIENTE");
 		
-		//campo para validação de CPF
+		// field for CPF validation
 		while (true) {
 		    System.out.print("Digite o seu CPF (11 dígitos): ");
 		    cpf = sc.nextLine().trim();
@@ -121,7 +121,7 @@ public class CustomerMenu {
 		    }
 		}
 		
-		//campo para validação do primeiro nome
+		// field for first name validation
 		while (true) {
 		    System.out.print("Digite o seu primeiro nome: ");
 		    primeiroNome = sc.nextLine().trim();
@@ -134,7 +134,7 @@ public class CustomerMenu {
 		    }
 		}
 		
-		//campo para validação do ultimo nome
+		// field for last name validation
 		while (true) {
 		    System.out.print("Digite o seu último nome: ");
 		    ultimoNome = sc.nextLine().trim();
@@ -147,7 +147,7 @@ public class CustomerMenu {
 		    }
 		}
 		
-		//campo para validação do nome do meio
+		// field for middle name validation
 		while (true) {
 		    System.out.print("Digite o seu nome do meio: ");
 		    nomeMeio = sc.nextLine().trim();
@@ -160,7 +160,7 @@ public class CustomerMenu {
 		    }
 		}
 				
-		//campo para validação de telefone
+		// field for phone validation
 		while (true) {
 		    System.out.print("Digite o seu telefone: ");
 		    telefone = sc.nextLine().trim();
@@ -173,7 +173,7 @@ public class CustomerMenu {
 		    }
 		}
 		
-		//campo para validação de email
+		// field for email validation
 		while (true) {
 		    System.out.print("Digite o seu email: ");
 		    email = sc.nextLine().trim();
@@ -186,7 +186,7 @@ public class CustomerMenu {
 		    }
 		}
 	
-		//campo para validação de senha
+		// field for password validation
 		while (true) {
 		    System.out.print("Digite a sua senha de usuário: ");
 		    senha = sc.nextLine().trim();
@@ -211,13 +211,13 @@ public class CustomerMenu {
 		System.out.println("================================================\n");
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
-		//validação da escolha do usuário
+		// validate user's confirmation choice
 		while (true) {
 			
 			String opt = sc.next();
 			
 			if (opt.equals("s")) {
-				//instanciação de um novo cliente e vinculação dos atributos
+				// instantiate a new customer and set attributes
 				Customer c = new Customer();
 				c.setCpf(cpf);
 				c.setPrimeiroNome(primeiroNome);
@@ -227,7 +227,7 @@ public class CustomerMenu {
 				c.setEmail(email);
 				c.setSenha(senha);
 				
-				//chamada do método para cadastro e verificação se houve êxito na ação
+					// call service method to register and check success
 				if(servicocliente.cadastrarCliente(c)) {
 					System.out.println("Você foi cadastrado com sucesso!");
 					
@@ -249,24 +249,24 @@ public class CustomerMenu {
 	}
 	
 	/**
-	 * Responsável por receber credenciais do usuário e passá-las para a camada de serviço
+	 * Collects user credentials and forwards them to the service layer
 	 */
 	private void fazerLogin() {
 		System.out.print("Digite o seu CPF para poder inciar sessão: ");
 		
 		String cpf = sc.next().trim();
 		
-		//armazena todas as informações do restaurante
+		// retrieve the customer information
 		Customer c = servicocliente.retornarCliente(cpf);
 		
-		//verifica se houve retorno para um restaurante
+		// check if a customer was returned
 		if(c != null) {
 
 			System.out.print("Digite a senha da sua conta: ");
 			
 			String senha = sc.next().trim();
 			
-			//verifica se o atributo senha de r confere com senha informada
+			// verify that the stored password matches the entered password
 			if (c.getSenha().equals(senha)) {
 				System.out.println("Seja bem vindo, " + c.getPrimeiroNome() + "!");
 				this.menuClienteLogado(c);
@@ -281,8 +281,8 @@ public class CustomerMenu {
 	}
 	
 	/**
-	 * Responsável por oferecer o menu de ações para o cliente em sessão
-	 * @param c objeto Cliente
+	 * Presents action menu for a logged-in customer
+	 * @param c customer object
 	 */
 	private void menuClienteLogado(Customer c) {
 		int option = -1;
@@ -304,7 +304,7 @@ public class CustomerMenu {
 				option = sc.nextInt();
 				sc.nextLine();
 				
-				//verificar se a opção do usuário está fora do intervalo permitido
+					// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 4)) {
 					System.out.println("Digite uma opção válida: ");
 				}

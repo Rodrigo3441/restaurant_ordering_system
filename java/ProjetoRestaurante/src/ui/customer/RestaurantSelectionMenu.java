@@ -9,14 +9,14 @@ import services.OrderService;
 import services.RestaurantService;
 
 /**
- * Classe: MenuSelecaoRestaurante
+ * Class: RestaurantSelectionMenu
  *
- * Descrição:
- * Classe responsável por oferecer a interface para o cliente escolher
- * um restaurante para poder fazer os pedidos
+ * Description:
+ * Class responsible for providing an interface for customers to choose
+ * a restaurant to place orders.
  *
- * Responsabilidades:
- * - oferecer menus interativos para o restaurante
+ * Responsibilities:
+ * - Provide interactive menus for restaurant selection
  *
  * @author Rodrigo
  * @since 04-05-2026
@@ -40,7 +40,7 @@ public class RestaurantSelectionMenu {
 	
 	
 	/**
-	 * Exibe a interface para que o usuário possa escolher de qual restaurante ele deseja comprar
+	 * Displays the interface for the user to choose which restaurant they want to order from.
 	 */
 	public void mostrarRestaurantes() {
 		int contador = 1; //enumerador dos restaurantes
@@ -48,7 +48,7 @@ public class RestaurantSelectionMenu {
 		
 		ArrayList<Restaurant> listaRestaurantes = servicorestaurante.listarRestaurantes();
 		
-		//impede o usuário de avançar se não houver restaurantes
+		// prevents the user from advancing if there are no restaurants
 		if (listaRestaurantes.isEmpty()) {
 			System.out.println("ERRO: não há nenhum restaurante cadastrado no sistema!");
 			return;
@@ -65,13 +65,13 @@ public class RestaurantSelectionMenu {
 		
 		System.out.print("Informe o índice de qual restaurante você deseja comprar: ");
 		
-		//campo para validação do índice do restaurante escolhido
+		// field for validating the index of the chosen restaurant
 		while (true) {
 		    try {
 		    	index = sc.nextInt();
 			    sc.nextLine();
 			    
-			    index--; //usuário enxerga de (1)à(N). Computador enxerga de (0)à(N-1)
+			    index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
 		        servicopedido.validarIndex(listaRestaurantes, index);
 		        break;
@@ -83,7 +83,7 @@ public class RestaurantSelectionMenu {
 		    }
 		}
 		
-		//pega da lista o restaurante escolhido pelo usuário com base no índice
+		// gets the restaurant chosen by the user from the list based on the index
 		Restaurant r = listaRestaurantes.get(index);
 
 		ProductSelectionMenu menuselecaoproduto = new ProductSelectionMenu(conn, sc);

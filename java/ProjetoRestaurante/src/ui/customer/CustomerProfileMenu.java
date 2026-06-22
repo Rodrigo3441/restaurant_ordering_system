@@ -7,13 +7,13 @@ import entities.Customer;
 import services.CustomerService;
 
 /**
- * Classe: MenuPerfilCliente
+ * Class: CustomerProfileMenu
  *
- * Descrição:
- * Classe responsável por oferecer a interface do sistema para o usuário
+ * Description:
+ * Provides the user interface for customer profile management.
  *
- * Responsabilidades:
- * - oferecer menus interativos para o usuário
+ * Responsibilities:
+ * - present interactive menus for the user to edit their profile
  *
  * @author Rodrigo
  * @since 24-04-2026
@@ -33,13 +33,13 @@ public class CustomerProfileMenu {
 	
 
 	/**
-	 * Responsável por exibir as ações de personalização do perfil
-	 * @param c objeto Cliente
+	 * Displays the profile editing actions menu
+	 * @param c Customer object
 	 */
 	public void mostrarMenuPerfil(Customer c) {
 		int option = 9;
 		
-		//validação da entrada de opção pelo usuário
+		// validate the user's menu option input
 		while (true) {
 			
 			System.out.println("\nMENU DE EDIÇÃO DE PERFIL");
@@ -60,7 +60,7 @@ public class CustomerProfileMenu {
 				option = sc.nextInt();
 				sc.nextLine();
 				
-				//verificar se a opção do usuário está fora do intervalo permitido
+				// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 8)) {
 					System.out.println("Digite uma opção válida: ");
 				}
@@ -71,7 +71,7 @@ public class CustomerProfileMenu {
 				option = -1;
 			}
 			
-			//acesso as opções do menu			
+			// access menu options
 			switch (option) {
 				case 1:
 					this.atualizarPrimeiroNome(c);
@@ -106,12 +106,13 @@ public class CustomerProfileMenu {
 	}
 	
 	/**
-	 * Responsável por atualizar o primeiro nome do cliente
-	 * @param c objeto cliente
+	 * Updates the customer's first name
+	 * @param c customer object
 	 */
 	private void atualizarPrimeiroNome(Customer c) {
 
-		//campo para validação do primeiro nome
+
+		// input loop for validating first name
 		while (true) {
 			System.out.print("Insira o seu primeiro nome (3-20 letras): ");
 			
@@ -131,12 +132,13 @@ public class CustomerProfileMenu {
 	}
 	
 	/**
-	 * Responsável por atualizar o nome do meio do cliente
-	 * @param c objeto cliente
+	 * Updates the customer's middle name
+	 * @param c customer object
 	 */
 	private void atualizarNomeMeio(Customer c) {
 
-		//campo para validação do nome do meio
+
+		// input loop for validating middle name
 		while (true) {
 			System.out.print("Insira o seu nome do meio (3-40 letras): ");
 			
@@ -157,12 +159,13 @@ public class CustomerProfileMenu {
 	}
 	
 	/**
-	 * Responsável por atualizar o ultimo nome do cliente
-	 * @param c objeto cliente
+	 * Updates the customer's last name
+	 * @param c customer object
 	 */
 	private void atualizarUltimoNome(Customer c) {
 
-		//campo para validação do ultimo nome
+
+		// input loop for validating last name
 		while (true) {
 			System.out.print("Insira o seu ultimo nome (3-20 letras): ");
 			
@@ -182,12 +185,13 @@ public class CustomerProfileMenu {
 	}
 	
 	/**
-	 * Responsável por atualizar o telefone do cliente
-	 * @param c objeto cliente
+	 * Updates the customer's phone number
+	 * @param c customer object
 	 */
 	private void atualizarTelefone(Customer c) {
 
-		//campo para validação do telefone
+
+		// input loop for validating phone number
 		while (true) {
 			System.out.print("Insira o seu novo telefone (até 11 dígitos): ");
 			
@@ -207,12 +211,13 @@ public class CustomerProfileMenu {
 	}
 		
 	/**
-	 * Responsável por atualizar o email do usuário
-	 * @param c objeto cliente
+	 * Updates the customer's email
+	 * @param c customer object
 	 */
 	private void atualizarEmail(Customer c) {
 
-		//campo para validação do email
+
+		// input loop for validating email
 		while (true) {
 			System.out.print("Insira o seu novo email: ");
 			
@@ -232,12 +237,13 @@ public class CustomerProfileMenu {
 	}
 		
 	/**
-	 * Responsável por atualizar a senha do usuário
-	 * @param c objeto cliente
+	 * Updates the customer's password
+	 * @param c customer object
 	 */
 	private void atualizarSenha(Customer c) {
 
-		//campo para validação da senha
+
+		// input loop for validating password
 		while (true) {
 			System.out.print("Insira a sua nova senha: ");
 			

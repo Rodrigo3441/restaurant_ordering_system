@@ -9,14 +9,14 @@ import entities.CustomerAddress;
 import services.AddressService;
 
 /**
- * Classe: MenuEnderecoCliente
+ * Class: CustomerAddressMenu
  *
- * Descrição:
- * Classe responsável por fornecer opções para o cliente gerenciar o endereço
+ * Description:
+ * Responsible for presenting address management options to the customer
  *
- * Responsabilidades:
- * - fornecer interface
- * - comunicar com a camada serviço
+ * Responsibilities:
+ * - provide the user interface
+ * - communicate with the service layer
  *
  * @author Rodrigo
  * @since 27-04-2026
@@ -35,16 +35,17 @@ public class CustomerAddressMenu {
 	}
 
 	/**
-	 * exibe a interface de endereço para o cliente pode gerenciar
-	 * tem dois estados:
-	 * se o cliente possui um endereço exibe um menu, caso contrário outro
-	 * @param c objeto cliente
+	 * Displays the address interface so the customer can manage it.
+	 * There are two states:
+	 * - if the customer has an address, show the edit menu
+	 * - otherwise, show the add-address menu
+	 * @param c customer object
 	 */
 	public void mostrar(Customer c) {
 		
 		int option = 9;
 		
-		//armazena o endereço do cliente
+		// store the customer's address
 		enderecoCliente = servicoendereco.retornarEnderecoCliente(c.getCpf());
 		
 		if (enderecoCliente == null) {
@@ -53,14 +54,14 @@ public class CustomerAddressMenu {
 			System.out.println("1- Adicionar endereço");
 			System.out.println("2- Voltar ao menu anterior");
 			
-			//escolha para menu sem endereço cadastrado 
+				// choice handling for menu when no address is registered
 			while (true) {
 				try {
 					
 					option = sc.nextInt();
 					sc.nextLine();
 					
-					//verificar se a opção do usuário está fora do intervalo permitido
+					// check if the user's choice is outside the allowed range
 					if (!(option > 0 && option <= 2)) {
 						System.out.println("Digite uma opção válida: ");
 					}
@@ -98,13 +99,13 @@ public class CustomerAddressMenu {
 				
 				System.out.print("Informe a ação desejada: ");
 				
-				// escolha para menu com endereço já cadastrado
+				// choice handling for menu when an address is already registered
 				try {
 					
 					option = sc.nextInt();
 					sc.nextLine();
 					
-					//verificar se a opção do usuário está fora do intervalo permitido
+					// check if the user's choice is outside the allowed range
 					if (!(option > 0 && option <= 4)) {
 						System.out.println("Digite uma opção válida: ");
 					}
@@ -115,7 +116,7 @@ public class CustomerAddressMenu {
 					option = -1;
 				}
 
-				//acesso as opções do menu			
+				// access the menu options
 				switch (option) {
 					case 1:
 						this.atualizarCepCliente(enderecoCliente);
@@ -142,15 +143,15 @@ public class CustomerAddressMenu {
 	}	
 	
 	/**
-	 * Implementa o cadastro de um endereço para um cliente
-	 * @param c objeto cliente
+	 * Implements the registration of an address for a customer
+	 * @param c customer object
 	 */
 	private void cadastrarEndereco(Customer c) {
 		String cep;
 		String nome;
 		int numero;
 	
-		//campo para validação do CEP
+		// field for CEP validation
 		while (true) {
 		    System.out.print("Digite o CEP da sua rua (8 dígitos): ");
 		    cep = sc.nextLine().trim();
@@ -163,7 +164,7 @@ public class CustomerAddressMenu {
 		    }
 		}
 		
-		//campo para validação do nome da rua
+		// field for street name validation
 		while (true) {
 		    System.out.print("Digite o nome da sua rua: ");
 		    nome = sc.nextLine().trim();
@@ -176,7 +177,7 @@ public class CustomerAddressMenu {
 		    }
 		}
 		
-		// validação do número da rua do cliente cliente
+		// validation of the customer's street number
 		while (true) {
 		    System.out.print("Digite o número da sua rua: ");
 	
@@ -201,13 +202,13 @@ public class CustomerAddressMenu {
 		System.out.println("================================================\n");
 		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
 		
-		//validação da escolha do usuário
+		// validation of the user's choice
 		while (true) {
 			
 			String opt = sc.next();
 			
 			if (opt.equals("s")) {
-				//instanciação de um novo enderecocliente e vinculação dos atributos
+				// instantiate a new CustomerAddress and bind attributes
 				CustomerAddress ec = new CustomerAddress();
 				ec.setCep(cep);
 				ec.setCpfCliente(c.getCpf());
@@ -239,12 +240,12 @@ public class CustomerAddressMenu {
 	}
 
 	/**
-	 * Implementa a atualização do CEP
-	 * @param ec objeto enderecoCliente
+	 * Implements CEP update
+	 * @param ec address object
 	 */
 	private void atualizarCepCliente(Address ec) {
 		
-		//campo para validação do CEP
+		// field for CEP validation
 		while (true) {
 			System.out.print("Digite o seu novo CEP (8 dígitos): ");
 			
@@ -265,12 +266,12 @@ public class CustomerAddressMenu {
 	}
 	
 	/**
-	 * Implementa a atualização do nome do endereço
-	 * @param ec objeto enderecocliente
+	 * Implements update of the address name
+	 * @param ec address object
 	 */
 	private void atualizarNomeEnderecoCliente(Address ec) {
 		
-		//campo para validação do nome da rua
+		// field for street name validation
 		while (true) {
 			System.out.print("Digite o novo nome da sua rua: ");
 			
@@ -290,12 +291,12 @@ public class CustomerAddressMenu {
 	}
 	
 	/**
-	 * Implementa a atualização do número do endereço do cliente
-	 * @param ec objeto enderecocliente
+	 * Implements update of the customer's address number
+	 * @param ec address object
 	 */
 	private void atualizarNumeroEnderecoCliente(Address ec) {
 		
-		//campo para validação do número da rua
+		// field for street number validation
 		while (true) {
 			System.out.print("Digite o novo número da sua rua: ");
 	

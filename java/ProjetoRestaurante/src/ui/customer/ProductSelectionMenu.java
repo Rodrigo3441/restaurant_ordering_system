@@ -11,14 +11,14 @@ import view.OrderItemView;
 import view.RestaurantProductView;
 
 /**
- * Classe: MenuSelecaoProduto
+ * Class: ProductSelectionMenu
  *
- * Descrição:
- * Classe responsável por oferecer a interface para o cliente escolher
- * os produtos que ele deseja comprar
+ * Description:
+ * Class responsible for providing the interface for the customer to choose
+ * the products they want to buy
  *
- * Responsabilidades:
- * - oferecer menus interativos para o restaurante
+ * Responsibilities:
+ * - provide interactive menus for the restaurant
  *
  * @author Rodrigo
  * @since 04-05-2026
@@ -40,36 +40,36 @@ public class ProductSelectionMenu {
 	
 	
 	/**
-	 * Exibe todos os produtos do restaurante escolhido pelo usuário e permite que ele adicione esses
-	 * produtos ao carrinho de compras dele
-	 * @param r objeto Restaurante
-	 * @param c objeto Cliente
+	 * Displays all products from the restaurant chosen by the user and allows them
+	 * to add these products to their shopping cart
+	 * @param r Restaurant object
+	 * @param c Customer object
 	 */
 	public void mostrarProdutos(Restaurant r, Customer c) {
 
-		//Armazena todos os produtos oferecidos pelo restaurante escolhido pelo cliente
+		// Stores all products offered by the restaurant selected by the customer
 		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(r.getCnpj());
 		
-		//armazena todos os produtos do restaurante escolhido pelo usuário
+		// Stores all products that the user has added to the shopping cart
 		ArrayList<OrderItemView> carrinhoCompras = new ArrayList<OrderItemView>();
 		
-		//interrompe se o restaurante não tiver pelo menos um produto
+		// Stop if the restaurant has no products registered
 		if (listaProdutos.isEmpty()) {
 			System.out.println("ERRO: não há produtos cadastrados para esse restaurante!");
 			return;
 		}
 		
-		//loop que permite o usuário adicionar vários produtos ao carrinho
+		// Loop that allows the user to add multiple products to the cart
 		while (true) {
 			
-			//Imprime o atual carrinho de compras do usuário
+			// Prints the current user's shopping cart
 			System.out.println("\n\nSEU CARRINHO DE COMPRAS");
 			System.out.println("============================================================================");
 			
 			if (carrinhoCompras.isEmpty()) {
 				System.out.println("Seu carrinho de compras está vazio!");
 			} else {
-				//imprime todos os produtos com um índice enumerando todos os items
+				// Prints all products with an index enumerating each item
 				for (int i = 0; i < carrinhoCompras.size(); i++) {
 					System.out.println(i+1 + "- " + carrinhoCompras.get(i));
 				}
@@ -95,18 +95,18 @@ public class ProductSelectionMenu {
 					this.removerItemPedido(carrinhoCompras);
 					break;
 				case 3:
-					//acessa o menu para exibição de detalhes se o carrinho não estiver vazio
+					// Access the details menu if the cart is not empty
 					if (carrinhoCompras.isEmpty()) {
 						System.out.println("ERRO: o carrinho de compras está vazio!");
 						break;
 					}
 					
 					OrderConfirmationMenu menuconfirmacao = new OrderConfirmationMenu(conn, sc);
-						
-					//chama o método e armazena se o pedido foi realizado ou não
+					
+					// Calls the method and stores whether the order was placed or not
 					boolean pedidoRealizado = menuconfirmacao.mostrarDetalhesPedido(r, c, carrinhoCompras);
-						
-					//se foi realizado esse método será interrompido aqui
+					
+					// If it was placed, this method will return here
 					if (pedidoRealizado) {
 						return;
 					}					
@@ -123,8 +123,8 @@ public class ProductSelectionMenu {
 	}
 	
 	/**
-	 * Exibe o menu das ações disponíveis para ele fazer no menu de pedidos
-	 * @return número da ação desejada
+	 * Displays the available action menu for the order screen
+	 * @return desired action number
 	 */
 	private int exibirMenuAcao() {
 		int option;
@@ -143,9 +143,9 @@ public class ProductSelectionMenu {
 				option = sc.nextInt();
 				sc.nextLine();
 				
-				//verificar se a opção do usuário está fora do intervalo permitido
+				// Check if the user's option is outside the allowed range
 				if (option >= 1 && option <= 4) {
-					//retorna a ação desejada do usuário
+					// Return the action selected by the user
 					return option; 
 				} else {
 					System.out.println("Digite uma opção válida: ");
@@ -161,22 +161,22 @@ public class ProductSelectionMenu {
 	}
 	
 	/**
-	 * permite que o usuário escolha pelo índice um produto para ser adicionado no carrinho de compras
-	 * @param listaProdutos lista de todos os produtos do restaurante escolhido
-	 * @param carrinhoCompras todos os produtos que o usuário já escolheu
+	 * Allows the user to choose a product by index to add to the shopping cart
+	 * @param listaProdutos list of all products from the selected restaurant
+	 * @param carrinhoCompras all products that the user has already chosen
 	 */
 	private void escolherItemPedido(ArrayList<RestaurantProductView> listaProdutos, ArrayList<OrderItemView> carrinhoCompras) {
 		int index;		  //indice do produto escolhido pelo usuário
 		
 		System.out.println("Digite o índice do produto que você deseja adicionar no carrinho");
 		
-		//campo para validação entrada pelo usuário
+		// field for validating user input
 		while (true) {
 		    try {
 		    	index = sc.nextInt();
 			    sc.nextLine();
 			    
-			    index--; //usuário enxerga de (1)à(N). Computador enxerga de (0)à(N-1)
+				index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
 		        servicopedido.validarIndex(listaProdutos, index);
 		        break;
@@ -188,10 +188,10 @@ public class ProductSelectionMenu {
 		    }
 		}
 		
-		//armazena o produto escolhido só no momento de adicionar ao carrinho
+		// store the chosen product only at the moment of adding it to the cart
 		RestaurantProductView produtoTemp = listaProdutos.get(index);
 		
-		//verificação para impedir de um produto sem estoque ser selecionado
+		// check to prevent selecting a product with no stock
 		if (produtoTemp.getQuantidadeEstoque() == 0) {
 			System.out.println("Esse produto está sem estoque!");
 			return;
@@ -200,15 +200,15 @@ public class ProductSelectionMenu {
 		System.out.printf("Produto escolhido: %s\n", produtoTemp.getNomeProduto());
 		System.out.print("Deseja adicionar esse produto ao seu carrinho? (s-sim/n-não): ");
 		
-		//usuário informa se confirma ou não a ação de inserir no carrinho
+		// user indicates whether they confirm the action of adding it to the cart
 		outer:
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
 		
 			switch (escolha) {
 				case "s":
-					// Antes de adicionar, verifica se o produto já está no carrinho
-					// e guarda o índice dele (ou -1 caso não exista)
+					// Before adding, check if the product is already in the cart
+					// and store its index (or -1 if it does not exist)
 					int indexProdutoExistente = servicopedido.retornarPosicaoItemCarrinho(carrinhoCompras, produtoTemp.getCodigoProduto());
 					
 					if (indexProdutoExistente != -1) {
@@ -229,10 +229,10 @@ public class ProductSelectionMenu {
 	}
 
 	/**
-	 * solicita quantas unidades de um produto o usuário deseja comprar
-	 * @param produtoTemp o produto que o usuário escolheu
-	 * @param carrinhoCompras todos os produtos que o cliente escolheu
-	 * @return ItemPedidoView
+	 * Prompts how many units of a product the user wants to buy
+	 * @param produtoTemp the product chosen by the user
+	 * @param carrinhoCompras all products the customer chose
+	 * @return OrderItemView
 	 */
 	private OrderItemView criarItemPedido(
 		RestaurantProductView produtoTemp, 
@@ -242,7 +242,7 @@ public class ProductSelectionMenu {
 		
 		System.out.printf("Digite quantas unidades de %s você deseja adicionar ao carrinho: ", produtoTemp.getNomeProduto());
 		
-		//campo para validação da quantidade escolhida pelo usuário
+		// field for validating the quantity chosen by the user
 		while (true) {
 		    try {
 		    	quantidade  = sc.nextInt();
@@ -262,9 +262,9 @@ public class ProductSelectionMenu {
 	}
 	
 	/**
-	 * atualiza a quantidade de um produto que o usuário já inseriu no carrinho
-	 * @param produto do restaurante
-	 * @param item escolhido pelo cliente
+	 * Updates the quantity of a product that the user already added to the cart
+	 * @param produto restaurant product
+	 * @param item chosen by the customer
 	 */
 	private void atualizarItemPedido(
 		RestaurantProductView produto, 
@@ -274,7 +274,7 @@ public class ProductSelectionMenu {
 
 		System.out.printf("O produto %s já está no carrinho. Deseja atualizar a quantidade? (s-sim/n-não)", item.getNome());
 		
-		//usuário informa se deseja ou não atualizar a quantidade do produto no carrinho
+		// user indicates whether they want to update the product quantity in the cart
 		outer:
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
@@ -284,7 +284,7 @@ public class ProductSelectionMenu {
 				
 				System.out.printf("Digite quantas unidades de %s você deseja comprar no total: ", item.getNome());
 				
-				//campo para validação da quantidade escolhida pelo usuário
+				// field for validating the quantity chosen by the user
 				while (true) {
 				    try {
 				    	quantidade  = sc.nextInt();
@@ -313,11 +313,11 @@ public class ProductSelectionMenu {
 	}
 	
 	/**
-	 * solicita o índice do produto que o usuário deseja remover do carrinho de compras
-	 * @param carrinhoCompras do usuário
+	 * Prompts the index of the product the user wants to remove from the shopping cart
+	 * @param carrinhoCompras user's shopping cart
 	 */
 	private void removerItemPedido(ArrayList<OrderItemView> carrinhoCompras) {
-		//index do produto que será removido do carrinho
+		// index of the product that will be removed from the cart
 		int index; 
 		
 		if (carrinhoCompras.isEmpty()) {
@@ -327,14 +327,14 @@ public class ProductSelectionMenu {
 		
 		System.out.print("Digite o índice do produto que você deseja remover do carrinho: ");
 		
-		//campo para validação entrada pelo usuário
+		// field for validating user input
 		while (true) {
 		    try {
 		    	index = sc.nextInt();
 			    sc.nextLine();
-			    
-			    index--; //usuário enxerga de (1)à(N). Computador enxerga de (0)à(N-1)
-			    
+		    	
+			    index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
+				
 		        servicopedido.validarIndex(carrinhoCompras, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
@@ -347,7 +347,7 @@ public class ProductSelectionMenu {
 		
 		System.out.printf("Deseja remover o produto %s do seu carrinho? (s-sim/n-não): ", carrinhoCompras.get(index).getNome());
 		
-		//usuário informa se deseja ou não remover o produto do carrinho
+		// user indicates whether they want to remove the product from the cart
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
 		
