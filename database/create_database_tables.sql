@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS restaurant (
     name VARCHAR (40) NOT NULL,
 	phone VARCHAR (11) NOT NULL,
     cat_id_fk INT NULL,
-    res_senha VARCHAR (255) NOT NULL,
+    passcode VARCHAR (255) NOT NULL,
     
     FOREIGN KEY (cat_id_fk)
     REFERENCES restaurant_category(res_cat_id_pk)
