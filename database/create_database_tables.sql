@@ -160,14 +160,14 @@ CREATE TABLE IF NOT EXISTS orders (
 -- Table: order_item
 -- ==========================================
 CREATE TABLE IF NOT EXISTS order_item (
-	order_id_fk INT,
-	product_id_fk INT,
+	order_item_order_id_pk_fk INT,
+	order_item_product_id_pk_fk INT,
 	quantity INT NOT NULL, 
-	PRIMARY KEY (order_id_fk, product_id_fk),
+	PRIMARY KEY (order_item_order_id_pk_fk, order_item_product_id_pk_fk),
 
-	FOREIGN KEY (order_id_fk)
+	FOREIGN KEY (order_item_order_id_pk_fk)
     REFERENCES orders(order_id_pk),
     
-    FOREIGN KEY (product_id_fk)
+    FOREIGN KEY (order_item_product_id_pk_fk)
     REFERENCES product(product_id_pk)
 );
