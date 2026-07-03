@@ -15,55 +15,55 @@ package entities;
  */
 
 public abstract class User {
-	protected String cpf;
-	protected String primeiroNome;
-	protected String nomeMeio;
-	protected String ultimoNome;
-	protected String telefone;
+	protected String id;
+	protected String firstName;
+	protected String middleName;
+	protected String lastName;
+	protected String phone;
 	
 	// No-argument constructor
 	protected User() {
 		
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getId() {
+		return id;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getPrimeiroNome() {
-		return primeiroNome;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setPrimeiroNome(String primeiroNome) {
-		this.primeiroNome = primeiroNome;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public String getNomeMeio() {
-		return nomeMeio;
+	public String getMiddleName() {
+		return middleName;
 	}
 
-	public void setNomeMeio(String nomeMeio) {
-		this.nomeMeio = nomeMeio;
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
 	}
 	
-	public String getUltimoNome() {
-		return ultimoNome;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setUltimoNome(String ultimoNome) {
-		this.ultimoNome = ultimoNome;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}	
 	
 	

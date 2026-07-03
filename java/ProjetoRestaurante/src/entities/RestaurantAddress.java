@@ -16,7 +16,7 @@ package entities;
  */
 
 public class RestaurantAddress extends Address {
-	private String cnpjRestaurante;
+	private String restaurantId;
 	
 	/**
 	 * No-argument constructor
@@ -26,24 +26,24 @@ public class RestaurantAddress extends Address {
 	}
 
 
-	public String getCnpjRestaurante() {
-		return cnpjRestaurante;
+	public String getRestaurantId() {
+		return restaurantId;
 	}
 
-	public void setCnpjRestaurante(String cnpjRestaurante) {
-		this.cnpjRestaurante = cnpjRestaurante;
-	}
-
-	@Override
-	public String formatarEndereco() {
-		return "CEP: " + cep +
-				" | Nome da rua: " + nome +
-				" | Número do restaurante: " + numero;
+	public void setRestaurantId(String restaurantId) {
+		this.restaurantId = restaurantId;
 	}
 
 	@Override
-	public String getIdentificacao() {
-		return cnpjRestaurante;
+	public String formatAddress() {
+		return "Postal Code: " + postalCode +
+				" | Street Name: " + name +
+				" | Street Number: " + number;
+	}
+
+	@Override
+	public String getId() {
+		return restaurantId;
 	}
 	
 	

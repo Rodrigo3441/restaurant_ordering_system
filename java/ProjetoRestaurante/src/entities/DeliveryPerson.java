@@ -17,8 +17,8 @@ package entities;
  */
 
 public class DeliveryPerson extends User {
-	private String veiculo;
-	private Short disponibilidade;
+	private String vehicle;
+	private Short available;
 		
 	/**
 	 * No-argument constructor
@@ -27,44 +27,44 @@ public class DeliveryPerson extends User {
 		super();
 	}
 
-	public String getVeiculo() {
-		return veiculo;
+	public String getVehicle() {
+		return vehicle;
 	}
 
-	public void setVeiculo(String veiculo) {
-		this.veiculo = veiculo;
+	public void setVehicle(String veiculo) {
+		this.vehicle = veiculo;
 	}
 
-	public short getDisponibilidade() {
-		return disponibilidade;
+	public short getAvailable() {
+		return available;
 	}	
 
 	/**
 	 * Returns an availability message for the delivery person based on the availability index
 	 * @return a string with the two possible availability statuses
 	 */
-	public String getDisponibilidadeString() {
-		return (this.disponibilidade == 0) ? "Livre" : "Ocupado";
+	public String getAvailableString() {
+		return (this.available == 0) ? "Available" : "Not Available";
 	}
 
-	public void setDisponibilidade(Short disponibilidade) {
-		this.disponibilidade = disponibilidade;
+	public void setAvailable(Short available) {
+		this.available = available;
 	}
 	
 	@Override
 	public String toString() {
-		return String.format("Nome Completo: %s %s %s | "
-							+ "CPF: %s | "
-							+ "Telefone: %s | "
-							+ "Veículo: %s | "
-							+ "Disponibilidade: %s", 
-							primeiroNome, 
-							nomeMeio, 
-							ultimoNome, 
-							cpf,
-							telefone, 
-							veiculo, 
-							this.getDisponibilidadeString());
+		return String.format("Full Name: %s %s %s | "
+							+ "ID: %s | "
+							+ "Phone: %s | "
+							+ "Vehicle: %s | "
+							+ "Available: %s", 
+							firstName, 
+							middleName, 
+							lastName, 
+							id,
+							phone, 
+							vehicle, 
+							this.getAvailableString());
 		
 	}
 	

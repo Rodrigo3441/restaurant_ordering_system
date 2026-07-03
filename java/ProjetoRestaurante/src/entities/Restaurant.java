@@ -17,55 +17,55 @@ package entities;
  */
 
 public class Restaurant {
-	private String cnpj;
-	private String nome;
-	private String telefone;
-	private Integer idCategoria;
-	private String senha;
+	private String id;
+	private String name;
+	private String phone;
+	private Integer categoryId;
+	private String passcode;
 	
 	// No-argument constructor
 	public Restaurant() {
 		
 	}
 
-	public String getCnpj() {
-		return cnpj;
+	public String getId() {
+		return id;
 	}
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public Integer getIdCategoria() {
-		return idCategoria;
+	public Integer getCategoryId() {
+		return categoryId;
 	}
 
-	public void setIdCategoria(Integer idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPasscode() {
+		return passcode;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPasscode(String passcode) {
+		this.passcode = passcode;
 	}
 	
 	

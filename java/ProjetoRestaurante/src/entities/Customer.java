@@ -15,7 +15,7 @@ package entities;
  */
 public class Customer extends User {
 	private String email;
-	private String senha;
+	private String passcode;
     
 	/**
 	 * No-argument constructor
@@ -32,12 +32,12 @@ public class Customer extends User {
 		this.email = email;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPasscode() {
+		return passcode;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPasscode(String passcode) {
+		this.passcode = passcode;
 	}
 
 }

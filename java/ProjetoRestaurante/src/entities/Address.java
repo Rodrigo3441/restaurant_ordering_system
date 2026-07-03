@@ -15,9 +15,9 @@ package entities;
  */
 
 public abstract class Address {
-	protected String cep;
-	protected String nome;
-	protected Integer numero;
+	protected String postalCode;
+	protected String name;
+	protected Integer number;
 	
 	/**
 	 * No-argument constructor
@@ -27,20 +27,20 @@ public abstract class Address {
 	}
 
 	/**
-	 * Returns the postal code (CEP) of the address.
+	 * Returns the postal code of the address.
 	 * If no postal code is registered, returns a default message.
 	 * 
 	 * @return Postal code of the address or message indicating no postal code
 	 */
-	public String getCep() {
-		if (cep != null) {
-			return cep;
+	public String getPostalCode() {
+		if (postalCode != null) {
+			return postalCode;
 		} 
-		return "Sem cep cadastrado";
+		return "No postal code available.";
 	}
 
-	public void setCep(String cep) {
-		this.cep = cep;
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 	
 	/**
@@ -49,15 +49,15 @@ public abstract class Address {
 	 *
 	 * @return Street name or message indicating no registration
 	 */
-	public String getNome() {
-		if (nome != null) {
-			return nome;
+	public String getName() {
+		if (name != null) {
+			return name;
 		} 
-		return "Sem nome de rua cadastrado";
+		return "No street name available.";
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -66,28 +66,28 @@ public abstract class Address {
 	 *
 	 * @return Address number or 0
 	 */
-	public Integer getNumero() {
-		if (numero != null) {
-			return numero;
+	public Integer getNumber() {
+		if (number != null) {
+			return number;
 		}
 		return 0;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 	
 	/**
 	 * Returns a formatted string representation of the address
 	 * @return Formatted address string
 	 */
-	public abstract String formatarEndereco();
+	public abstract String formatAddress();
 	
 	/**
 	 * Returns the identification of the owner of the address
 	 * @return String with CPF/CNPJ identification
 	 */
-	public abstract String getIdentificacao();
+	public abstract String getId();
 	
 	
 }

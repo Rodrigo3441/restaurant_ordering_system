@@ -16,46 +16,46 @@ package entities;
  */
 
 public class Product {
-	private Integer codigo;
-	private String nome;
-	private String descricao;
-	private Integer idCategoria;
+	private Integer number;
+	private String name;
+	private String description;
+	private Integer categoryId;
 	
 	// No-argument constructor
 	public Product() {
 		
 	}
 
-	public Integer getCodigo() {
-		return codigo;
+	public Integer getNumber() {
+		return number;
 	}
 
-	public void setCodigo(Integer codigo) {
-		this.codigo = codigo;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 	
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Integer getIdCategoria() {
-		return idCategoria;
+	public Integer getCategoryId() {
+		return categoryId;
 	}
 
-	public void setIdCategoria(Integer idCategoria) {
-		this.idCategoria = idCategoria;
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
 	}
 
 }

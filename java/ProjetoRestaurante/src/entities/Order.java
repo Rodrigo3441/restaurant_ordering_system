@@ -20,12 +20,12 @@ import java.time.format.DateTimeFormatter;
  */
 
 public class Order {
-	private Integer numeroPedido;
-	private String status;
-	private String cpfEntregador;
-	private String cnpjRestaurante;
-	private String cpfCliente;
-	private LocalDateTime dataPedido;
+	private Integer orderNumber;
+	private String orderStatus;
+	private String deliveryPersonId;
+	private String restaurantId;
+	private String customerId;
+	private LocalDateTime orderDate;
 	
 	/**
 	 * No-argument constructor
@@ -34,72 +34,72 @@ public class Order {
 		
 	}
 
-	public Integer getNumeroPedido() {
-		return numeroPedido;
+	public Integer getOrderNumber() {
+		return orderNumber;
 	}
 
-	public void setNumeroPedido(Integer numeroPedido) {
-		this.numeroPedido = numeroPedido;
+	public void setOrderNumber(Integer orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getOrderStatus() {
+		return orderStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
 	}
 
 	/**
-	 * Returns the delivery person's CPF for the order.
+	 * Returns the delivery person id for the order.
 	 * If no delivery person is assigned, returns a default message.
 	 *
-	 * @return delivery person's CPF or a message indicating no delivery person assigned
+	 * @return delivery person id or a message indicating no delivery person assigned
 	 */
-	public String getCpfEntregador() {
-		if (cpfEntregador == null) {
-			return "Sem entregador atribuido";
+	public String getDeliveryPersonId() {
+		if (deliveryPersonId == null) {
+			return "No delivery person assigned.";
 		}
 		
-		return cpfEntregador;
+		return deliveryPersonId;
 	}
 	
-	public void setCpfEntregador(String cpfEntregador) {
-		this.cpfEntregador = cpfEntregador;
+	public void setDeliveryPersonId(String deliveryPersonId) {
+		this.deliveryPersonId = deliveryPersonId;
 	}
 
-	public String getCnpjRestaurante() {
-		return cnpjRestaurante;
+	public String getRestaurantId() {
+		return restaurantId;
 	}
 
-	public void setCnpjRestaurante(String cnpjRestaurante) {
-		this.cnpjRestaurante = cnpjRestaurante;
+	public void setCnpjRestaurante(String restaurantId) {
+		this.restaurantId = restaurantId;
 	}
 
-	public String getCpfCliente() {
-		return cpfCliente;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCpfCliente(String cpfCliente) {
-		this.cpfCliente = cpfCliente;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	
-	public String getDataPedido() {
-		DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+	public String getOrderDate() {
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 		
-	    return dataPedido.format(formatoData);
+	    return orderDate.format(dateFormat);
 	}	
 	
-	public void setDataPedido(LocalDateTime dataPedido) {
-	    this.dataPedido = dataPedido;
+	public void setOrderDate(LocalDateTime orderDate) {
+	    this.orderDate = orderDate;
 	}
 	
 	@Override
 	public String toString() {
-		return " Número do pedido: " + numeroPedido +
-			   " |Status: " + status +
-		       " | Entregador atribuido: " + this.getCpfEntregador() +
-		       " | Cliente: " + cpfCliente +
-		       " | Data do pedido: " + this.getDataPedido();
+		return " Order Number: " + orderNumber +
+			   " |Order Status: " + orderStatus +
+		       " | Delivery Person: " + this.getDeliveryPersonId() +
+		       " | Customer: " + customerId +
+		       " | Order Date: " + this.getOrderDate();
 	}
 }

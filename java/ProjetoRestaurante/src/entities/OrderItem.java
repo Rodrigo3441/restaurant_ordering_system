@@ -16,9 +16,9 @@ package entities;
  */
 
 public class OrderItem {
-	private Integer numeroPedido;
-	private Integer codigoProduto;
-	private Integer quantidade;
+	private Integer orderNumber;
+	private Integer productNumber;
+	private Integer quantity;
 	
 	
 	/**
@@ -28,28 +28,28 @@ public class OrderItem {
 		
 	}
 
-	public Integer getNumeroPedido() {
-		return numeroPedido;
+	public Integer getOrderNumber() {
+		return orderNumber;
 	}
 
-	public void setNumeroPedido(Integer numeroPedido) {
-		this.numeroPedido = numeroPedido;
+	public void setOrderNumber(Integer orderNumber) {
+		this.orderNumber = orderNumber;
 	}
 
-	public Integer getCodigoProduto() {
-		return codigoProduto;
+	public Integer getProductNumber() {
+		return productNumber;
 	}
 
-	public void setCodigoProduto(Integer codigoProduto) {
-		this.codigoProduto = codigoProduto;
+	public void setProductCode(Integer productNumber) {
+		this.productNumber = productNumber;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 	
 	

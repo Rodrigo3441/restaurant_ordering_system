@@ -16,7 +16,7 @@ package entities;
  */
 
 public class CustomerAddress extends Address {
-	private String cpfCliente;
+	private String customerId;
 	
 	/**
 	 * No-argument constructor
@@ -25,24 +25,24 @@ public class CustomerAddress extends Address {
 		super();
 	}
 
-	public String getCpfCliente() {
-		return cpfCliente;
+	public String getCustomerId() {
+		return customerId;
 	}
 
-	public void setCpfCliente(String cpfCliente) {
-		this.cpfCliente = cpfCliente;
-	}
-
-	@Override
-	public String formatarEndereco() {
-		return "CEP: " + cep +
-				" | Nome da rua: " + nome +
-				" | Número do cliente: " + numero;
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 
 	@Override
-	public String getIdentificacao() {
-		return cpfCliente;
+	public String formatAddress() {
+		return "Postal Code: " + postalCode +
+				" | Street Name: " + name +
+				" | Street Number: " + number;
+	}
+
+	@Override
+	public String getId() {
+		return customerId;
 	}
 	
 	

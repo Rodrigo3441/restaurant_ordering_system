@@ -17,10 +17,10 @@ package entities;
  */
 
 public class RestaurantProduct {
-	private String cnpjRestaurante;
-	private Integer codigoProduto;
-	private Integer quantidadeEstoque;
-	private Double preco;
+	private String restaurantId;
+	private Integer productNumber;
+	private Integer stockAmount;
+	private Double price;
 	
 	
 	// No-argument constructor
@@ -28,36 +28,36 @@ public class RestaurantProduct {
 		
 	}
 
-	public String getCnpjRestaurante() {
-		return cnpjRestaurante;
+	public String getRestaurantId() {
+		return restaurantId;
 	}
 
-	public void setCnpjRestaurante(String cnpjRestaurante) {
-		this.cnpjRestaurante = cnpjRestaurante;
+	public void setRestaurantId(String restaurantId) {
+		this.restaurantId = restaurantId;
 	}
 
-	public Integer getCodigoProduto() {
-		return codigoProduto;
+	public Integer getProductNumber() {
+		return productNumber;
 	}
 
-	public void setCodigoProduto(Integer codigoProduto) {
-		this.codigoProduto = codigoProduto;
+	public void setProductNumber(Integer productNumber) {
+		this.productNumber = productNumber;
 	}
 
-	public Integer getQuantidadeEstoque() {
-		return quantidadeEstoque;
+	public Integer getStockAmount() {
+		return stockAmount;
 	}
 
-	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
-		this.quantidadeEstoque = quantidadeEstoque;
+	public void setStockAmount(Integer stockAmount) {
+		this.stockAmount = stockAmount;
 	}
 
-	public Double getPreco() {
-		return preco;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	public void setPrice(Double price) {
+		this.price = price;
 	}	
 	
 }
