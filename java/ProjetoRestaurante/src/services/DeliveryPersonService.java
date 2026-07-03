@@ -104,8 +104,8 @@ public class DeliveryPersonService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		e.setPrimeiroNome(primeiroNome);
-		return dao.atualizarEntregador(conn, e);
+		e.setFirstName(primeiroNome);
+		return dao.updateDeliveryPerson(conn, e);
 	}
 	
 	/**
@@ -119,8 +119,8 @@ public class DeliveryPersonService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		e.setNomeMeio(nomeMeio);
-		return dao.atualizarEntregador(conn, e);
+		e.setMiddleName(nomeMeio);
+		return dao.updateDeliveryPerson(conn, e);
 	}
 	
 	/**
@@ -134,8 +134,8 @@ public class DeliveryPersonService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		e.setUltimoNome(ultimoNome);
-		return dao.atualizarEntregador(conn, e);
+		e.setLastName(ultimoNome);
+		return dao.updateDeliveryPerson(conn, e);
 	}
 	
 	/**
@@ -149,8 +149,8 @@ public class DeliveryPersonService {
 			throw new IllegalArgumentException("Utilize um telefone válido: ");
 		}
 		
-		e.setTelefone(telefone);
-		return dao.atualizarEntregador(conn, e);
+		e.setPhone(telefone);
+		return dao.updateDeliveryPerson(conn, e);
 	}
 	
 	/**
@@ -164,8 +164,8 @@ public class DeliveryPersonService {
 			throw new IllegalArgumentException("Utilize uma placa válida: ");
 		}
 		
-		e.setVeiculo(placaVeiculo);
-		return dao.atualizarEntregador(conn, e);
+		e.setVehicle(placaVeiculo);
+		return dao.updateDeliveryPerson(conn, e);
 	}
 		
 	/**
@@ -174,7 +174,7 @@ public class DeliveryPersonService {
 	 * @return boolean indicating success
 	 */
 	public boolean cadastrarEntregador(DeliveryPerson e) {
-		return dao.inserirEntregador(conn, e);
+		return dao.addDeliveryPerson(conn, e);
 	}
 	
 	/**
@@ -183,7 +183,7 @@ public class DeliveryPersonService {
 	 * @return DeliveryPerson or null if not found
 	 */
 	public DeliveryPerson retornarEntregador(String cpf) {
-		return dao.retornarEntregador(conn, cpf);
+		return dao.returnDeliveryPerson(conn, cpf);
 	}
 	
 	/**
@@ -191,7 +191,7 @@ public class DeliveryPersonService {
 	 * @return list of DeliveryPerson
 	 */
 	public ArrayList<DeliveryPerson> listarEntregadores() {
-		return dao.listarEntregadores(conn);
+		return dao.returnDeliveryPersonList(conn);
 	}
 	
 	/**
@@ -200,7 +200,7 @@ public class DeliveryPersonService {
 	 * @return boolean indicating success
 	 */
 	public boolean removerEntregador(String cpf) {
-		return dao.deletarEntregador(conn, cpf);
+		return dao.deleteDeliveryPerson(conn, cpf);
 	}
 	
 	private boolean cpfValido(String cpf) {	
@@ -208,7 +208,7 @@ public class DeliveryPersonService {
 	}
 
 	private boolean cpfDisponivel(String cpf) {
-		return dao.retornarEntregador(conn, cpf) == null;
+		return dao.returnDeliveryPerson(conn, cpf) == null;
 	}
 	
 	private boolean primeiroNomeValido(String primeiroNome) {

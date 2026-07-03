@@ -85,8 +85,8 @@ public class RestaurantService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		r.setNome(nome);
-		return dao.atualizarRestaurante(conn, r);
+		r.setName(nome);
+		return dao.updateRestaurant(conn, r);
 	}
 	
 	/**
@@ -100,8 +100,8 @@ public class RestaurantService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		r.setTelefone(telefone);
-		return dao.atualizarRestaurante(conn, r);
+		r.setPhone(telefone);
+		return dao.updateRestaurant(conn, r);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public class RestaurantService {
 			throw new IllegalArgumentException("Utilize uma senha válida: ");
 		}
 		
-		r.setSenha(senha);
-		return dao.atualizarRestaurante(conn, r);
+		r.setPasscode(senha);
+		return dao.updateRestaurant(conn, r);
 	}
 	
 	/**
@@ -125,7 +125,7 @@ public class RestaurantService {
 	 * @return boolean indicating success
 	 */
 	public boolean cadastrarRestaurante(Restaurant r) {
-		return dao.inserirRestaurante(conn, r);
+		return dao.addRestaurant(conn, r);
 	}
 	
 	/**
@@ -134,7 +134,7 @@ public class RestaurantService {
 	 * @return Restaurant object
 	 */
 	public Restaurant retornarRestaurante(String cnpj) {
-		return dao.retornarRestaurante(conn, cnpj);
+		return dao.returnRestaurant(conn, cnpj);
 	}
 	
 	/**
@@ -142,7 +142,7 @@ public class RestaurantService {
 	 * @return ArrayList of Restaurant
 	 */
 	public ArrayList<Restaurant> listarRestaurantes(){
-		return dao.listarRestaurantes(conn);
+		return dao.returnRestaurantList(conn);
 	}
 
 	private boolean cnpjValido(String cnpj) {	
@@ -150,7 +150,7 @@ public class RestaurantService {
 	}
 
 	private boolean cnpjDisponivel(String cnpj) {
-		return dao.retornarRestaurante(conn, cnpj) == null;
+		return dao.returnRestaurant(conn, cnpj) == null;
 	}
 	
 	private boolean nomeValido(String nome) {

@@ -67,7 +67,7 @@ public class RestaurantProductService {
 	 * @return true if the product is already registered
 	 */
 	public boolean produtoJaEstaCadastrado(String cnpj, int codigo) {
-		return dao.produtoJaEstaCadastrado(conn, cnpj, codigo);
+		return dao.isProductAlreadyAdded(conn, cnpj, codigo);
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class RestaurantProductService {
 	 * @throws Exception if an error occurs while deleting the product
 	 */
 	public void apagarProdutoRestaurante(String cnpj, int codigo) throws Exception {
-		if(!dao.deletarProduto(conn, cnpj, codigo)) {
+		if(!dao.deleteProductRestaurant(conn, cnpj, codigo)) {
 			throw new Exception("Ocorreu um erro desconhecido ao apagar o produto.");		
 		} 
 		
@@ -89,7 +89,7 @@ public class RestaurantProductService {
 	 * @return true if the association was successful
 	 */
 	public boolean associarProdutoRestaurante(RestaurantProduct pr) {
-		return dao.associarProdutoRestaurante(conn, pr);
+		return dao.addRestaurantProduct(conn, pr);
 	}
 	
 	/**
@@ -103,12 +103,12 @@ public class RestaurantProductService {
 		
 		RestaurantProduct pr = new RestaurantProduct();
 		
-		pr.setCnpjRestaurante(cnpj);
-		pr.setCodigoProduto(prView.getCodigoProduto());
-		pr.setPreco(prView.getPrecoProduto());
-		pr.setQuantidadeEstoque(quantidadeEstoque);
+		pr.setRestaurantId(cnpj);
+		pr.setProductNumber(prView.getProductNumber());
+		pr.setPrice(prView.getProductPrice());
+		pr.setStockAmount(quantidadeEstoque);
 		
-		return dao.atualizarProdutoRestaurante(conn, pr);
+		return dao.updateProductRestaurant(conn, pr);
 	}
 	
 	/**
@@ -117,7 +117,7 @@ public class RestaurantProductService {
 	 * @return list of restaurant product views
 	 */
 	public ArrayList<RestaurantProductView> retornarTodoProdutoRestaurante(String cnpj){
-		return dao.retornarTodoProdutoRestaurante(conn, cnpj);
+		return dao.returnAllProductsPerRestaurant(conn, cnpj);
 	}
 	
 	private boolean quantidadeEstoqueValida(int quantidadeEstoque) {

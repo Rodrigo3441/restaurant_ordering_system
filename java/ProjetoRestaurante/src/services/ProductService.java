@@ -67,7 +67,7 @@ public class ProductService {
 	 */
 	public Product buscarProdutoPorNome(String nome) {
 		nome = nome.toLowerCase().trim();
-		return dao.retornarProdutoPorNome(conn, nome);
+		return dao.returnProductByName(conn, nome);
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public class ProductService {
 	 * @return Product object or null if not found
 	 */
 	public Product buscarProdutoPorId(int codigo) {
-		return dao.retornarProdutoPorId(conn, codigo);
+		return dao.returnProductById(conn, codigo);
 	}
 	
 	/**
@@ -85,7 +85,7 @@ public class ProductService {
 	 * @return true if insertion succeeded
 	 */
 	public boolean inserirProduto(Product p) {
-		return dao.inserirProduto(conn, p);
+		return dao.addProduct(conn, p);
 	}
 	
 	private boolean nomeValido(String nome) {
@@ -106,7 +106,7 @@ public class ProductService {
 	 * @return true if the code is available
 	 */
 	private boolean codigoDisponivel(int codigo) {
-		return dao.retornarProdutoPorId(conn, codigo) == null;
+		return dao.returnProductById(conn, codigo) == null;
 	}
 	
 }

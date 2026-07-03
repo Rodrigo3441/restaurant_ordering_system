@@ -75,10 +75,10 @@ public class OrderService {
 	 */
 	public OrderItemView criarItemPedido(RestaurantProductView produtoTemp, int quantidade) {
 		OrderItemView ip = new OrderItemView();
-		ip.setNome(produtoTemp.getNomeProduto());
-		ip.setPreco(produtoTemp.getPrecoProduto());
-		ip.setCodigo(produtoTemp.getCodigoProduto());
-		ip.setQuantidade(quantidade);
+		ip.setName(produtoTemp.getProductName());
+		ip.setPrice(produtoTemp.getProductPrice());
+		ip.setProductNumber(produtoTemp.getProductNumber());
+		ip.setQuantity(quantidade);
 		return ip;
 	}
 	
@@ -93,7 +93,7 @@ public class OrderService {
 		int codigoProduto
 	) {
 		for (int i = 0; i < carrinhoCompras.size(); i++) {
-			if (carrinhoCompras.get(i).getCodigoProduto() == codigoProduto) {
+			if (carrinhoCompras.get(i).getProductNumber() == codigoProduto) {
 				return i; //return the position of the product in the cart
 			}
 		}
@@ -112,7 +112,7 @@ public class OrderService {
 		int codigoProduto
 	) {
 		for (int i = 0; i < listaProdutos.size(); i++) {
-			if (listaProdutos.get(i).getCodigoProduto() == codigoProduto) {
+			if (listaProdutos.get(i).getProductNumber() == codigoProduto) {
 				return listaProdutos.get(i); //return the matching product
 			}
 		}
@@ -159,12 +159,12 @@ public class OrderService {
 			conn.setAutoCommit(false);
 			
 			// insert the order and get the generated primary key to insert items
-			int idPedido = pedidoDAO.inserirPedido(conn, r, c);
+			int idPedido = pedidoDAO.addOrder(conn, r, c);
 			
 			for (OrderItemView item: carrinhoCompras) {
 				
 				// decrease the purchased quantity from stock and store the result to verify
-				boolean estoqueAtualizado = produtoRestauranteDAO.diminuirEstoque(conn, r.getCnpj(), item);
+				boolean estoqueAtualizado = produtoRestauranteDAO.decreaseStockAmount(conn, r.getId(), item);
 				
 				if (!estoqueAtualizado) {
 					throw new RuntimeException("Estoque insuficiente");
@@ -172,11 +172,11 @@ public class OrderService {
 				
 				// instantiate an OrderItem to be inserted into the join table and set its fields
 				OrderItem ip = new OrderItem();
-				ip.setNumeroPedido(idPedido);
-				ip.setCodigoProduto(item.getCodigoProduto());
-				ip.setQuantidade(item.getQuantidade());
+				ip.setOrderNumber(idPedido);
+				ip.setProductCode(item.getProductNumber());
+				ip.setQuantity(item.getQuantity());
 				
-				itemPedidoDAO.inserirItemPedido(conn, ip);
+				itemPedidoDAO.addOrderItem(conn, ip);
 				
 				// commit after each item insertion
 				conn.commit();
@@ -212,7 +212,7 @@ public class OrderService {
 	 * @return list of orders
 	 */
 	public ArrayList<Order> retornarPedidosRestaurante(String cnpj, String status){
-		return pedidoDAO.listarPedidosPorRestaurante(conn, cnpj, status);
+		return pedidoDAO.returnAllOrdersPerRestaurant(conn, cnpj, status);
 	}
 	
 	/**
@@ -221,7 +221,7 @@ public class OrderService {
 	 * @return list of orders
 	 */
 	public ArrayList<Order> retornarPedidosCliente(String cpf){
-		return pedidoDAO.listarPedidosPorCliente(conn, cpf);
+		return pedidoDAO.returnAllOrdersPerCustomer(conn, cpf);
 	}
 	
 	/**
@@ -230,7 +230,7 @@ public class OrderService {
 	 * @return list of OrderItemView for the order
 	 */
 	public ArrayList<OrderItemView> retornarItensPedido(int codigoPedido){
-		return itemPedidoDAO.retornarItensPedido(conn, codigoPedido);
+		return itemPedidoDAO.returnAllOrderItem(conn, codigoPedido);
 	}
 	
 	/**
@@ -250,21 +250,21 @@ public class OrderService {
 	        conn.setAutoCommit(false);
 
 		        // update order attributes
-	        p.setCpfEntregador(e.getCpf());
-	        p.setStatus(statusPedido);
+	        p.setDeliveryPersonId(e.getId());
+	        p.setOrderStatus(statusPedido);
 
 		        // execute update and verify it succeeded
-		        if (!pedidoDAO.atualizarPedido(conn, p)) {
+		        if (!pedidoDAO.updateOrder(conn, p)) {
 		        	// rollback and return false if update failed
 		            conn.rollback(); 
 		            return false;
 		        }
 
 		        // update delivery person attributes
-	        e.setDisponibilidade(eDisp);
+	        e.setAvailable(eDisp);
 
 		      // execute update and verify it succeeded
-		        if (!entregadorDAO.atualizarEntregador(conn, e)) {
+		        if (!entregadorDAO.updateDeliveryPerson(conn, e)) {
 		        	// rollback and return false if update failed
 		            conn.rollback();
 		            return false;
@@ -309,7 +309,7 @@ public class OrderService {
 	}
 	
 	private boolean quantidadeValida(RestaurantProductView produtoTemp, int quantidade) {
-		return quantidade > 0 && quantidade <= produtoTemp.getQuantidadeEstoque(); 
+		return quantidade > 0 && quantidade <= produtoTemp.getStockAmount(); 
 	}
 	
 }

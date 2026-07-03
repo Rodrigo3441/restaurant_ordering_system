@@ -34,7 +34,7 @@ public class AddressService {
 	 * @return restaurant address object
 	 */
 	public RestaurantAddress retornarEnderecoRestaurante(String cnpj) {
-		return dao.retornarEnderecoRestaurante(conn, cnpj);
+		return dao.returnRestaurantAddress(conn, cnpj);
 	}
 	
 	/**
@@ -43,7 +43,7 @@ public class AddressService {
 	 * @return customer address object
 	 */
 	public CustomerAddress retornarEnderecoCliente(String cpf) {
-		return dao.retornarEnderecoCliente(conn, cpf);
+		return dao.returnCustomerAddress(conn, cpf);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class AddressService {
 	 * @return boolean
 	 */
 	public boolean inserirEnderecoRestaurante(Address er) {
-		return dao.inserirEnderecoRestaurante(conn, er);
+		return dao.addRestaurantAddress(conn, er);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class AddressService {
 	 * @return boolean
 	 */
 	public boolean inserirEnderecoCliente(Address ec) {
-		return dao.inserirEnderecoCliente(conn, ec);
+		return dao.addCustomerAddress(conn, ec);
 	}
 	
 	/**
@@ -105,8 +105,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um CEP válido");
 		}
 		
-		ec.setCep(cep);
-		return dao.atualizarEnderecoCliente(conn, ec);
+		ec.setPostalCode(cep);
+		return dao.updateCustomerAddress(conn, ec);
 	}
 	
 	/**
@@ -120,8 +120,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um nome válido");
 		}
 		
-		ec.setNome(nome);
-		return dao.atualizarEnderecoCliente(conn, ec);
+		ec.setName(nome);
+		return dao.updateCustomerAddress(conn, ec);
 	}
 	
 	/**
@@ -135,8 +135,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um número válido");
 		}
 		
-		ec.setNumero(numero);
-		return dao.atualizarEnderecoCliente(conn, ec);
+		ec.setNumber(numero);
+		return dao.updateCustomerAddress(conn, ec);
 	}
 	
 	/**
@@ -150,8 +150,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um CEP válido");
 		}
 		
-		er.setCep(cep);
-		return dao.atualizarEnderecoRestaurante(conn, er);
+		er.setPostalCode(cep);
+		return dao.updateRestaurantAddress(conn, er);
 	}
 	
 	/**
@@ -165,8 +165,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um nome válido");
 		}
 		
-		er.setNome(nome);
-		return dao.atualizarEnderecoRestaurante(conn, er);
+		er.setName(nome);
+		return dao.updateRestaurantAddress(conn, er);
 	}
 	
 	/**
@@ -180,8 +180,8 @@ public class AddressService {
 			throw new IllegalArgumentException("Digite um número válido");
 		}
 		
-		er.setNumero(numero);
-		return dao.atualizarEnderecoRestaurante(conn, er);
+		er.setNumber(numero);
+		return dao.updateRestaurantAddress(conn, er);
 	}
 	
 	private boolean cepValido(String cep) {

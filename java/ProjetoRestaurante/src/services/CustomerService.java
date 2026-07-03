@@ -117,8 +117,8 @@ public class CustomerService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		c.setPrimeiroNome(primeiroNome);
-		return dao.atualizarCliente(conn, c);
+		c.setFirstName(primeiroNome);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -132,8 +132,8 @@ public class CustomerService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		c.setNomeMeio(nomeMeio);
-		return dao.atualizarCliente(conn, c);
+		c.setMiddleName(nomeMeio);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -147,8 +147,8 @@ public class CustomerService {
 			throw new IllegalArgumentException("Utilize um nome válido: ");
 		}
 		
-		c.setUltimoNome(ultimoNome);
-		return dao.atualizarCliente(conn, c);
+		c.setLastName(ultimoNome);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -162,8 +162,8 @@ public class CustomerService {
 			throw new IllegalArgumentException("Utilize um telefone válido: ");
 		}
 		
-		c.setTelefone(telefone);
-		return dao.atualizarCliente(conn, c);
+		c.setPhone(telefone);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -178,7 +178,7 @@ public class CustomerService {
 		}
 		
 		c.setEmail(email);
-		return dao.atualizarCliente(conn, c);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -192,8 +192,8 @@ public class CustomerService {
 			throw new IllegalArgumentException("Utilize uma senha válida: ");
 		}
 		
-		c.setSenha(senha);
-		return dao.atualizarCliente(conn, c);
+		c.setPasscode(senha);
+		return dao.updateCustomer(conn, c);
 	}
 	
 	/**
@@ -202,7 +202,7 @@ public class CustomerService {
 	 * @return true if insertion succeeded
 	 */
 	public boolean cadastrarCliente(Customer c) {
-		return dao.inserirCliente(conn, c);
+		return dao.addCustomer(conn, c);
 	}
 	
 	/**
@@ -211,7 +211,7 @@ public class CustomerService {
 	 * @return Customer or null if not found
 	 */
 	public Customer retornarCliente(String cpf) {
-		return dao.retornarCliente(conn, cpf);
+		return dao.returnCustomer(conn, cpf);
 	}
 	
 	private boolean cpfValido(String cpf) {	
@@ -219,7 +219,7 @@ public class CustomerService {
 	}
 	
 	private boolean cpfDisponivel(String cpf) {
-		return dao.retornarCliente(conn, cpf) == null;
+		return dao.returnCustomer(conn, cpf) == null;
 	}
 	
 	private boolean primeiroNomeValido(String primeiroNome) {
