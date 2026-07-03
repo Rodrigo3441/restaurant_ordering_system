@@ -26,29 +26,35 @@ public class CustomerDAO {
 	/**
 	 * Inserts a new cliente into the database.
 	 * @param conn database connection
-	 * @param cliente cliente object
+	 * @param customer cliente object
 	 */
-	public boolean inserirCliente(Connection conn, Customer cliente) {
-		String sqlQuery = "INSERT INTO CLIENTE (pk_cli_cpf, cli_primeiro_nome, cli_nome_meio, "
-				+ "cli_ultimo_nome, cli_telefone, cli_email, cli_senha) VALUES (?, ?, ?, ?, ?, ?, ?)";
+	public boolean addCustomer(Connection conn, Customer customer) {
+		String sqlQuery = "INSERT INTO customer ("
+				+ "customer_id_pk, "
+				+ "first_name, "
+				+ "middle_name, "
+				+ "last_name, "
+				+ "phone, "
+				+ "email, "
+				+ "passcode) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		
 			// prepare statement
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind parameters
-			stmt.setString(1, cliente.getCpf());
-			stmt.setString(2, cliente.getPrimeiroNome());
-			stmt.setString(3, cliente.getNomeMeio());
-			stmt.setString(4, cliente.getUltimoNome());
-			stmt.setString(5, cliente.getTelefone());
-			stmt.setString(6, cliente.getEmail());
-			stmt.setString(7, cliente.getSenha());
+			stmt.setString(1, customer.getId());
+			stmt.setString(2, customer.getFirstName());
+			stmt.setString(3, customer.getMiddleName());
+			stmt.setString(4, customer.getLastName());
+			stmt.setString(5, customer.getPhone());
+			stmt.setString(6, customer.getEmail());
+			stmt.setString(7, customer.getPasscode());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de CLIENTE");
+			System.err.println("Error in customer adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -58,38 +64,38 @@ public class CustomerDAO {
 	/**
 	 * Retrieves a cliente by CPF from the database.
 	 * @param conn database connection
-	 * @param cpf cliente CPF
+	 * @param id cliente CPF
 	 * @return cliente object or null if not found
 	 */
-	public Customer retornarCliente(Connection conn, String cpf) {
-		String sqlQuery = "SELECT * FROM CLIENTE WHERE pk_cli_cpf = ?";
+	public Customer returnCustomer(Connection conn, String id) {
+		String sqlQuery = "SELECT * FROM customer WHERE customer_id_pk = ?";
 		
 			// prepare statement
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind parameters
-			stmt.setString(1, cpf);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if a result is found, populate a Cliente object
-			if (resultado.next()) {
-				Customer c = new Customer();
+			if (result.next()) {
+				Customer customer = new Customer();
 							
-				c.setCpf(resultado.getString("pk_cli_cpf"));
-				c.setPrimeiroNome(resultado.getString("cli_primeiro_nome"));
-				c.setNomeMeio(resultado.getString("cli_nome_meio"));
-				c.setUltimoNome(resultado.getString("cli_ultimo_nome"));
-				c.setTelefone(resultado.getString("cli_telefone"));
-				c.setEmail(resultado.getString("cli_email"));
-				c.setSenha(resultado.getString("cli_senha"));
+				customer.setId(result.getString("customer_id_pk"));
+				customer.setFirstName(result.getString("first_name"));
+				customer.setMiddleName(result.getString("middle_name"));
+				customer.setLastName(result.getString("last_name"));
+				customer.setPhone(result.getString("phone"));
+				customer.setEmail(result.getString("email"));
+				customer.setPasscode(result.getString("passcode"));
 				
-				return c;
+				return customer;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de CLIENTE");
+			System.err.println("Error in customer querying operation.");
 		    e.printStackTrace();
 		}
 		return null;
@@ -98,35 +104,35 @@ public class CustomerDAO {
 	/**
 	 * Updates an existing cliente's information.
 	 * @param conn database connection
-	 * @param cliente cliente object
+	 * @param customer cliente object
 	 */
-	public boolean atualizarCliente(Connection conn, Customer cliente) {
-		String sqlQuery = "UPDATE CLIENTE SET " +
-	            "cli_primeiro_nome = ?, " +
-	            "cli_nome_meio = ?, " +
-	            "cli_ultimo_nome = ?, " +
-	            "cli_telefone = ?, " +
-	            "cli_email = ?, " +
-	            "cli_senha = ? " +
-	            "WHERE pk_cli_cpf = ?";
+	public boolean updateCustomer(Connection conn, Customer customer) {
+		String sqlQuery = "UPDATE customer SET " +
+	            "first_name = ?, " +
+	            "middle_name = ?, " +
+	            "last_name = ?, " +
+	            "phone = ?, " +
+	            "email = ?, " +
+	            "passcode = ? " +
+	            "WHERE customer_id_pk = ?";
 
 			// prepare statement
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind parameters
-			stmt.setString(1, cliente.getPrimeiroNome());
-	        stmt.setString(2, cliente.getNomeMeio());
-	        stmt.setString(3, cliente.getUltimoNome());
-	        stmt.setString(4, cliente.getTelefone());
-	        stmt.setString(5, cliente.getEmail());
-	        stmt.setString(6, cliente.getSenha());
-	        stmt.setString(7, cliente.getCpf());
+			stmt.setString(1, customer.getFirstName());
+	        stmt.setString(2, customer.getMiddleName());
+	        stmt.setString(3, customer.getLastName());
+	        stmt.setString(4, customer.getPhone());
+	        stmt.setString(5, customer.getEmail());
+	        stmt.setString(6, customer.getPasscode());
+	        stmt.setString(7, customer.getId());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de CLIENTE");
+			System.err.println("Error in customer updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -136,24 +142,24 @@ public class CustomerDAO {
 	/**
 	 * Deletes a cliente by CPF.
 	 * @param conn database connection
-	 * @param cpf cliente CPF
+	 * @param id cliente CPF
 	 * @return true if deletion succeeded
 	 */
-	public boolean deletarCliente(Connection conn, String cpf) {
-		String sqlQuery = "DELETE FROM CLIENTE WHERE pk_cli_cpf = ?";
+	public boolean deleteCustomer(Connection conn, String id) {
+		String sqlQuery = "DELETE FROM customer WHERE customer_id_pk = ?";
 		
 			// prepare statement
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind parameters
-			stmt.setString(1, cpf);
+			stmt.setString(1, id);
 			
 			// execute update and check success
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de CLIENTE");
+			System.err.println("Error in customer deleting operation.");
 		    e.printStackTrace();
 		}
 		

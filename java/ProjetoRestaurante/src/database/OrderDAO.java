@@ -30,35 +30,36 @@ public class OrderDAO {
 	/**
 	 * Inserts a new order into the database and returns the generated id.
 	 * @param conn database connection
-	 * @param r Restaurant associated with the order
-	 * @param c Customer who placed the order
+	 * @param restaurant Restaurant associated with the order
+	 * @param customer Customer who placed the order
 	 * @return generated order id, or -1 on failure
 	 */
-	public int inserirPedido(Connection conn, Restaurant r, Customer c) {
-		String sqlQuery = "INSERT INTO PEDIDO (ped_status, "
-				+ "fk_res_cnpj, "
-				+ "fk_cli_cpf) "
+	public int addOrder(Connection conn, Restaurant restaurant, Customer customer) {
+		String sqlQuery = "INSERT INTO orders ("
+				+ "order_status, "
+				+ "restaurant_id_fk, "
+				+ "customer_id_fk) "
 				+ "VALUES (?, ?, ?)";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)){
 			
 			// bind attributes to the prepared statement
-			stmt.setString(1, "Em preparo");
-			stmt.setString(2, r.getCnpj());
-			stmt.setString(3, c.getCpf());
+			stmt.setString(1, "Preparing");
+			stmt.setString(2, restaurant.getId());
+			stmt.setString(3, customer.getId());
 			
 			stmt.executeUpdate();
 			
 			// obtain the generated order id
-			ResultSet resultado = stmt.getGeneratedKeys();
+			ResultSet result = stmt.getGeneratedKeys();
 			
-			if (resultado.next()) {
-				return resultado.getInt(1);
+			if (result.next()) {
+				return result.getInt(1);
 			}
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -69,36 +70,36 @@ public class OrderDAO {
 	/**
 	 * Retrieves order information from the database for lookup purposes.
 	 * @param conn database connection
-	 * @param numero order number to fetch
+	 * @param number order number to fetch
 	 * @return Order object or null if not found
 	 */
-	public Order retornarPedido(Connection conn, int numero) {
-		String sqlQuery = "SELECT * FROM PEDIDO WHERE pk_ped_numero = ?";
+	public Order returnOrder(Connection conn, int number) {
+		String sqlQuery = "SELECT * FROM orders WHERE order_id_pk = ?";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared statement
-			stmt.setInt(1, numero);
+			stmt.setInt(1, number);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if a result is found, instantiate an Order object with the result attributes
-			if (resultado.next()) {
-				Order p = new Order();
+			if (result.next()) {
+				Order order = new Order();
 				
-				p.setNumeroPedido(resultado.getInt("pk_ped_numero"));
-				p.setStatus(resultado.getString("ped_status"));
-				p.setCpfEntregador(resultado.getString("fk_etg_cpf"));
-				p.setCnpjRestaurante(resultado.getString("fk_res_cnpj"));
-				p.setCpfCliente(resultado.getString("fk_cli_cpf"));
+				order.setOrderNumber(result.getInt("order_id_pk"));
+				order.setOrderStatus(result.getString("order_status"));
+				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
+				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setCustomerId(result.getString("customer_id_fk"));
 				
-				return p;
+				return order;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders querying operation.");
 		    e.printStackTrace();
 		}
 		
@@ -108,28 +109,28 @@ public class OrderDAO {
 	/**
 	 * Updates an order record in the database.
 	 * @param conn database connection
-	 * @param pedido Order object with updated data
+	 * @param order Order object with updated data
 	 * @return true if update affected at least one row
 	 */
-	public boolean atualizarPedido(Connection conn, Order pedido) {
-		String sqlQuery = "UPDATE PEDIDO " +
-							"SET ped_status = ?, " +
-							"fk_etg_cpf = ? " +
-							"WHERE pk_ped_numero = ?";
+	public boolean updateOrder(Connection conn, Order order) {
+		String sqlQuery = "UPDATE orders " +
+							"SET order_status = ?, " +
+							"delivery_person_id_fk = ? " +
+							"WHERE order_id_pk = ?";
 
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared statement
-			stmt.setString(1, pedido.getStatus());
-			stmt.setString(2, pedido.getCpfEntregador());
-			stmt.setInt(3, pedido.getNumeroPedido());
+			stmt.setString(1, order.getOrderStatus());
+			stmt.setString(2, order.getDeliveryPersonId());
+			stmt.setInt(3, order.getOrderNumber());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -139,24 +140,24 @@ public class OrderDAO {
 	/**
 	 * Deletes an order from the database.
 	 * @param conn database connection
-	 * @param numero order number to delete
+	 * @param number order number to delete
 	 * @return true if deletion affected at least one row
 	 */
-	public boolean deletarPedido(Connection conn, int numero) {
-		String sqlQuery = "DELETE FROM PEDIDO WHERE pk_ped_numero = ?";
+	public boolean deleteOrder(Connection conn, int number) {
+		String sqlQuery = "DELETE FROM orders WHERE order_id_pk = ?";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared statement
-			stmt.setInt(1, numero);
+			stmt.setInt(1, number);
 			
 			// execute the query and check success
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders deleting operation.");
 		    e.printStackTrace();
 		}
 		
@@ -166,88 +167,88 @@ public class OrderDAO {
 	/**
 	 * Retrieves all orders for a given restaurant filtered by status.
 	 * @param conn database connection
-	 * @param cnpj restaurant CNPJ
-	 * @param status desired order status
+	 * @param id restaurant id
+	 * @param orderStatus desired order status
 	 * @return ArrayList of orders
 	 */
-	public ArrayList<Order> listarPedidosPorRestaurante(Connection conn, String cnpj, String status){
+	public ArrayList<Order> returnAllOrdersPerRestaurant(Connection conn, String id, String orderStatus){
 		
 		// List to store all order instances
-		ArrayList<Order> listaPedidos = new ArrayList<Order>();
+		ArrayList<Order> ordersList = new ArrayList<Order>();
 		
-		String sqlQuery = "SELECT * FROM PEDIDO WHERE fk_res_cnpj = ? AND ped_status = ? ORDER BY ped_data ASC";
+		String sqlQuery = "SELECT * FROM orders WHERE restaurant_id_fk = ? AND order_status = ? ORDER BY order_date ASC";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
-			stmt.setString(1, cnpj);
-			stmt.setString(2, status);
+			stmt.setString(1, id);
+			stmt.setString(2, orderStatus);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// store each found order in the dynamic list
-			while (resultado.next()) {
-				Order p = new Order();
+			while (result.next()) {
+				Order order = new Order();
 				
-				p.setNumeroPedido(resultado.getInt("pk_ped_numero"));
-				p.setStatus(resultado.getString("ped_status"));
-				p.setCpfEntregador(resultado.getString("fk_etg_cpf"));
-				p.setCnpjRestaurante(resultado.getString("fk_res_cnpj"));
-				p.setCpfCliente(resultado.getString("fk_cli_cpf"));
-				p.setDataPedido(resultado.getTimestamp("ped_data").toLocalDateTime());
+				order.setOrderNumber(result.getInt("order_id_pk"));
+				order.setOrderStatus(result.getString("order_status"));
+				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
+				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setCustomerId(result.getString("customer_id_fk"));
+				order.setOrderDate(result.getTimestamp("order_date").toLocalDateTime());
 				
-				listaPedidos.add(p);
+				ordersList.add(order);
 			}
 			
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders querying operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaPedidos;
+		return ordersList;
 	}
 	
 	/**
 	 * Retrieves all orders placed by a specific customer.
 	 * @param conn database connection
-	 * @param cpf customer CPF
+	 * @param id customer id
 	 * @return ArrayList of orders
 	 */
-	public ArrayList<Order> listarPedidosPorCliente(Connection conn, String cpf){
+	public ArrayList<Order> returnAllOrdersPerCustomer(Connection conn, String id){
 		
 		// List to store all order instances
-		ArrayList<Order> listaPedidos = new ArrayList<Order>();
+		ArrayList<Order> ordersList = new ArrayList<Order>();
 		
-		String sqlQuery = "SELECT * FROM PEDIDO WHERE fk_cli_cpf = ? ORDER BY ped_data DESC";
+		String sqlQuery = "SELECT * FROM orders WHERE customer_id_fk = ? ORDER BY order_date DESC";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
-			stmt.setString(1, cpf);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// store each found order in the dynamic list
-			while (resultado.next()) {
-				Order p = new Order();
+			while (result.next()) {
+				Order order = new Order();
 				
-				p.setNumeroPedido(resultado.getInt("pk_ped_numero"));
-				p.setStatus(resultado.getString("ped_status"));
-				p.setCpfEntregador(resultado.getString("fk_etg_cpf"));
-				p.setCnpjRestaurante(resultado.getString("fk_res_cnpj"));
-				p.setCpfCliente(resultado.getString("fk_cli_cpf"));
-				p.setDataPedido(resultado.getTimestamp("ped_data").toLocalDateTime());
+				order.setOrderNumber(result.getInt("order_id_pk"));
+				order.setOrderStatus(result.getString("order_status"));
+				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
+				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setCustomerId(result.getString("customer_id_fk"));
+				order.setOrderDate(result.getTimestamp("order_id").toLocalDateTime());
 				
-				listaPedidos.add(p);
+				ordersList.add(order);
 			}
 			
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in orders querying operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaPedidos;
+		return ordersList;
 	}
 }

@@ -28,29 +28,28 @@ public class OrderItemDAO {
 	/**
 	 * Inserts a customer order item into the database.
 	 * @param conn database connection
-	 * @param ip order item object
+	 * @param orderItem order item object
 	 * @return true if insert succeeded, false otherwise
 	 */
-	public boolean inserirItemPedido(Connection conn, OrderItem ip) {
-		String sqlQuery = "INSERT INTO ITEM_PEDIDO ("
-						+ "pk_fk_ped_numero, "
-						+ "pk_fk_prd_codigo, "
-						+ "itp_quantidade) VALUES "
-						+ "(?, ?, ?)";
+	public boolean addOrderItem(Connection conn, OrderItem orderItem) {
+		String sqlQuery = "INSERT INTO order_item ("
+						+ "order_item_order_id_pk_fk, "
+						+ "order_item_product_id_pk_fk, "
+						+ "quantity) VALUES (?, ?, ?)";
 		
 			// prepare the statement before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 				// bind attributes to the prepared statement
-			stmt.setInt(1, ip.getNumeroPedido());
-			stmt.setInt(2, ip.getCodigoProduto());
-			stmt.setInt(3, ip.getQuantidade());
+			stmt.setInt(1, orderItem.getOrderNumber());
+			stmt.setInt(2, orderItem.getProductNumber());
+			stmt.setInt(3, orderItem.getQuantity());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ITEM_PEDIDO");
+			System.err.println("Error in order_item adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -60,47 +59,47 @@ public class OrderItemDAO {
 	/**
 	 * Returns all items for a given order for display in the customer menu.
 	 * @param conn database connection
-	 * @param codigoPedido order identifier
+	 * @param orderId order identifier
 	 * @return ArrayList of OrderItemView
 	 */
-	public ArrayList<OrderItemView> retornarItensPedido(Connection conn, int codigoPedido) {		
+	public ArrayList<OrderItemView> returnAllOrderItem(Connection conn, int orderId) {		
 		String sqlQuery = "SELECT "
-						+ "p.prd_nome, "
-						+ "ip.itp_quantidade, "
-						+ "pr.pdr_preco "
-						+ "FROM ITEM_PEDIDO AS ip "
-						+ "INNER JOIN PRODUTO AS p "
-						+ "ON ip.pk_fk_prd_codigo = p.pk_prd_codigo "
-						+ "INNER JOIN PRODUTO_RESTAURANTE AS pr "
-						+ "ON p.pk_prd_codigo = pr.pk_fk_prd_codigo "
-						+ "WHERE ip.pk_fk_ped_numero = ?;";
+						+ "p.name, "
+						+ "oi.quantity, "
+						+ "rp.price "
+						+ "FROM order_item AS oi "
+						+ "INNER JOIN product AS p "
+						+ "ON oi.order_item_product_id_pk_fk = p.product_id_pk "
+						+ "INNER JOIN restaurant_product AS rp "
+						+ "ON p.product_id_pk = rp.res_pro_product_id_pk_fk"
+						+ "WHERE oi.order_item_order_id_pk_fk = ?;";
 		
 		// List to store all order item view instances
-		ArrayList<OrderItemView> listaItemPedido = new ArrayList<OrderItemView>();
+		ArrayList<OrderItemView> orderItemList = new ArrayList<OrderItemView>();
 				
 		// prepare the statement before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared statement
-			stmt.setInt(1, codigoPedido);
+			stmt.setInt(1, orderId);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
-			while (resultado.next()) {
+			while (result.next()) {
 				OrderItemView ip = new OrderItemView();
-				ip.setNome(resultado.getString("prd_nome"));
-				ip.setPreco(resultado.getDouble("pdr_preco"));
-				ip.setQuantidade(resultado.getInt("itp_quantidade"));
+				ip.setName(result.getString("prd_nome"));
+				ip.setPrice(result.getDouble("pdr_preco"));
+				ip.setQuantity(result.getInt("itp_quantidade"));
 				
-				listaItemPedido.add(ip);
+				orderItemList.add(ip);
 			}
 			
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in order_item querying operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaItemPedido;
+		return orderItemList;
 	}
 }

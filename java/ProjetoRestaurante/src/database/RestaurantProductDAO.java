@@ -29,31 +29,30 @@ public class RestaurantProductDAO {
 	/**
 	 * Inserts a restaurant-product association into the associative table.
 	 * @param conn database connection
-	 * @param pr RestaurantProduct object to insert
+	 * @param restaurantProduct RestaurantProduct object to insert
 	 * @return true if insertion succeeded, false otherwise
 	 */
-	public boolean associarProdutoRestaurante(Connection conn, RestaurantProduct pr) {
-		String sqlQuery = "INSERT INTO PRODUTO_RESTAURANTE (" +
-				"pk_fk_res_cnpj, " +
-				"pk_fk_prd_codigo, " +
-				"pdr_qtde_estoque, " +
-				"pdr_preco) " +
-				"VALUES (?, ?, ?, ?)";
+	public boolean addRestaurantProduct(Connection conn, RestaurantProduct restaurantProduct) {
+		String sqlQuery = "INSERT INTO restaurant_product (" +
+				"res_pro_restaurant_id_pk_fk, " +
+				"res_pro_product_id_pk_fk, " +
+				"stock_amount, " +
+				"price VALUES (?, ?, ?, ?)";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, pr.getCnpjRestaurante());
-			stmt.setInt(2, pr.getCodigoProduto());
-			stmt.setInt(3, pr.getQuantidadeEstoque());
-			stmt.setDouble(4, pr.getPreco());
+			stmt.setString(1, restaurantProduct.getRestaurantId());
+			stmt.setInt(2, restaurantProduct.getProductNumber());
+			stmt.setInt(3, restaurantProduct.getStockAmount());
+			stmt.setDouble(4, restaurantProduct.getPrice());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO_RESTAURANTE");
+			System.err.println("Error in restaurant_product adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -63,76 +62,79 @@ public class RestaurantProductDAO {
 	/**
 	 * Retrieves all products for a given restaurant from the database.
 	 * @param conn database connection
-	 * @param cnpj the restaurant's CNPJ (identifier)
+	 * @param id the restaurant's CNPJ (identifier)
 	 * @return list of RestaurantProductView representing the restaurant's products
 	 */
-	public ArrayList<RestaurantProductView> retornarTodoProdutoRestaurante(Connection conn, String cnpj) {		
-		String sqlQuery = "SELECT p.prd_nome, "
-				+ "p.pk_prd_codigo,"
-				+ "pr.pdr_preco, "
-				+ "pr.pdr_qtde_estoque, "
-				+ "p.prd_descricao "
-				+ "FROM PRODUTO_RESTAURANTE AS pr "
-				+ "INNER JOIN PRODUTO AS p "
-				+ "ON p.pk_prd_codigo = pr.pk_fk_prd_codigo "
-				+ "WHERE pk_fk_res_cnpj = ?";
+	public ArrayList<RestaurantProductView> returnAllProductsPerRestaurant(Connection conn, String id) {		
+		String sqlQuery = "SELECT "
+				+ "p.name, "
+				+ "p.product_id_pk,"
+				+ "rp.price, "
+				+ "rp.stock_amount, "
+				+ "p.description "
+				+ "FROM restaurant_product AS rp "
+				+ "INNER JOIN product AS p "
+				+ "ON p.product_id_pk = rp.res_pro_product_id_pk_fk "
+				+ "WHERE rp.res_pro_product_id_pk_fk = ?";
 		
 		// list to store all restaurant product instances
-		ArrayList<RestaurantProductView> listaProdutos = new ArrayList<RestaurantProductView>();
+		ArrayList<RestaurantProductView> productList = new ArrayList<RestaurantProductView>();
 				
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, cnpj);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if there are results for products by CNPJ, add each product
 			// with the result attributes to the product list
-			while (resultado.next()) {
+			while (result.next()) {
 				RestaurantProductView pr = new RestaurantProductView();
-				pr.setCodigoProduto(resultado.getInt("pk_prd_codigo"));
-				pr.setNomeProduto(resultado.getString("prd_nome"));
-				pr.setPrecoProduto(resultado.getDouble("pdr_preco"));
-				pr.setQuantidadeEstoque(resultado.getInt("pdr_qtde_estoque"));
-				pr.setDescricao(resultado.getString("prd_descricao"));
+				pr.setProductNumber(result.getInt("product_id_pk"));
+				pr.setProductName(result.getString("name"));
+				pr.setProductPrice(result.getDouble("price"));
+				pr.setStockAmount(result.getInt("stock_amount"));
+				pr.setDescription(result.getString("description"));
 				
-				listaProdutos.add(pr);
+				productList.add(pr);
 			}
 			
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in restaurant_product querying operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaProdutos;
+		return productList;
 	}
 	
 	/**
 	 * Checks whether a product is already associated with a restaurant.
 	 * @param conn database connection
-	 * @param cnpj restaurant identifier
-	 * @param codigo product code to check
+	 * @param id restaurant identifier
+	 * @param number product code to check
 	 * @return true if the association exists, false otherwise
 	 */
-	public boolean produtoJaEstaCadastrado(Connection conn, String cnpj, int codigo) {
-		String sqlQuery = "SELECT * FROM PRODUTO_RESTAURANTE WHERE pk_fk_res_cnpj = ? AND pk_fk_prd_codigo = ?";
+	public boolean isProductAlreadyAdded(Connection conn, String id, int number) {
+		String sqlQuery = "SELECT * FROM restaurant_product "
+				+ "WHERE res_pro_restaurant_id_pk_fk = ? "
+				+ "AND res_pro_product_id_pk_fk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, cnpj);
-			stmt.setInt(2, codigo);
+			stmt.setString(1, id);
+			stmt.setInt(2, number);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
-			return resultado.next();
+			return result.next();
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in restaurant_product querying operation.");
 		    e.printStackTrace();
 		}
 		
@@ -142,53 +144,55 @@ public class RestaurantProductDAO {
 	/**
 	 * Deletes a product association from a restaurant, removing it from the restaurant's catalog.
 	 * @param conn database connection
-	 * @param cnpj restaurant identifier
-	 * @param codigo product code to delete
+	 * @param id restaurant identifier
+	 * @param number product code to delete
 	 * @return true if deletion succeeded, false otherwise
 	 */
-	public boolean deletarProduto(Connection conn, String cnpj, int codigo) {
-		String sqlQuery = "DELETE FROM PRODUTO_RESTAURANTE WHERE pk_fk_res_cnpj = ? AND pk_fk_prd_codigo = ?";
+	public boolean deleteProductRestaurant(Connection conn, String id, int number) {
+		String sqlQuery = "DELETE FROM restaurant_product "
+				+ "WHERE res_pro_restaurant_id_pk_fk = ? "
+				+ "AND res_pro_product_id_pk_fk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, cnpj);
-			stmt.setInt(2, codigo);
+			stmt.setString(1, id);
+			stmt.setInt(2, number);
 			
 			// execute the query and validate success
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO_RESTAURANTE");
+			System.err.println("Error in restaurant_product deleting operation.");
 		    e.printStackTrace();
 		}
 		
 		return false;
 	}
 	
-	public boolean atualizarProdutoRestaurante(Connection conn, RestaurantProduct pr) {
-		String sqlQuery = "UPDATE PRODUTO_RESTAURANTE " +
-				"SET pdr_qtde_estoque = ?, " +
-				"pdr_preco = ? " +
-				"WHERE pk_fk_res_cnpj = ? "
-				+ "AND pk_fk_prd_codigo = ?";
+	public boolean updateProductRestaurant(Connection conn, RestaurantProduct restaurantProduct) {
+		String sqlQuery = "UPDATE restaurant_product " +
+				"SET stock_amount = ?, " +
+				"price = ? "
+				+ "WHERE res_pro_restaurant_id_pk_fk = ? "
+				+ "AND res_pro_product_id_pk_fk = ?";
 
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 		
 			// bind attributes to the prepared query
-			stmt.setInt(1, pr.getQuantidadeEstoque());
-			stmt.setDouble(2, pr.getPreco());
-			stmt.setString(3, pr.getCnpjRestaurante());
-			stmt.setInt(4, pr.getCodigoProduto());
+			stmt.setInt(1, restaurantProduct.getStockAmount());
+			stmt.setDouble(2, restaurantProduct.getPrice());
+			stmt.setString(3, restaurantProduct.getRestaurantId());
+			stmt.setInt(4, restaurantProduct.getProductNumber());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 		
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO_RESTAURANTE");
+			System.err.println("Error in restaurant_product updating operation.");
 			e.printStackTrace();
 		}
 		
@@ -198,30 +202,32 @@ public class RestaurantProductDAO {
 	/**
 	 * Decreases the stock of a restaurant product when an order is placed.
 	 * @param conn database connection
-	 * @param cnpj restaurant identifier
+	 * @param id restaurant identifier
 	 * @param item order item containing product code and quantity
 	 * @return true if stock was successfully decreased, false otherwise
 	 */
-	public boolean diminuirEstoque(Connection conn, String cnpj, OrderItemView item) {
-		String sqlQuery = "UPDATE PRODUTO_RESTAURANTE " +
-						  "SET pdr_qtde_estoque = pdr_qtde_estoque - ? " +
-						  "WHERE pk_fk_res_cnpj = ? AND pk_fk_prd_codigo = ? AND pdr_qtde_estoque >= ?";
+	public boolean decreaseStockAmount(Connection conn, String id, OrderItemView item) {
+		String sqlQuery = "UPDATE restaurant_product " +
+						  "SET stock_amount = stock_amount - ? " +
+						  "WHERE res_pro_restaurant_id_pk_fk = ? "
+						  + "AND res_pro_product_id_pk_fk = ? "
+						  + "AND stock_amount >= ?";
 
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 		
 			// bind attributes to the prepared query
 			
-			stmt.setInt(1, item.getQuantidade());
-			stmt.setString(2, cnpj);
-			stmt.setInt(3, item.getCodigoProduto());
-			stmt.setInt(4, item.getQuantidade());
+			stmt.setInt(1, item.getQuantity());
+			stmt.setString(2, id);
+			stmt.setInt(3, item.getProductNumber());
+			stmt.setInt(4, item.getQuantity());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PEDIDO");
+			System.err.println("Error in restaurant_product decreasingStock operation.");
 			e.printStackTrace();
 			}
 		

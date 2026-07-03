@@ -20,9 +20,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-	private static final String URL = "jdbc:postgresql://localhost:5432/Fred_Food";
-	private static final String USER = "postgres";
-	private static final String PASSWORD = "root";
+	private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/free_food_en";
+	private static final String DATABASE_USER = "postgres";
+	private static final String DATABASE_PASSWORD = "root";
 	
 	/**
 	 * Gets a database connection
@@ -31,7 +31,7 @@ public class DatabaseConnection {
 	 */
 	public static Connection getConnection() {
 		try {
-			return DriverManager.getConnection(URL, USER, PASSWORD);
+			return DriverManager.getConnection(DATABASE_URL, DATABASE_USER, DATABASE_PASSWORD);
 		} catch (SQLException e) {
 			throw new RuntimeException("An error occurred while connecting to the database", e);
 		}

@@ -33,8 +33,8 @@ public class Main {
 		Scanner sc = new Scanner(System.in);
 		
 		// instantiate the main menu for application start
-		MainMenu mn = new MainMenu(conn, sc);
-		mn.mostrar();
+		MainMenu mainMenu = new MainMenu(conn, sc);
+		mainMenu.mostrar();
 		
 		// close the scanner when application execution ends
 		sc.close();

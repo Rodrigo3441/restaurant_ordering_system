@@ -27,36 +27,37 @@ public class DeliveryPersonDAO {
 	/**
 	 * Responsible for inserting a new delivery person into the database
 	 * @param conn connection object
-	 * @param entregador delivery person object
+	 * @param deliveryPerson delivery person object
 	 * @return boolean
 	 */
-	public boolean inserirEntregador(Connection conn, DeliveryPerson entregador) {
-		String sqlQuery = "INSERT INTO ENTREGADOR (" +
-						"pk_etg_cpf, etg_primeiro_nome, " +
-						"etg_nome_meio, " +
-						"etg_ultimo_nome, " +
-						"etg_telefone, " +
-						"etg_veiculo, " +
-						"etg_disponibilidade) " +
+	public boolean addDeliveryPerson(Connection conn, DeliveryPerson deliveryPerson) {
+		String sqlQuery = "INSERT INTO delivery_person (" +
+						"del_per_id_pk," +
+						"first_name, " +
+						"middle_name, " +
+						"last_name, " +
+						"phone, " +
+						"vehicle, " +
+						"available) " +
 						"VALUES (?, ?, ?, ?, ?, ?, ?)";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind the attributes to the prepared query
-			stmt.setString(1, entregador.getCpf());
-			stmt.setString(2, entregador.getPrimeiroNome());
-			stmt.setString(3, entregador.getNomeMeio());
-			stmt.setString(4, entregador.getUltimoNome());
-			stmt.setString(5, entregador.getTelefone());
-			stmt.setString(6, entregador.getVeiculo());
-			stmt.setShort(7, entregador.getDisponibilidade());
+			stmt.setString(1, deliveryPerson.getId());
+			stmt.setString(2, deliveryPerson.getFirstName());
+			stmt.setString(3, deliveryPerson.getMiddleName());
+			stmt.setString(4, deliveryPerson.getLastName());
+			stmt.setString(5, deliveryPerson.getPhone());
+			stmt.setString(6, deliveryPerson.getVehicle());
+			stmt.setShort(7, deliveryPerson.getAvailable());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENTREGADOR");
+			System.err.println("Error in delivery_person adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -67,39 +68,39 @@ public class DeliveryPersonDAO {
 	 * Responsible for retrieving the delivery person's information from the database
 	 * so it can be used for assigning deliveries
 	 * @param conn connection object
-	 * @param cpf cpf of the searched delivery person
+	 * @param id cpf of the searched delivery person
 	 * @return delivery person object
 	 */
-	public DeliveryPerson retornarEntregador(Connection conn, String cpf) {
-		String sqlQuery = "SELECT * FROM ENTREGADOR WHERE pk_etg_cpf = ?";
+	public DeliveryPerson returnDeliveryPerson(Connection conn, String id) {
+		String sqlQuery = "SELECT * FROM delivery_person WHERE del_per_id_pk = ?";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind the attributes to the prepared query
-			stmt.setString(1, cpf);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 				// if there is a result for the cpf search, instantiate a delivery person
 				// object with the result attributes
-			if (resultado.next()) {
-				DeliveryPerson e = new DeliveryPerson();
+			if (result.next()) {
+				DeliveryPerson deliveryPerson = new DeliveryPerson();
 							
-				e.setCpf(resultado.getString("pk_etg_cpf"));
-				e.setPrimeiroNome(resultado.getString("etg_primeiro_nome"));
-				e.setNomeMeio(resultado.getString("etg_nome_meio"));
-				e.setUltimoNome(resultado.getString("etg_ultimo_nome"));
-				e.setTelefone(resultado.getString("etg_telefone"));
-				e.setVeiculo(resultado.getString("etg_veiculo"));
-				e.setDisponibilidade(resultado.getShort("etg_disponibilidade"));
+				deliveryPerson.setId(result.getString("del_per_id_pk"));
+				deliveryPerson.setFirstName(result.getString("first_name"));
+				deliveryPerson.setMiddleName(result.getString("middle_name"));
+				deliveryPerson.setLastName(result.getString("last_name"));
+				deliveryPerson.setPhone(result.getString("phone"));
+				deliveryPerson.setVehicle(result.getString("vehicle"));
+				deliveryPerson.setAvailable(result.getShort("available"));
 				
-				return e;
+				return deliveryPerson;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENTREGADOR");
+			System.err.println("Error in delivery_person querying operation.");
 		    e.printStackTrace();
 		}
 		return null;
@@ -108,36 +109,36 @@ public class DeliveryPersonDAO {
 	/**
 	 * Responsible for updating a delivery person's information in the database
 	 * @param conn connection object
-	 * @param entregador delivery person object
+	 * @param deliveryPerson delivery person object
 	 * @return boolean
 	 */
-	public boolean atualizarEntregador(Connection conn, DeliveryPerson entregador) {
-		String sqlQuery = "UPDATE ENTREGADOR SET " +
-			            "etg_primeiro_nome = ?, " +
-			            "etg_nome_meio = ?, " +
-			            "etg_ultimo_nome = ?, " +
-			            "etg_telefone = ?, " +
-			            "etg_veiculo = ?, " +
-			            "etg_disponibilidade = ? " +
-			            "WHERE pk_etg_cpf = ?";
+	public boolean updateDeliveryPerson(Connection conn, DeliveryPerson deliveryPerson) {
+		String sqlQuery = "UPDATE delivery_person SET " +
+			            "first_name = ?, " +
+			            "middle_name = ?, " +
+			            "last_name = ?, " +
+			            "phone = ?, " +
+			            "vehicle = ?, " +
+			            "available = ? " +
+			            "WHERE del_per_id_pk = ?";
 
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind the attributes to the prepared query
-			stmt.setString(1, entregador.getPrimeiroNome());
-	        stmt.setString(2, entregador.getNomeMeio());
-	        stmt.setString(3, entregador.getUltimoNome());
-	        stmt.setString(4, entregador.getTelefone());
-	        stmt.setString(5, entregador.getVeiculo());
-	        stmt.setShort(6, entregador.getDisponibilidade());
-	        stmt.setString(7, entregador.getCpf());
+			stmt.setString(1, deliveryPerson.getFirstName());
+	        stmt.setString(2, deliveryPerson.getMiddleName());
+	        stmt.setString(3, deliveryPerson.getLastName());
+	        stmt.setString(4, deliveryPerson.getPhone());
+	        stmt.setString(5, deliveryPerson.getVehicle());
+	        stmt.setShort(6, deliveryPerson.getAvailable());
+	        stmt.setString(7, deliveryPerson.getId());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENTREGADOR");
+			System.err.println("Error in delivery_person updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -147,24 +148,24 @@ public class DeliveryPersonDAO {
 	/**
 	 * Responsible for deleting a delivery person from the database
 	 * @param conn connection object
-	 * @param cpf cpf of the delivery person
+	 * @param id cpf of the delivery person
 	 * @return boolean
 	 */
-	public boolean deletarEntregador(Connection conn, String cpf) {
-		String sqlQuery = "DELETE FROM ENTREGADOR WHERE pk_etg_cpf = ?";
+	public boolean deleteDeliveryPerson(Connection conn, String id) {
+		String sqlQuery = "DELETE FROM delivery_person WHERE del_per_id_pk = ?";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind the attributes to the prepared query
-			stmt.setString(1, cpf);
+			stmt.setString(1, id);
 			
 			// query execution
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENTREGADOR");
+			System.err.println("Error in delivery_person deleting operation.");
 		    e.printStackTrace();
 		}
 		
@@ -176,40 +177,40 @@ public class DeliveryPersonDAO {
 	 * @param conn connection object
 	 * @return ArrayList of delivery persons
 	 */
-	public ArrayList<DeliveryPerson> listarEntregadores(Connection conn){
+	public ArrayList<DeliveryPerson> returnDeliveryPersonList(Connection conn){
 		
 		// List to store all DeliveryPerson instances
-		ArrayList<DeliveryPerson> listaEntregadores = new ArrayList<DeliveryPerson>();
+		ArrayList<DeliveryPerson> deliveryPersonList = new ArrayList<DeliveryPerson>();
 		
-		String sqlQuery = "SELECT * FROM ENTREGADOR";
+		String sqlQuery = "SELECT * FROM delivery_person";
 		
 			// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 				// storing all found delivery persons in the dynamic list
-			while (resultado.next()) {
-				DeliveryPerson e = new DeliveryPerson();
+			while (result.next()) {
+				DeliveryPerson deliveryPerson = new DeliveryPerson();
 		
-				e.setCpf(resultado.getString("pk_etg_cpf"));
-				e.setPrimeiroNome(resultado.getString("etg_primeiro_nome"));
-				e.setNomeMeio(resultado.getString("etg_nome_meio"));
-				e.setUltimoNome(resultado.getString("etg_ultimo_nome"));
-				e.setTelefone(resultado.getString("etg_telefone"));
-				e.setVeiculo(resultado.getString("etg_veiculo"));
-				e.setDisponibilidade(resultado.getShort("etg_disponibilidade"));
+				deliveryPerson.setId(result.getString("del_per_id_pk"));
+				deliveryPerson.setFirstName(result.getString("first_name"));
+				deliveryPerson.setMiddleName(result.getString("middle_name"));
+				deliveryPerson.setLastName(result.getString("last_name"));
+				deliveryPerson.setPhone(result.getString("phone"));
+				deliveryPerson.setVehicle(result.getString("vehicle"));
+				deliveryPerson.setAvailable(result.getShort("available"));
 				
-				listaEntregadores.add(e);
+				deliveryPersonList.add(deliveryPerson);
 			}
 			
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in delivery_person listing operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaEntregadores;
+		return deliveryPersonList;
 	}
 	
 }

@@ -27,26 +27,30 @@ public class RestaurantDAO {
 	/**
 	 * Inserts a new restaurant into the database.
 	 * @param conn database connection
-	 * @param restaurante restaurant object to insert
+	 * @param restaurant restaurant object to insert
 	 * @return true if insert succeeded, false otherwise
 	 */
-	public boolean inserirRestaurante(Connection conn, Restaurant restaurante) {
-		String sqlQuery = "INSERT INTO RESTAURANTE (pk_res_cnpj, res_nome, res_telefone, res_senha) VALUES (?, ?, ?, ?)";
+	public boolean addRestaurant(Connection conn, Restaurant restaurant) {
+		String sqlQuery = "INSERT INTO restaurant ("
+				+ "restaurant_id_pk, "
+				+ "name, "
+				+ "phone, "
+				+ "res_senha) VALUES (?, ?, ?, ?)";
 		
 		// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// binding attributes to the prepared statement
-			stmt.setString(1, restaurante.getCnpj());
-			stmt.setString(2, restaurante.getNome());
-			stmt.setString(3, restaurante.getTelefone());
-			stmt.setString(4, restaurante.getSenha());
+			stmt.setString(1, restaurant.getId());
+			stmt.setString(2, restaurant.getName());
+			stmt.setString(3, restaurant.getPhone());
+			stmt.setString(4, restaurant.getPasscode());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in restaurant adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -56,42 +60,42 @@ public class RestaurantDAO {
 	/**
 	 * Retrieves restaurant information from the database for use in operations.
 	 * @param conn database connection
-	 * @param cnpj CNPJ of the restaurant to retrieve
+	 * @param id CNPJ of the restaurant to retrieve
 	 * @return a Restaurant object if found, otherwise null
 	 */
-	public Restaurant retornarRestaurante(Connection conn, String cnpj) {
-		String sqlQuery = "SELECT * FROM RESTAURANTE WHERE pk_res_cnpj = ?";
+	public Restaurant returnRestaurant(Connection conn, String id) {
+		String sqlQuery = "SELECT * FROM restaurant WHERE restaurant_id_pk = ?";
 		
 			// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// binding attributes to the prepared statement
-			stmt.setString(1, cnpj);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if there is a result for the CNPJ, instantiate a Restaurant object
 			// with the attributes from the result
-			if (resultado.next()) {
-				Restaurant r = new Restaurant();
+			if (result.next()) {
+				Restaurant restaurant = new Restaurant();
 				
-				r.setCnpj(resultado.getString("pk_res_cnpj"));
-				r.setNome(resultado.getString("res_nome"));
-				r.setTelefone(resultado.getString("res_telefone"));
-				r.setSenha(resultado.getString("res_senha"));
+				restaurant.setId(result.getString("restaurant_id_pk"));
+				restaurant.setName(result.getString("name"));
+				restaurant.setPhone(result.getString("phone"));
+				restaurant.setPasscode(result.getString("passcode"));
 				
 				// restaurant category may be null
-				int categoria = resultado.getInt("fk_res_id_catg");
-				if (!resultado.wasNull()) {
-					r.setIdCategoria(categoria);
+				int category = result.getInt("cat_id_fk");
+				if (!result.wasNull()) {
+					restaurant.setCategoryId(category);
 				}
 				
-				return r;
+				return restaurant;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in restaurant querying operation.");
 		    e.printStackTrace();
 		}
 		
@@ -101,32 +105,32 @@ public class RestaurantDAO {
 	/**
 	 * Updates a restaurant's information in the database.
 	 * @param conn database connection
-	 * @param restaurante restaurant object with updated data
+	 * @param restaurant restaurant object with updated data
 	 * @return true if update succeeded, false otherwise
 	 */
-	public boolean atualizarRestaurante(Connection conn, Restaurant restaurante) {
-		String sqlQuery = "UPDATE RESTAURANTE " +
-							"SET res_nome = ?, " +
-							"res_telefone = ?, " +
-							"fk_res_id_catg = ?, " +
-							"res_senha = ? " +
-							"WHERE pk_res_cnpj = ?";
+	public boolean updateRestaurant(Connection conn, Restaurant restaurant) {
+		String sqlQuery = "UPDATE restaurant " +
+							"SET name = ?, " +
+							"phone = ?, " +
+							"cat_id_fk = ?, " +
+							"passcode = ? " +
+							"WHERE restaurant_id_pk = ?";
 
 		// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// binding attributes to the prepared statement
-			stmt.setString(1, restaurante.getNome());
-			stmt.setString(2, restaurante.getTelefone());
-			stmt.setObject(3, restaurante.getIdCategoria());
-			stmt.setString(4, restaurante.getSenha());
-			stmt.setString(5, restaurante.getCnpj());
+			stmt.setString(1, restaurant.getName());
+			stmt.setString(2, restaurant.getPhone());
+			stmt.setObject(3, restaurant.getCategoryId());
+			stmt.setString(4, restaurant.getPasscode());
+			stmt.setString(5, restaurant.getId());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in restaurant updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -136,24 +140,24 @@ public class RestaurantDAO {
 	/**
 	 * Deletes a restaurant from the database.
 	 * @param conn database connection
-	 * @param cnpj CNPJ of the restaurant to delete
+	 * @param id CNPJ of the restaurant to delete
 	 * @return true if delete succeeded, false otherwise
 	 */
-	public boolean deletarRestaurante(Connection conn, String cnpj) {
-		String sqlQuery = "DELETE FROM RESTAURANTE WHERE pk_res_cnpj = ?";
+	public boolean deleteRestaurant(Connection conn, String id) {
+		String sqlQuery = "DELETE FROM restaurant WHERE restaurant_id_pk = ?";
 		
 		// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// binding attributes to the prepared statement
-			stmt.setString(1, cnpj);
+			stmt.setString(1, id);
 			
 			// execute the query and validate success
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in restaurant deleting operation.");
 		    e.printStackTrace();
 		}
 		
@@ -165,37 +169,37 @@ public class RestaurantDAO {
 	 * @param conn database connection
 	 * @return ArrayList of Restaurant objects
 	 */
-	public ArrayList<Restaurant> listarRestaurantes(Connection conn){
+	public ArrayList<Restaurant> returnRestaurantList(Connection conn){
 		
-		//Lista para armazenar todos as instâncias de restaurante
-		ArrayList<Restaurant> listaRestaurantes = new ArrayList<Restaurant>();
+		//list to store all restaurant instances
+		ArrayList<Restaurant> restaurantList = new ArrayList<Restaurant>();
 		
-		String sqlQuery = "SELECT * FROM RESTAURANTE";
+		String sqlQuery = "SELECT * FROM restaurant";
 		
 		// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// storing all found restaurants into the dynamic restaurant list
-			while (resultado.next()) {
-				Restaurant r = new Restaurant();
+			while (result.next()) {
+				Restaurant restaurant = new Restaurant();
 				
-				r.setCnpj(resultado.getString("pk_res_cnpj"));
-				r.setNome(resultado.getString("res_nome"));
-				r.setTelefone(resultado.getString("res_telefone"));
-				r.setIdCategoria(resultado.getInt("fk_res_id_catg"));
-				r.setSenha(resultado.getString("res_senha"));
+				restaurant.setId(result.getString("restaurant_id_pk"));
+				restaurant.setName(result.getString("name"));
+				restaurant.setPhone(result.getString("phone"));
+				restaurant.setCategoryId(result.getInt("cat_id_fk"));
+				restaurant.setPasscode(result.getString("passcode"));
 				
-				listaRestaurantes.add(r);
+				restaurantList.add(restaurant);
 			}
 			
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de RESTAURANTE");
+			System.err.println("Error in restaurant querying operation.");
 		    e.printStackTrace();
 		}
 		
-		return listaRestaurantes;
+		return restaurantList;
 	}
 }

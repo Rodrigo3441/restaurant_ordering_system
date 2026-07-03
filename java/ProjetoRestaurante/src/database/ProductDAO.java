@@ -26,31 +26,31 @@ public class ProductDAO {
 	/**
 	 * Inserts a new product into the database.
 	 * @param conn database connection
-	 * @param produto product object to insert
+	 * @param product product object to insert
 	 * @return true if insert succeeded, false otherwise
 	 */
-	public boolean inserirProduto(Connection conn, Product produto) {
-		String sqlQuery = "INSERT INTO PRODUTO (" +
-				"pk_prd_codigo, " +
-				"prd_nome, " +
-				"prd_descricao, " +
-				"fk_prd_id_catg) " +
+	public boolean addProduct(Connection conn, Product product) {
+		String sqlQuery = "INSERT INTO product (" +
+				"product_id_pk, " +
+				"name, " +
+				"description, " +
+				"cat_id_fk) " +
 				"VALUES (?, ?, ?, ?)";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setInt(1, produto.getCodigo());
-			stmt.setString(2, produto.getNome());
-			stmt.setString(3, produto.getDescricao());
-			stmt.setObject(4, produto.getIdCategoria());
+			stmt.setInt(1, product.getNumber());
+			stmt.setString(2, product.getName());
+			stmt.setString(3, product.getDescription());
+			stmt.setObject(4, product.getCategoryId());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in product adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -60,40 +60,40 @@ public class ProductDAO {
 	/**
 	 * Retrieves a product from the database by its id.
 	 * @param conn database connection
-	 * @param codigo product id to search for
+	 * @param number product id to search for
 	 * @return Product object if found, otherwise null
 	 */
-	public Product retornarProdutoPorId(Connection conn, int codigo) {
-		String sqlQuery = "SELECT * FROM PRODUTO WHERE pk_prd_codigo = ?";
+	public Product returnProductById(Connection conn, int number) {
+		String sqlQuery = "SELECT * FROM product WHERE product_id_pk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setInt(1, codigo);
+			stmt.setInt(1, number);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if there is a result from the search by id, instantiate a Product
 			// with the attributes from the result
-			if (resultado.next()) {
-				Product p = new Product();
+			if (result.next()) {
+				Product product = new Product();
 							
-				p.setCodigo(resultado.getInt("pk_prd_codigo"));
-				p.setNome(resultado.getString("prd_nome"));
-				p.setDescricao(resultado.getString("prd_descricao"));
+				product.setNumber(result.getInt("product_id_pk"));
+				product.setName(result.getString("name"));
+				product.setDescription(result.getString("description"));
 				
-				//categoria do produto pode ser null
-				int categoria = resultado.getInt("fk_prd_id_catg");
-				if (!resultado.wasNull()) {
-					p.setIdCategoria(categoria);
+				//product category can be null
+				int category = result.getInt("cat_id_fk");
+				if (!result.wasNull()) {
+					product.setCategoryId(category);
 				}
-				return p;
+				return product;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in product querying operation.");
 		    e.printStackTrace();
 		}
 		
@@ -104,40 +104,40 @@ public class ProductDAO {
 	 * Retrieves a product from the database by matching its name.
 	 * Uses SQL LIKE to perform a partial match.
 	 * @param conn database connection
-	 * @param nome name (or partial name) of the product to search for
+	 * @param name name (or partial name) of the product to search for
 	 * @return Product object if a match is found, otherwise null
 	 */
-	public Product retornarProdutoPorNome(Connection conn, String nome) {
-		String sqlQuery = "SELECT * FROM PRODUTO WHERE prd_nome LIKE ?";
+	public Product returnProductByName(Connection conn, String name) {
+		String sqlQuery = "SELECT * FROM product WHERE name LIKE ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, "%" + nome + "%");
+			stmt.setString(1, "%" + name + "%");
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if there is a result from the name search, instantiate a Product
 			// with the attributes from the result
-			if (resultado.next()) {
-				Product p = new Product();
+			if (result.next()) {
+				Product product = new Product();
 							
-				p.setCodigo(resultado.getInt("pk_prd_codigo"));
-				p.setNome(resultado.getString("prd_nome"));
-				p.setDescricao(resultado.getString("prd_descricao"));
+				product.setNumber(result.getInt("product_id_pk"));
+				product.setName(result.getString("name"));
+				product.setDescription(result.getString("description"));
 				
 				//categoria do produto pode ser null
-				int categoria = resultado.getInt("fk_prd_id_catg");
-				if (!resultado.wasNull()) {
-					p.setIdCategoria(categoria);
+				int categoria = result.getInt("cat_id_fk");
+				if (!result.wasNull()) {
+					product.setCategoryId(categoria);
 				}
-				return p;
+				return product;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in product querying operation.");
 		    e.printStackTrace();
 		}
 		
@@ -147,30 +147,30 @@ public class ProductDAO {
 	/**
 	 * Updates an existing product's information in the database.
 	 * @param conn database connection
-	 * @param produto product object with updated values
+	 * @param product product object with updated values
 	 * @return true if update succeeded, false otherwise
 	 */
-	public boolean atualizarProduto(Connection conn, Product produto) {
-		String sqlQuery = "UPDATE PRODUTO SET "
-				+ "prd_nome = ?, "
-				+ "prd_descricao = ?, "
-				+ "fk_prd_id_catg = ? "
-				+ "WHERE pk_prd_codigo = ?";
+	public boolean updateProduct(Connection conn, Product product) {
+		String sqlQuery = "UPDATE product SET "
+				+ "name = ?, "
+				+ "description = ?, "
+				+ "cat_id_fk = ? "
+				+ "WHERE product_id_pk = ?";
 
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, produto.getNome());
-	        stmt.setString(2, produto.getDescricao());
-	        stmt.setObject(3, produto.getIdCategoria());
-	        stmt.setObject(4, produto.getCodigo());
+			stmt.setString(1, product.getName());
+	        stmt.setString(2, product.getDescription());
+	        stmt.setObject(3, product.getCategoryId());
+	        stmt.setObject(4, product.getNumber());
 	
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in product updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -180,24 +180,24 @@ public class ProductDAO {
 	/**
 	 * Deletes a product from the database by id.
 	 * @param conn database connection
-	 * @param codigo id of the product to delete
+	 * @param number id of the product to delete
 	 * @return true if delete succeeded, false otherwise
 	 */
-	public boolean deletarProduto(Connection conn, int codigo) {
-		String sqlQuery = "DELETE FROM PRODUTO WHERE pk_prd_codigo = ?";
+	public boolean deleteProduct(Connection conn, int number) {
+		String sqlQuery = "DELETE FROM product WHERE product_id_pk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setInt(1, codigo);
+			stmt.setInt(1, number);
 			
 			// execute the query and validate success
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de PRODUTO");
+			System.err.println("Error in product deleting operation.");
 		    e.printStackTrace();
 		}
 		

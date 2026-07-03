@@ -27,30 +27,30 @@ public class AddressDAO {
 	/**
 	 * Inserts a restaurant address into the database.
 	 * @param conn database connection
-	 * @param er restaurant address object
+	 * @param restaurantAddress restaurant address object
 	 * @return boolean
 	 */
-	public boolean inserirEnderecoRestaurante(Connection conn, Address er) {
-		String sqlQuery = "INSERT INTO ENDERECO_RESTAURANTE "
-				+ "(pk_fk_res_cnpj, "
-				+ "pk_enr_cep, "
-				+ "enr_nome, "
-				+ "enr_numero) VALUES (?, ?, ?, ?)";
+	public boolean addRestaurantAddress(Connection conn, Address restaurantAddress) {
+		String sqlQuery = "INSERT INTO restaurant_address "
+				+ "(res_add_restaurant_id_pk_fk, "
+				+ "res_add_postal_code_pk, "
+				+ "name, "
+				+ "number) VALUES (?, ?, ?, ?)";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, er.getIdentificacao());
-			stmt.setString(2, er.getCep());
-			stmt.setString(3, er.getNome());
-			stmt.setInt(4, er.getNumero());
+			stmt.setString(1, restaurantAddress.getId());
+			stmt.setString(2, restaurantAddress.getPostalCode());
+			stmt.setString(3, restaurantAddress.getName());
+			stmt.setInt(4, restaurantAddress.getNumber());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_RESTAURANTE");
+			System.err.println("Error in restaurant_address adding operation.");
 		    e.printStackTrace();
 		}
 		
@@ -60,36 +60,36 @@ public class AddressDAO {
 	/**
 	 * Retrieves restaurant address details for use in other operations.
 	 * @param conn database connection  
-	 * @param cnpj restaurant CNPJ
+	 * @param id restaurant CNPJ
 	 * @return restaurant address object
 	 */
-	public RestaurantAddress retornarEnderecoRestaurante(Connection conn, String cnpj) {
-		String sqlQuery = "SELECT * FROM ENDERECO_RESTAURANTE WHERE pk_fk_res_cnpj = ?";
+	public RestaurantAddress returnRestaurantAddress(Connection conn, String id) {
+		String sqlQuery = "SELECT * FROM restaurant_address WHERE res_add_restaurant_id_pk_fk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, cnpj);
+			stmt.setString(1, id);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if a result is found for the CNPJ, create a restaurant address object
 			// with the result attributes
-			if (resultado.next()) {
+			if (result.next()) {
 				RestaurantAddress er = new RestaurantAddress();
 				
-				er.setCnpjRestaurante(resultado.getString("pk_fk_res_cnpj"));
-				er.setCep(resultado.getString("pk_enr_cep"));
-				er.setNome(resultado.getString("enr_nome"));
-				er.setNumero(resultado.getInt("enr_numero"));
+				er.setRestaurantId(result.getString("res_add_restaurant_id_pk_fk"));
+				er.setPostalCode(result.getString("res_add_postal_code_pk"));
+				er.setName(result.getString("name"));
+				er.setNumber(result.getInt("number"));
 				
 				return er;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_RESTAURANTE");
+			System.err.println("Error in restaurant_address querying operation.");
 		    e.printStackTrace();
 		}
 		return null;
@@ -98,29 +98,29 @@ public class AddressDAO {
 	/**
 	 * Updates a restaurant address in the database.
 	 * @param conn database connection
-	 * @param er address object
+	 * @param restaurantAddress address object
 	 */
-	public boolean atualizarEnderecoRestaurante(Connection conn, Address er) {
-		String sqlQuery = "UPDATE ENDERECO_RESTAURANTE SET " +
-	            "pk_enr_cep = ?, " +
-	            "enr_nome = ?, " +
-	            "enr_numero = ? " +
-	            "WHERE pk_fk_res_cnpj = ?";
+	public boolean updateRestaurantAddress(Connection conn, Address restaurantAddress) {
+		String sqlQuery = "UPDATE restaurant_address SET " +
+	            "res_add_postal_code_pk = ?, " +
+	            "name = ?, " +
+	            "number = ? " +
+	            "WHERE res_add_restaurant_id_pk_fk = ?";
 
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, er.getCep());
-	        stmt.setString(2, er.getNome());
-	        stmt.setInt(3, er.getNumero());
-	        stmt.setString(4, er.getIdentificacao());
+			stmt.setString(1, restaurantAddress.getPostalCode());
+	        stmt.setString(2, restaurantAddress.getName());
+	        stmt.setInt(3, restaurantAddress.getNumber());
+	        stmt.setString(4, restaurantAddress.getId());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_RESTAURANTE");
+			System.err.println("Error in restaurant_address updating operation.");
 		    e.printStackTrace();
 		}
 		
@@ -130,30 +130,30 @@ public class AddressDAO {
 	/**
 	 * Inserts a client address into the database.
 	 * @param conn database connection
-	 * @param ec client address object
+	 * @param customerAddress client address object
 	 * @return boolean
 	 */
-	public boolean inserirEnderecoCliente(Connection conn, Address ec) {
-		String sqlQuery = "INSERT INTO ENDERECO_CLIENTE "
-				+ "(pk_fk_cli_cpf, "
-				+ "pk_enc_cep, "
-				+ "enc_nome, "
-				+ "enc_numero) VALUES (?, ?, ?, ?)";
+	public boolean addCustomerAddress(Connection conn, Address customerAddress) {
+		String sqlQuery = "INSERT INTO customer_address "
+				+ "(cus_add_customer_id_pk_fk, "
+				+ "cus_add_postal_code_pk, "
+				+ "name, "
+				+ "number) VALUES (?, ?, ?, ?)";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, ec.getIdentificacao());
-			stmt.setString(2, ec.getCep());
-			stmt.setString(3, ec.getNome());
-			stmt.setInt(4, ec.getNumero());
+			stmt.setString(1, customerAddress.getId());
+			stmt.setString(2, customerAddress.getPostalCode());
+			stmt.setString(3, customerAddress.getName());
+			stmt.setInt(4, customerAddress.getNumber());
 			
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_CLIENTE");
+			System.err.println("Error in customer_address adding operation");
 		    e.printStackTrace();
 		}
 		
@@ -166,8 +166,8 @@ public class AddressDAO {
 	 * @param cpf client CPF
 	 * @return client address object
 	 */
-	public CustomerAddress retornarEnderecoCliente(Connection conn, String cpf) {
-		String sqlQuery = "SELECT * FROM ENDERECO_CLIENTE WHERE pk_fk_cli_cpf = ?";
+	public CustomerAddress returnCustomerAddress(Connection conn, String cpf) {
+		String sqlQuery = "SELECT * FROM customer_address WHERE cus_add_customer_id_pk_fk = ?";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
@@ -175,24 +175,24 @@ public class AddressDAO {
 			// bind attributes to the prepared query
 			stmt.setString(1, cpf);
 			
-			ResultSet resultado = stmt.executeQuery();
+			ResultSet result = stmt.executeQuery();
 			
 			// if a result is found for the CPF, create a client address object
 			// with the result attributes
-			if (resultado.next()) {
-				CustomerAddress ec = new CustomerAddress();
+			if (result.next()) {
+				CustomerAddress customerAddress = new CustomerAddress();
 				
-				ec.setCpfCliente(resultado.getString("pk_fk_cli_cpf"));
-				ec.setCep(resultado.getString("pk_enc_cep"));
-				ec.setNome(resultado.getString("enc_nome"));
-				ec.setNumero(resultado.getInt("enc_numero"));
+				customerAddress.setCustomerId(result.getString("pk_fk_cli_cpf"));
+				customerAddress.setPostalCode(result.getString("pk_enc_cep"));
+				customerAddress.setName(result.getString("enc_nome"));
+				customerAddress.setNumber(result.getInt("enc_numero"));
 				
-				return ec;
+				return customerAddress;
 
 			}
 									
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_CLIENTE");
+			System.err.println("Error in customer_address querying operation");
 		    e.printStackTrace();
 		}
 		return null;
@@ -201,30 +201,30 @@ public class AddressDAO {
 	/**
 	 * Updates a client address in the database.
 	 * @param conn database connection
-	 * @param ec address object
+	 * @param customerAddress address object
 	 * @return boolean
 	 */
-	public boolean atualizarEnderecoCliente(Connection conn, Address ec) {
-		String sqlQuery = "UPDATE ENDERECO_CLIENTE SET " +
-	            "pk_enc_cep = ?, " +
-	            "enc_nome = ?, " +
-	            "enc_numero = ? " +
-	            "WHERE pk_fk_cli_cpf = ?";
+	public boolean updateCustomerAddress(Connection conn, Address customerAddress) {
+		String sqlQuery = "UPDATE customer_address SET " +
+	            "cus_add_postal_code_pk = ?, " +
+	            "name = ?, " +
+	            "number = ? " +
+	            "WHERE cus_add_customer_id_pk_fk = ?";
 
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
 			
 			// bind attributes to the prepared query
-			stmt.setString(1, ec.getCep());
-	        stmt.setString(2, ec.getNome());
-	        stmt.setInt(3, ec.getNumero());
-	        stmt.setString(4, ec.getIdentificacao());
+			stmt.setString(1, customerAddress.getPostalCode());
+	        stmt.setString(2, customerAddress.getName());
+	        stmt.setInt(3, customerAddress.getNumber());
+	        stmt.setString(4, customerAddress.getId());
 						
-			int linhasAfetadas = stmt.executeUpdate();
-			return linhasAfetadas > 0;
+			int affectedRows = stmt.executeUpdate();
+			return affectedRows > 0;
 			
 		} catch (SQLException e) {
-			System.err.println("Erro na operação de ENDERECO_CLIENTE");
+			System.err.println("Error in customer_address updating operation");
 		    e.printStackTrace();
 		}
 		
