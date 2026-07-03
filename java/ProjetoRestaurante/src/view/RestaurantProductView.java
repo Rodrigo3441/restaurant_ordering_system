@@ -14,11 +14,11 @@ package view;
  * @since 28-04-2026
  */
 public class RestaurantProductView {
-	private Integer codigoProduto;
-	private String nomeProduto;
-	private Double precoProduto;
-	private Integer quantidadeEstoque;
-	private String descricao;
+	private Integer productNumber;
+	private String productName;
+	private Double productPrice;
+	private Integer stockAmount;
+	private String description;
 	
 	/**
 	 * No-argument constructor
@@ -27,60 +27,60 @@ public class RestaurantProductView {
 		
 	}
 
-	public int getCodigoProduto() {
-		return codigoProduto;
+	public int getProductNumber() {
+		return productNumber;
 	}
 	
-	public void setCodigoProduto(int codigoProduto) {
-		this.codigoProduto = codigoProduto;
+	public void setProductNumber(int productNumber) {
+		this.productNumber = productNumber;
 	}
 
-	public String getNomeProduto() {
-		return nomeProduto;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setNomeProduto(String nomeProduto) {
-		this.nomeProduto = nomeProduto;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public Double getPrecoProduto() {
-		return precoProduto;
+	public Double getProductPrice() {
+		return productPrice;
 	}
 
-	public void setPrecoProduto(Double precoProduto) {
-		this.precoProduto = precoProduto;
+	public void setProductPrice(Double productPrice) {
+		this.productPrice = productPrice;
 	}
 
-	public Integer getQuantidadeEstoque() {
-		return quantidadeEstoque;
+	public Integer getStockAmount() {
+		return stockAmount;
 	}
 
-	public void setQuantidadeEstoque(Integer quantidadeEstoque) {
-		this.quantidadeEstoque = quantidadeEstoque;
+	public void setStockAmount(Integer stockAmount) {
+		this.stockAmount = stockAmount;
 	}
 
-	public String getDescricao() {
-		return descricao;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public String toString() {
-		return "Nome: " + nomeProduto +
-		       " | Preço: R$ " + precoProduto +
-		       " | Estoque: " + quantidadeEstoque +
-		       " | Descrição: " + descricao +
-			   " | Código: " + codigoProduto;
+		return "Name: " + productName +
+		       " | Price: R$ " + productPrice +
+		       " | Stock Amount: " + stockAmount +
+		       " | Description: " + description +
+			   " | Number: " + productNumber;
 	}
 	
 	public String formatarParaCliente() {
-		return "Nome: " + nomeProduto +
-			   " | Descrição: " + descricao +
-		       " | Preço: R$ " + precoProduto +
-		       " | Estoque: " + quantidadeEstoque;
+		return "Name: " + productName +
+			   " | Description: " + description +
+		       " | Price: R$ " + productPrice +
+		       " | Stock Amount: " + stockAmount;
 		       
 	}
 	

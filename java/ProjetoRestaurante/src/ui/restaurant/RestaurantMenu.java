@@ -175,10 +175,10 @@ public class RestaurantMenu {
 			if (opt.equals("s")) {
 				// instantiate a new restaurant and set its attributes
 				Restaurant r = new Restaurant();
-				r.setCnpj(cnpj);
-				r.setNome(nome);
-				r.setTelefone(telefone);
-				r.setSenha(senha);
+				r.setId(cnpj);
+				r.setName(nome);
+				r.setPhone(telefone);
+				r.setPasscode(senha);
 				
 				// call the registration method and verify whether it succeeded
 				if(servicorestaurante.cadastrarRestaurante(r)) {
@@ -220,8 +220,8 @@ public class RestaurantMenu {
 			String senha = sc.next().trim();
 			
 			// verify whether the restaurant password matches the entered password
-			if (r.getSenha().equals(senha)) {
-				System.out.println("Seja bem vindo, " + r.getNome() + "!");
+			if (r.getPasscode().equals(senha)) {
+				System.out.println("Seja bem vindo, " + r.getName() + "!");
 				this.menuRestauranteLogado(r);
 			} else {
 				System.out.println("Usuário ou senha incorretos.");

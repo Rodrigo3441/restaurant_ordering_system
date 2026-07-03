@@ -72,10 +72,10 @@ public class RestaurantProductMenu {
 			// process the menu options
 			switch (option) {
 				case 1:
-					this.cadastrarProduto(r.getCnpj());
+					this.cadastrarProduto(r.getId());
 					break;
 				case 2:
-					this.gerenciarProdutosCadastrados(r.getCnpj());
+					this.gerenciarProdutosCadastrados(r.getId());
 					break;
 				case 3:
 					System.out.println("Voltando ao menu anterior");
@@ -115,7 +115,7 @@ public class RestaurantProductMenu {
 		
 		// check whether a product with the same name was returned
 		if (p != null) {
-			if (servicoprodutorestaurante.produtoJaEstaCadastrado(cnpj, p.getCodigo())) {
+			if (servicoprodutorestaurante.produtoJaEstaCadastrado(cnpj, p.getNumber())) {
 				System.out.println("Esse produto já está associado ao restaurante!");
 				return;
 			}
@@ -212,9 +212,9 @@ public class RestaurantProductMenu {
 				// instantiate a new product and assign attributes
 				Product p = new Product();
 				
-				p.setCodigo(codigo);
-				p.setNome(nomeProduto);
-				p.setDescricao(descricaoProduto);
+				p.setNumber(codigo);
+				p.setName(nomeProduto);
+				p.setDescription(descricaoProduto);
 				
 				// call the registration method and verify success
 				if(servicoproduto.inserirProduto(p)) {
@@ -251,7 +251,7 @@ public class RestaurantProductMenu {
 		
 		// field for validating the product stock quantity
 		while (true) {
-			System.out.printf("Insira a quantidade atual em estoque do produto %s: ", p.getNome());
+			System.out.printf("Insira a quantidade atual em estoque do produto %s: ", p.getName());
 			
 		    try {
 		    	quantidadeEstoque = sc.nextInt();
@@ -269,7 +269,7 @@ public class RestaurantProductMenu {
 		
 		// field for validating the product price
 		while (true) {
-			System.out.printf("Insira o preço do produto %s: ", p.getNome());
+			System.out.printf("Insira o preço do produto %s: ", p.getName());
 			
 		    try {
 		    	preco = sc.nextDouble();
@@ -287,8 +287,8 @@ public class RestaurantProductMenu {
 		
 		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
 		System.out.println("================================================");
-		System.out.printf("Código global do produto: %d\n", p.getCodigo());
-		System.out.printf("Nome do produto: %s\n", p.getNome());
+		System.out.printf("Código global do produto: %d\n", p.getNumber());
+		System.out.printf("Nome do produto: %s\n", p.getName());
 		System.out.printf("Quantidade em estoque: %d\n", quantidadeEstoque);
 		System.out.printf("Preço do produto: R$ %.2f\n", preco);
 		System.out.println("================================================\n");
@@ -304,10 +304,10 @@ public class RestaurantProductMenu {
 				// instantiate a new restaurant product and assign attributes
 				RestaurantProduct pr = new RestaurantProduct();
 				
-				pr.setCnpjRestaurante(cnpj);
-				pr.setCodigoProduto(p.getCodigo());
-				pr.setQuantidadeEstoque(quantidadeEstoque);
-				pr.setPreco(preco);
+				pr.setRestaurantId(cnpj);
+				pr.setProductNumber(p.getNumber());
+				pr.setStockAmount(quantidadeEstoque);
+				pr.setPrice(preco);
 				
 				// call the association method and verify success
 				if(servicoprodutorestaurante.associarProdutoRestaurante(pr)) {
@@ -428,7 +428,7 @@ public class RestaurantProductMenu {
 		RestaurantProductView produtoAlvo = listaProdutos.get(index);
 
 		
-		System.out.printf("Digite a nova quantidade em estoque do produto %s: ", produtoAlvo.getNomeProduto());
+		System.out.printf("Digite a nova quantidade em estoque do produto %s: ", produtoAlvo.getProductName());
 		
 		// field for validating the product's stock quantity
 		while (true) {
@@ -447,7 +447,7 @@ public class RestaurantProductMenu {
 		    }
 		}
 		
-		System.out.printf("Deseja confirmar a atualização da quantidade em estoque do produto %s? (s-sim/n-não): ", produtoAlvo.getNomeProduto());
+		System.out.printf("Deseja confirmar a atualização da quantidade em estoque do produto %s? (s-sim/n-não): ", produtoAlvo.getProductName());
 		// the restaurant confirms whether to update the stock quantity
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
@@ -499,7 +499,7 @@ public class RestaurantProductMenu {
 		Product alvo = servicoproduto.buscarProdutoPorId(codigo);
 		
 		if (alvo != null) {
-			System.out.printf("Deseja apagar o produto %s do seu restaurante? (s-sim/n-não): ",alvo.getNome());
+			System.out.printf("Deseja apagar o produto %s do seu restaurante? (s-sim/n-não): ",alvo.getName());
 			
 			// validate the user's choice
 			while (true) {

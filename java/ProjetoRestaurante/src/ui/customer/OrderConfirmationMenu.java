@@ -47,13 +47,13 @@ public class OrderConfirmationMenu {
 		System.out.println("\n============================================================================");
 		System.out.println("RESUMO DETALHADO DO PEDIDO");
 		System.out.println("============================================================================");
-		System.out.printf("Nome do cliente: %s %s\n", c.getPrimeiroNome(), c.getUltimoNome());
+		System.out.printf("Nome do cliente: %s %s\n", c.getFirstName(), c.getLastName());
 		
 		System.out.println("============================================================================");
 		System.out.println("Lista de produtos:");
 		
 		for (int i = 0; i < carrinhoCompras.size(); i++) {
-			double precoQuantidade = carrinhoCompras.get(i).getPreco()*carrinhoCompras.get(i).getQuantidade();
+			double precoQuantidade = carrinhoCompras.get(i).getPrice()*carrinhoCompras.get(i).getQuantity();
 			valorTotal += precoQuantidade;
 			System.out.println(	carrinhoCompras.get(i));
 		}

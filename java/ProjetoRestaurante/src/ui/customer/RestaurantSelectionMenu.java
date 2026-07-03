@@ -58,7 +58,7 @@ public class RestaurantSelectionMenu {
 		System.out.println("================================================");
 		
 		for (Restaurant r: listaRestaurantes) {
-			System.out.println(contador + "- " + r.getNome());
+			System.out.println(contador + "- " + r.getName());
 			contador++;
 		}
 		System.out.println("================================================\n");

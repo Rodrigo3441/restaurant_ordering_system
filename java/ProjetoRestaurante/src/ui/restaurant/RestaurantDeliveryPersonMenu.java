@@ -214,13 +214,13 @@ public class RestaurantDeliveryPersonMenu {
 			if (opt.equals("s")) {
 				// instantiate a new DeliveryPerson and set attributes			
 				DeliveryPerson e = new DeliveryPerson();
-				e.setCpf(cpf);
-				e.setPrimeiroNome(primeiroNome);
-				e.setNomeMeio(nomeMeio);
-				e.setUltimoNome(ultimoNome);
-				e.setTelefone(telefone);
-				e.setVeiculo(placaVeiculo);
-				e.setDisponibilidade((short) 0);
+				e.setId(cpf);
+				e.setFirstName(primeiroNome);
+				e.setMiddleName(nomeMeio);
+				e.setLastName(ultimoNome);
+				e.setPhone(telefone);
+				e.setVehicle(placaVeiculo);
+				e.setAvailable((short) 0);
 				
 				// call the registration method and check if it succeeded
 				if(servicoentregador.cadastrarEntregador(e)) {
@@ -284,7 +284,7 @@ public class RestaurantDeliveryPersonMenu {
 		
 		if (entregador != null) {
 			System.out.println(entregador);
-			System.out.printf("Deseja apagar o entregador de cpf %s do seu restaurante? (s-sim/n-não): ",entregador.getCpf());
+			System.out.printf("Deseja apagar o entregador de cpf %s do seu restaurante? (s-sim/n-não): ",entregador.getId());
 			
 			// validate user's choice
 			while (true) {

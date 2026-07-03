@@ -39,7 +39,7 @@ public class CustomerOrderMenu {
 	public void mostrarPedidosCliente(Customer c) {
 		int option;
 		
-		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosCliente(c.getCpf());
+		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosCliente(c.getId());
 		
 		if (listaPedidos.isEmpty()) {
 			System.out.println("Você ainda não possui pedidos no sistema!");
@@ -124,7 +124,7 @@ public class CustomerOrderMenu {
 		}
 		
 		// Stores the order code to avoid code repetition
-		int codigoPedido = listaPedidos.get(index).getNumeroPedido();
+		int codigoPedido = listaPedidos.get(index).getOrderNumber();
 		
 		// Stores all items from the order the user chose
 		ArrayList<OrderItemView> listaItensPedido = servicoPedido.retornarItensPedido(codigoPedido);
@@ -133,8 +133,8 @@ public class CustomerOrderMenu {
 		System.out.println("============================================================================");
 		
 		for (OrderItemView ip: listaItensPedido) {
-			System.out.println("Produto: " + ip.getNome() + " | Quantidade: " + ip.getQuantidade() + " | Preço Unidade: " + ip.getPreco());
-			valorTotal += ip.getQuantidade() * ip.getPreco();
+			System.out.println("Produto: " + ip.getName() + " | Quantidade: " + ip.getQuantity() + " | Preço Unidade: " + ip.getPrice());
+			valorTotal += ip.getQuantity() * ip.getPrice();
 		}
 	
 		System.out.println("============================================================================");

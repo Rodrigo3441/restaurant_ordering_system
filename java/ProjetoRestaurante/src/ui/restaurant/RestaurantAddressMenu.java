@@ -45,7 +45,7 @@ public class RestaurantAddressMenu {
 		int option = 9;
 		
 		//stores the restaurant's address
-		enderecoRestaurante = servicoendereco.retornarEnderecoRestaurante(r.getCnpj());
+		enderecoRestaurante = servicoendereco.retornarEnderecoRestaurante(r.getId());
 		
 		if (enderecoRestaurante == null) {
 			System.out.println("Você não possui um endereço cadastrado!");
@@ -92,7 +92,7 @@ public class RestaurantAddressMenu {
 			do {
 				System.out.println("\nENDERECO ATUAL RESTAURANTE:");
 				System.out.println("================================================");
-				System.out.println(enderecoRestaurante.formatarEndereco());
+				System.out.println(enderecoRestaurante.formatAddress());
 				System.out.println("================================================");
 				System.out.println("1- Atualizar CEP");
 				System.out.println("2- Atualizar nome da rua");
@@ -214,10 +214,10 @@ public class RestaurantAddressMenu {
 			if (opt.equals("s")) {
 				//instantiation of a new restaurant address and linking of attributes
 				RestaurantAddress er = new RestaurantAddress();
-				er.setCep(cep);
-				er.setCnpjRestaurante(r.getCnpj());
-				er.setNome(nome);
-				er.setNumero(numero);
+				er.setPostalCode(cep);
+				er.setRestaurantId(r.getId());
+				er.setName(nome);
+				er.setNumber(numero);
 				
 				
 				//call the method to register and check if the action was successful

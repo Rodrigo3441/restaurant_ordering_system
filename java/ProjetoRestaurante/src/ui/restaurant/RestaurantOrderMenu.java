@@ -75,13 +75,13 @@ public class RestaurantOrderMenu {
 			
 			switch (option) {
 				case 1:
-					this.gerenciarPedidosEmPreparo(r.getCnpj());
+					this.gerenciarPedidosEmPreparo(r.getId());
 					break;
 				case 2:
-					this.gerenciarPedidosEnviados(r.getCnpj());
+					this.gerenciarPedidosEnviados(r.getId());
 					break;
 				case 3:
-					this.visualizarPedidosConcluidos(r.getCnpj());
+					this.visualizarPedidosConcluidos(r.getId());
 					break;
 				case 4: 
 					System.out.println("Voltando ao menu anterior");
@@ -120,7 +120,7 @@ public class RestaurantOrderMenu {
 		System.out.println("============================================================================\n");
 		
 		
-		System.out.printf("Próximo pedido a ter seu status alterado: %d\n", listaPedidos.get(0).getNumeroPedido());
+		System.out.printf("Próximo pedido a ter seu status alterado: %d\n", listaPedidos.get(0).getOrderNumber());
 		System.out.print("Deseja atribuir um entregador ao pedido e atualizar o seu status? (s-sim/n-não): ");
 		
 		// ask the user if they want to assign a delivery person and update the order status
@@ -159,7 +159,7 @@ public class RestaurantOrderMenu {
 		
 		// remove all occupied delivery persons from the list for better visibility
 		for (int i = 0; i < listaEntregadores.size(); i++) {
-			if (listaEntregadores.get(i).getDisponibilidade() == 1) {
+			if (listaEntregadores.get(i).getAvailable() == 1) {
 				listaEntregadores.remove(i);
 			}
 		}
@@ -172,7 +172,7 @@ public class RestaurantOrderMenu {
 		}
 		
 		System.out.println("============================================================================\n");
-		System.out.printf("Digite o índice do entregador que você deseja atribuir ao pedido %d: ", p.getNumeroPedido());
+		System.out.printf("Digite o índice do entregador que você deseja atribuir ao pedido %d: ", p.getOrderNumber());
 		
 	
 		// field to validate user input
@@ -197,7 +197,7 @@ public class RestaurantOrderMenu {
 		DeliveryPerson entregador = listaEntregadores.get(index);
 		
 		
-		System.out.printf("Deseja confirmar a atribuição do entregador %s ao pedido %d? (s-sim/n-não): ", entregador.getCpf(), p.getNumeroPedido());
+		System.out.printf("Deseja confirmar a atribuição do entregador %s ao pedido %d? (s-sim/n-não): ", entregador.getId(), p.getOrderNumber());
 		// restaurant confirms whether to assign the delivery person to the order
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
@@ -205,7 +205,7 @@ public class RestaurantOrderMenu {
 			switch (escolha) {
 				case "s":	
 					if (servicoPedido.atualizarEntregaPedido(p, entregador, (short) 1, "Saiu entrega")) {
-						System.out.printf("Entregador atribuído ao pedido %d com sucesso!\n", p.getNumeroPedido());
+						System.out.printf("Entregador atribuído ao pedido %d com sucesso!\n", p.getOrderNumber());
 					} else {
 						System.out.println("Ocorreu um erro");
 					}
@@ -293,9 +293,9 @@ public class RestaurantOrderMenu {
 		}
 		
 		Order pedido = listaPedidos.get(index);
-		DeliveryPerson entregador = servicoEntregador.retornarEntregador(pedido.getCpfEntregador());
+		DeliveryPerson entregador = servicoEntregador.retornarEntregador(pedido.getDeliveryPersonId());
 		
-		System.out.printf("Deseja confirmar a conclusão do pedido %d? (s-sim/n-não): ", pedido.getNumeroPedido());
+		System.out.printf("Deseja confirmar a conclusão do pedido %d? (s-sim/n-não): ", pedido.getOrderNumber());
 		// restaurant confirms whether to mark the order as delivered
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
@@ -303,7 +303,7 @@ public class RestaurantOrderMenu {
 			switch (escolha) {
 				case "s":	
 					if (servicoPedido.atualizarEntregaPedido(pedido, entregador, (short) 0, "Entregue")) {
-						System.out.printf("Pedido %d entregue com sucesso!\n", pedido.getNumeroPedido());
+						System.out.printf("Pedido %d entregue com sucesso!\n", pedido.getOrderNumber());
 					} else {
 						System.out.println("Ocorreu um erro");
 					}

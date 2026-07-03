@@ -46,7 +46,7 @@ public class CustomerAddressMenu {
 		int option = 9;
 		
 		// store the customer's address
-		enderecoCliente = servicoendereco.retornarEnderecoCliente(c.getCpf());
+		enderecoCliente = servicoendereco.retornarEnderecoCliente(c.getId());
 		
 		if (enderecoCliente == null) {
 			System.out.println("Você não possui um endereço cadastrado!");
@@ -89,7 +89,7 @@ public class CustomerAddressMenu {
 			while (true) {
 				System.out.println("\nENDERECO ATUAL CLIENTE:");
 				System.out.println("================================================");
-				System.out.println(enderecoCliente.formatarEndereco());
+				System.out.println(enderecoCliente.formatAddress());
 				System.out.println("================================================");
 				System.out.println("1- Atualizar CEP");
 				System.out.println("2- Atualizar nome da rua");
@@ -210,10 +210,10 @@ public class CustomerAddressMenu {
 			if (opt.equals("s")) {
 				// instantiate a new CustomerAddress and bind attributes
 				CustomerAddress ec = new CustomerAddress();
-				ec.setCep(cep);
-				ec.setCpfCliente(c.getCpf());
-				ec.setNome(nome);
-				ec.setNumero(numero);
+				ec.setPostalCode(cep);
+				ec.setCustomerId(c.getId());
+				ec.setName(nome);
+				ec.setNumber(numero);
 				
 				
 				//chamada do método para cadastro e verificação se houve êxito na ação

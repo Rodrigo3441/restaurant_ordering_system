@@ -219,13 +219,13 @@ public class CustomerMenu {
 			if (opt.equals("s")) {
 				// instantiate a new customer and set attributes
 				Customer c = new Customer();
-				c.setCpf(cpf);
-				c.setPrimeiroNome(primeiroNome);
-				c.setNomeMeio(nomeMeio);
-				c.setUltimoNome(ultimoNome);
-				c.setTelefone(telefone);
+				c.setId(cpf);
+				c.setFirstName(primeiroNome);
+				c.setMiddleName(nomeMeio);
+				c.setLastName(ultimoNome);
+				c.setPhone(telefone);
 				c.setEmail(email);
-				c.setSenha(senha);
+				c.setPasscode(senha);
 				
 					// call service method to register and check success
 				if(servicocliente.cadastrarCliente(c)) {
@@ -267,8 +267,8 @@ public class CustomerMenu {
 			String senha = sc.next().trim();
 			
 			// verify that the stored password matches the entered password
-			if (c.getSenha().equals(senha)) {
-				System.out.println("Seja bem vindo, " + c.getPrimeiroNome() + "!");
+			if (c.getPasscode().equals(senha)) {
+				System.out.println("Seja bem vindo, " + c.getFirstName() + "!");
 				this.menuClienteLogado(c);
 			} else {
 				System.out.println("Usuário ou senha incorretos.");
@@ -290,7 +290,7 @@ public class CustomerMenu {
 		while (true) {
 			System.out.println("\nMENU DO CLIENTE");
 			System.out.println("================================================");
-			System.out.printf("O que deseja fazer hoje, %s?\n", c.getPrimeiroNome());
+			System.out.printf("O que deseja fazer hoje, %s?\n", c.getFirstName());
 			System.out.println("1- Editar perfil");
 			System.out.println("2- Visualizar pedidos");
 			System.out.println("3- Fazer um pedido");

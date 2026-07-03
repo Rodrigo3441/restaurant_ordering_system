@@ -20,54 +20,54 @@ package view;
  * @since 04-05-2026
  */
 public class OrderItemView {
-	String nomeProduto;
-	Double preco;
-	Integer codigoProduto;
-	Integer quantidade;
+	String productName;
+	Double price;
+	Integer productNumber;
+	Integer quantity;
 	
 
 	public OrderItemView() {
 		
 	}
 
-	public String getNome() {
-		return nomeProduto;
+	public String getName() {
+		return productName;
 	}
 
-	public void setNome(String nomeProduto) {
-		this.nomeProduto = nomeProduto;
+	public void setName(String productName) {
+		this.productName = productName;
 	}
 
-	public Double getPreco() {
-		return preco;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setPreco(Double preco) {
-		this.preco = preco;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
-	public Integer getCodigoProduto() {
-		return codigoProduto;
+	public Integer getProductNumber() {
+		return productNumber;
 	}
 
-	public void setCodigo(Integer codigoProduto) {
-		this.codigoProduto = codigoProduto;
+	public void setProductNumber(Integer productNumber) {
+		this.productNumber = productNumber;
 	}
 
-	public Integer getQuantidade() {
-		return quantidade;
+	public Integer getQuantity() {
+		return quantity;
 	}
 
-	public void setQuantidade(Integer quantidade) {
-		this.quantidade = quantidade;
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
 	}
 
 	
 	@Override
 	public String toString() {
-		return " Nome: " + nomeProduto +
-		       " | Preço: R$ " + preco +
-		       " | Quantidade: " + quantidade;
+		return " Name: " + productName +
+		       " | Price: R$ " + price +
+		       " | Quantity: " + quantity;
 	}
 	
 	

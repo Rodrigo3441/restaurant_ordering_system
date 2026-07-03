@@ -48,7 +48,7 @@ public class ProductSelectionMenu {
 	public void mostrarProdutos(Restaurant r, Customer c) {
 
 		// Stores all products offered by the restaurant selected by the customer
-		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(r.getCnpj());
+		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(r.getId());
 		
 		// Stores all products that the user has added to the shopping cart
 		ArrayList<OrderItemView> carrinhoCompras = new ArrayList<OrderItemView>();
@@ -76,7 +76,7 @@ public class ProductSelectionMenu {
 			}
 			System.out.print("============================================================================\n\n");
 			
-			System.out.printf("PRODUTOS DO RESTAURANTE %s:\n", r.getNome());
+			System.out.printf("PRODUTOS DO RESTAURANTE %s:\n", r.getName());
 			System.out.println("============================================================================");
 			
 			for (int i = 0; i < listaProdutos.size(); i++) {
@@ -192,12 +192,12 @@ public class ProductSelectionMenu {
 		RestaurantProductView produtoTemp = listaProdutos.get(index);
 		
 		// check to prevent selecting a product with no stock
-		if (produtoTemp.getQuantidadeEstoque() == 0) {
+		if (produtoTemp.getStockAmount() == 0) {
 			System.out.println("Esse produto está sem estoque!");
 			return;
 		}
 		
-		System.out.printf("Produto escolhido: %s\n", produtoTemp.getNomeProduto());
+		System.out.printf("Produto escolhido: %s\n", produtoTemp.getProductName());
 		System.out.print("Deseja adicionar esse produto ao seu carrinho? (s-sim/n-não): ");
 		
 		// user indicates whether they confirm the action of adding it to the cart
@@ -209,10 +209,10 @@ public class ProductSelectionMenu {
 				case "s":
 					// Before adding, check if the product is already in the cart
 					// and store its index (or -1 if it does not exist)
-					int indexProdutoExistente = servicopedido.retornarPosicaoItemCarrinho(carrinhoCompras, produtoTemp.getCodigoProduto());
+					int indexProdutoExistente = servicopedido.retornarPosicaoItemCarrinho(carrinhoCompras, produtoTemp.getProductNumber());
 					
 					if (indexProdutoExistente != -1) {
-						RestaurantProductView produto = servicopedido.retornarProdutoPeloCodigo(listaProdutos, produtoTemp.getCodigoProduto());
+						RestaurantProductView produto = servicopedido.retornarProdutoPeloCodigo(listaProdutos, produtoTemp.getProductNumber());
 						this.atualizarItemPedido(produto, carrinhoCompras.get(indexProdutoExistente));
 					} else {
 						carrinhoCompras.add(this.criarItemPedido(produtoTemp, carrinhoCompras));
@@ -240,7 +240,7 @@ public class ProductSelectionMenu {
 	) {
 		int quantidade; 
 		
-		System.out.printf("Digite quantas unidades de %s você deseja adicionar ao carrinho: ", produtoTemp.getNomeProduto());
+		System.out.printf("Digite quantas unidades de %s você deseja adicionar ao carrinho: ", produtoTemp.getProductName());
 		
 		// field for validating the quantity chosen by the user
 		while (true) {
@@ -272,7 +272,7 @@ public class ProductSelectionMenu {
 	) {
 		int quantidade;
 
-		System.out.printf("O produto %s já está no carrinho. Deseja atualizar a quantidade? (s-sim/n-não)", item.getNome());
+		System.out.printf("O produto %s já está no carrinho. Deseja atualizar a quantidade? (s-sim/n-não)", item.getName());
 		
 		// user indicates whether they want to update the product quantity in the cart
 		outer:
@@ -282,7 +282,7 @@ public class ProductSelectionMenu {
 			switch (escolha) {
 			case "s":	
 				
-				System.out.printf("Digite quantas unidades de %s você deseja comprar no total: ", item.getNome());
+				System.out.printf("Digite quantas unidades de %s você deseja comprar no total: ", item.getName());
 				
 				// field for validating the quantity chosen by the user
 				while (true) {
@@ -291,7 +291,7 @@ public class ProductSelectionMenu {
 					    sc.nextLine();
 
 				        servicopedido.validarQuantidade(produto, quantidade);
-				        item.setQuantidade(quantidade);
+				        item.setQuantity(quantidade);
 				        break;
 				    } catch (IllegalArgumentException e) {
 				        System.out.println(e.getMessage());
@@ -345,7 +345,7 @@ public class ProductSelectionMenu {
 		    }
 		}
 		
-		System.out.printf("Deseja remover o produto %s do seu carrinho? (s-sim/n-não): ", carrinhoCompras.get(index).getNome());
+		System.out.printf("Deseja remover o produto %s do seu carrinho? (s-sim/n-não): ", carrinhoCompras.get(index).getName());
 		
 		// user indicates whether they want to remove the product from the cart
 		while (true) {
