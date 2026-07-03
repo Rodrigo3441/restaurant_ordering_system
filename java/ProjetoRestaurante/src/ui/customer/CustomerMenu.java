@@ -114,7 +114,7 @@ public class CustomerMenu {
 		    cpf = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarCpf(cpf);
+		        servicocliente.checkCustomerId(cpf);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -127,7 +127,7 @@ public class CustomerMenu {
 		    primeiroNome = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarPrimeiroNome(primeiroNome);
+		        servicocliente.checkFirstName(primeiroNome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -140,7 +140,7 @@ public class CustomerMenu {
 		    ultimoNome = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarUltimoNome(ultimoNome);
+		        servicocliente.checkLastName(ultimoNome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -153,7 +153,7 @@ public class CustomerMenu {
 		    nomeMeio = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarNomeMeio(nomeMeio);
+		        servicocliente.checkMiddleName(nomeMeio);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -166,7 +166,7 @@ public class CustomerMenu {
 		    telefone = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarTelefone(telefone);
+		        servicocliente.checkPhone(telefone);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -179,7 +179,7 @@ public class CustomerMenu {
 		    email = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarEmail(email);
+		        servicocliente.checkEmail(email);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -192,7 +192,7 @@ public class CustomerMenu {
 		    senha = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.validarSenha(senha);
+		        servicocliente.checkPasscode(senha);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -228,7 +228,7 @@ public class CustomerMenu {
 				c.setPasscode(senha);
 				
 					// call service method to register and check success
-				if(servicocliente.cadastrarCliente(c)) {
+				if(servicocliente.addCustomer(c)) {
 					System.out.println("Você foi cadastrado com sucesso!");
 					
 				} else {
@@ -257,7 +257,7 @@ public class CustomerMenu {
 		String cpf = sc.next().trim();
 		
 		// retrieve the customer information
-		Customer c = servicocliente.retornarCliente(cpf);
+		Customer c = servicocliente.returnCustomer(cpf);
 		
 		// check if a customer was returned
 		if(c != null) {

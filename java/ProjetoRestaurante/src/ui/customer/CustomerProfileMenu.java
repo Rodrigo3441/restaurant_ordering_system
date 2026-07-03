@@ -119,7 +119,7 @@ public class CustomerProfileMenu {
 			String primeiroNome = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarPrimeiroNome(c, primeiroNome)) {
+				if(servicocliente.updateFirstName(c, primeiroNome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -145,7 +145,7 @@ public class CustomerProfileMenu {
 			String nomeMeio = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarNomeMeio(c, nomeMeio)) {
+				if(servicocliente.updateMiddleName(c, nomeMeio)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 					
@@ -172,7 +172,7 @@ public class CustomerProfileMenu {
 			String ultimoNome = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarUltimoNome(c, ultimoNome)) {
+				if(servicocliente.updateLastName(c, ultimoNome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -198,7 +198,7 @@ public class CustomerProfileMenu {
 			String telefone = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarTelefone(c, telefone)) {
+				if(servicocliente.updatePhone(c, telefone)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -224,7 +224,7 @@ public class CustomerProfileMenu {
 			String email = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarEmail(c, email)) {
+				if(servicocliente.updateEmail(c, email)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -250,7 +250,7 @@ public class CustomerProfileMenu {
 			String senha = sc.next().trim();
 			
 			try {
-				if(servicocliente.atualizarSenha(c, senha)) {
+				if(servicocliente.updatePasscode(c, senha)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {

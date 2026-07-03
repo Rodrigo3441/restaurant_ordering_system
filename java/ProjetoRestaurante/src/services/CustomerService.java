@@ -19,7 +19,7 @@ import entities.Customer;
  */
 
 public class CustomerService {
-	private CustomerDAO dao;
+	private CustomerDAO customerDAO;
 	private Connection conn;
 	
 	/**
@@ -28,61 +28,61 @@ public class CustomerService {
 	 * @param conn database connection
 	 */
 	public CustomerService(Connection conn) {
-		this.dao = new CustomerDAO();
+		this.customerDAO = new CustomerDAO();
 		this.conn = conn;
 	}
 	
 	/**
-	 * Validate CPF: checks format and availability.
-	 * @param cpf customer's CPF (Brazilian tax ID)
+	 * Validate customer id: checks format and availability.
+	 * @param id customer's CPF (Brazilian tax ID)
 	 */
-	public void validarCpf(String cpf) {
-		if (!cpfValido(cpf)) {
-	        throw new IllegalArgumentException("Digite um CPF válido.");
+	public void checkCustomerId(String id) {
+		if (!isCustomerIdValid(id)) {
+	        throw new IllegalArgumentException("Enter a valid id");
 	    }
 
-	    if (!cpfDisponivel(cpf)) {
-	        throw new IllegalArgumentException("O CPF já está em uso.");
+	    if (!isCustomerIdAvailable(id)) {
+	        throw new IllegalArgumentException("This id is already used");
 	    }
 	}
 	
 	/**
 	 * Validate first name integrity.
-	 * @param primeiroNome first name
+	 * @param firstName first name
 	 */
-	public void validarPrimeiroNome(String primeiroNome) {
-		if(!primeiroNomeValido(primeiroNome)) {
-			throw new IllegalArgumentException("Utilize um nome válido");
+	public void checkFirstName(String firstName) {
+		if(!isFirstNameValid(firstName)) {
+			throw new IllegalArgumentException("Enter a valid first name");
 		}
 	}
 	
 	/**
 	 * Validate middle name integrity.
-	 * @param nomeMeio middle name
+	 * @param middleName middle name
 	 */
-	public void validarNomeMeio(String nomeMeio) {
-		if(!nomeMeioValido(nomeMeio)) {
-			throw new IllegalArgumentException("Utilize um nome válido");
+	public void checkMiddleName(String middleName) {
+		if(!isMiddleNameValid(middleName)) {
+			throw new IllegalArgumentException("Enter a valid middle name");
 		}
 	}
 	
 	/**
 	 * Validate last name integrity.
-	 * @param ultimoNome last name
+	 * @param lastName last name
 	 */
-	public void validarUltimoNome(String ultimoNome) {
-		if(!ultimoNomeValido(ultimoNome)) {
-			throw new IllegalArgumentException("Utilize um nome válido");
+	public void checkLastName(String lastName) {
+		if(!isLastNameValid(lastName)) {
+			throw new IllegalArgumentException("Enter a valid last name");
 		}
 	}
 	
 	/**
 	 * Validate phone number integrity.
-	 * @param telefone phone number
+	 * @param phone phone number
 	 */
-	public void validarTelefone(String telefone) {
-		if(!telefoneValido(telefone)) {
-			throw new IllegalArgumentException("Utilize um telefone válido");
+	public void checkPhone(String phone) {
+		if(!isPhoneValid(phone)) {
+			throw new IllegalArgumentException("Enter a valid phone number");
 		}
 	}
 	
@@ -90,160 +90,160 @@ public class CustomerService {
 	 * Validate email integrity.
 	 * @param email email address
 	 */
-	public void validarEmail(String email) {
-		if(!emailValido(email)) {
-			throw new IllegalArgumentException("Utilize um email válido");
+	public void checkEmail(String email) {
+		if(!isEmailValid(email)) {
+			throw new IllegalArgumentException("Enter a valid email");
 		}
 	}
 	
 	/**
 	 * Validate password integrity.
-	 * @param senha password
+	 * @param passcode password
 	 */
-	public void validarSenha(String senha) {
-		if(!senhaValida(senha)) {
-			throw new IllegalArgumentException("Utilize uma senha válida");
+	public void checkPasscode(String passcode) {
+		if(!isPasscodeValid(passcode)) {
+			throw new IllegalArgumentException("Enter a valid password");
 		}
 	}
 	
 	/**
 	 * Update customer's first name.
-	 * @param c customer object
-	 * @param primeiroNome first name
+	 * @param customer customer object
+	 * @param newFirstName first name
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarPrimeiroNome(Customer c, String primeiroNome) {
-		if (!primeiroNomeValido(primeiroNome)) {
-			throw new IllegalArgumentException("Utilize um nome válido: ");
+	public boolean updateFirstName(Customer customer, String newFirstName) {
+		if (!isFirstNameValid(newFirstName)) {
+			throw new IllegalArgumentException("Enter a valid first name");
 		}
 		
-		c.setFirstName(primeiroNome);
-		return dao.updateCustomer(conn, c);
+		customer.setFirstName(newFirstName);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Update customer's middle name.
-	 * @param c customer object
-	 * @param nomeMeio middle name
+	 * @param customer customer object
+	 * @param newMiddleName middle name
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarNomeMeio(Customer c, String nomeMeio) {
-		if (!nomeMeioValido(nomeMeio)) {
-			throw new IllegalArgumentException("Utilize um nome válido: ");
+	public boolean updateMiddleName(Customer customer, String newMiddleName) {
+		if (!isMiddleNameValid(newMiddleName)) {
+			throw new IllegalArgumentException("Enter a valid middle name");
 		}
 		
-		c.setMiddleName(nomeMeio);
-		return dao.updateCustomer(conn, c);
+		customer.setMiddleName(newMiddleName);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Update customer's last name.
-	 * @param c customer object
-	 * @param ultimoNome last name
+	 * @param customer customer object
+	 * @param newLastName last name
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarUltimoNome(Customer c, String ultimoNome) {
-		if (!ultimoNomeValido(ultimoNome)) {
-			throw new IllegalArgumentException("Utilize um nome válido: ");
+	public boolean updateLastName(Customer customer, String newLastName) {
+		if (!isLastNameValid(newLastName)) {
+			throw new IllegalArgumentException("Enter a valid last name");
 		}
 		
-		c.setLastName(ultimoNome);
-		return dao.updateCustomer(conn, c);
+		customer.setLastName(newLastName);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Update customer's phone number.
-	 * @param c customer object
-	 * @param telefone phone number
+	 * @param customer customer object
+	 * @param newPhone phone number
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarTelefone(Customer c, String telefone) {
-		if (!telefoneValido(telefone)) {
-			throw new IllegalArgumentException("Utilize um telefone válido: ");
+	public boolean updatePhone(Customer customer, String newPhone) {
+		if (!isPhoneValid(newPhone)) {
+			throw new IllegalArgumentException("Utilize um telefone válido");
 		}
 		
-		c.setPhone(telefone);
-		return dao.updateCustomer(conn, c);
+		customer.setPhone(newPhone);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Update customer's email.
-	 * @param c customer object
-	 * @param email email address
+	 * @param customer customer object
+	 * @param newEmail email address
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarEmail(Customer c, String email) {
-		if (!emailValido(email)) {
-			throw new IllegalArgumentException("Utilize um telefone válido: ");
+	public boolean updateEmail(Customer customer, String newEmail) {
+		if (!isEmailValid(newEmail)) {
+			throw new IllegalArgumentException("Enter a valid email");
 		}
 		
-		c.setEmail(email);
-		return dao.updateCustomer(conn, c);
+		customer.setEmail(newEmail);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Update customer's password.
-	 * @param c customer object
-	 * @param senha password
+	 * @param customer customer object
+	 * @param newPasscode password
 	 * @return true if update succeeded
 	 */
-	public boolean atualizarSenha(Customer c, String senha) {
-		if (!senhaValida(senha)) {
-			throw new IllegalArgumentException("Utilize uma senha válida: ");
+	public boolean updatePasscode(Customer customer, String newPasscode) {
+		if (!isPasscodeValid(newPasscode)) {
+			throw new IllegalArgumentException("Enter a valid password");
 		}
 		
-		c.setPasscode(senha);
-		return dao.updateCustomer(conn, c);
+		customer.setPasscode(newPasscode);
+		return customerDAO.updateCustomer(conn, customer);
 	}
 	
 	/**
 	 * Register a new customer in the system.
-	 * @param c customer object
+	 * @param customer customer object
 	 * @return true if insertion succeeded
 	 */
-	public boolean cadastrarCliente(Customer c) {
-		return dao.addCustomer(conn, c);
+	public boolean addCustomer(Customer customer) {
+		return customerDAO.addCustomer(conn, customer);
 	}
 	
 	/**
 	 * Return a customer by CPF.
-	 * @param cpf customer's CPF
+	 * @param id customer's CPF
 	 * @return Customer or null if not found
 	 */
-	public Customer retornarCliente(String cpf) {
-		return dao.returnCustomer(conn, cpf);
+	public Customer returnCustomer(String id) {
+		return customerDAO.returnCustomer(conn, id);
 	}
 	
-	private boolean cpfValido(String cpf) {	
-		return cpf.length() == 11 && cpf.matches("^[0-9]+$");
+	private boolean isCustomerIdValid(String id) {	
+		return id.length() == 11 && id.matches("^[0-9]+$");
 	}
 	
-	private boolean cpfDisponivel(String cpf) {
-		return dao.returnCustomer(conn, cpf) == null;
+	private boolean isCustomerIdAvailable(String id) {
+		return customerDAO.returnCustomer(conn, id) == null;
 	}
 	
-	private boolean primeiroNomeValido(String primeiroNome) {
-		return primeiroNome.length() >= 3 && primeiroNome.length() <= 20 && primeiroNome.matches("^[A-Za-zÀ-ÿ]+$");
+	private boolean isFirstNameValid(String firstName) {
+		return firstName.length() >= 3 && firstName.length() <= 20 && firstName.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 
-	private boolean nomeMeioValido(String nomeMeio) {
-		return nomeMeio.length() >= 3 && nomeMeio.length() <= 40 && nomeMeio.matches("^[A-Za-zÀ-ÿ ]+$");
+	private boolean isMiddleNameValid(String middleName) {
+		return middleName.length() >= 3 && middleName.length() <= 40 && middleName.matches("^[A-Za-zÀ-ÿ ]+$");
 	}
 
-	private boolean ultimoNomeValido(String ultimoNome) {
-		return ultimoNome.length() >= 3 && ultimoNome.length() <= 20 && ultimoNome.matches("^[A-Za-zÀ-ÿ]+$");
+	private boolean isLastNameValid(String lastName) {
+		return lastName.length() >= 3 && lastName.length() <= 20 && lastName.matches("^[A-Za-zÀ-ÿ]+$");
 	}
 	
-	private boolean telefoneValido(String telefone) {
-		return telefone.length() <= 11 && telefone.matches("^[0-9]+$");
+	private boolean isPhoneValid(String phone) {
+		return phone.length() <= 11 && phone.matches("^[0-9]+$");
 	}
 	
-	private boolean emailValido(String email) {
+	private boolean isEmailValid(String email) {
 		return email.length() <= 255 && email.contains("@");
 	}
 	
-	private boolean senhaValida(String senha) {
-		return senha.length() < 255;
+	private boolean isPasscodeValid(String passcode) {
+		return passcode.length() < 255;
 	}	
 	
 	

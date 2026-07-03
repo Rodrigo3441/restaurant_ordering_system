@@ -45,7 +45,7 @@ public class RestaurantAddressMenu {
 		int option = 9;
 		
 		//stores the restaurant's address
-		enderecoRestaurante = servicoendereco.retornarEnderecoRestaurante(r.getId());
+		enderecoRestaurante = servicoendereco.returnRestaurantAddress(r.getId());
 		
 		if (enderecoRestaurante == null) {
 			System.out.println("Você não possui um endereço cadastrado!");
@@ -160,7 +160,7 @@ public class RestaurantAddressMenu {
 		    cep = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.validarCep(cep);
+		        servicoendereco.checkPostalCode(cep);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -173,7 +173,7 @@ public class RestaurantAddressMenu {
 		    nome = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.validarNome(nome);
+		        servicoendereco.checkName(nome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -189,7 +189,7 @@ public class RestaurantAddressMenu {
 		    	numero = sc.nextInt();
 			    sc.nextLine();
 			    
-		        servicoendereco.validarNumero(numero);
+		        servicoendereco.checkNumber(numero);
 		        break;
 		    } catch (Exception e) {
 		        System.out.println(e.getMessage());
@@ -221,7 +221,7 @@ public class RestaurantAddressMenu {
 				
 				
 				//call the method to register and check if the action was successful
-				if(servicoendereco.inserirEnderecoRestaurante(er)) {
+				if(servicoendereco.addRestaurantAddress(er)) {
 					System.out.println("Endereço do restaurante cadastrado com sucesso!");
 					return;
 					
@@ -255,7 +255,7 @@ public class RestaurantAddressMenu {
 			String cep = sc.next().trim();
 			
 			try {
-				if(servicoendereco.atualizarCepEnderecoRestaurante(er, cep)) {
+				if(servicoendereco.updatePostalCodeRestaurantAddress(er, cep)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -281,7 +281,7 @@ public class RestaurantAddressMenu {
 			String nome = sc.nextLine().trim();
 			
 			try {
-				if(servicoendereco.atualizarNomeEnderecoRestaurante(er, nome)) {
+				if(servicoendereco.updateNameRestaurantAddress(er, nome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -308,7 +308,7 @@ public class RestaurantAddressMenu {
 				int numero = sc.nextInt();
 				sc.nextLine();
 				
-				if(servicoendereco.atualizarNumeroEnderecoRestaurante(er, numero)) {
+				if(servicoendereco.updateNumberRestaurantAddress(er, numero)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {

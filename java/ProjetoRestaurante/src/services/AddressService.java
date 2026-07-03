@@ -20,179 +20,179 @@ import database.AddressDAO;
  */
 
 public class AddressService {
-	private AddressDAO dao;
+	private AddressDAO adressDAO;
 	private Connection conn;
 	
 	public AddressService(Connection conn) {
-		this.dao = new AddressDAO();
+		this.adressDAO = new AddressDAO();
 		this.conn = conn;
 	}
 	
 	/**
 	 * Returns the restaurant address based on the provided CNPJ
-	 * @param cnpj restaurant CNPJ
+	 * @param id restaurant CNPJ
 	 * @return restaurant address object
 	 */
-	public RestaurantAddress retornarEnderecoRestaurante(String cnpj) {
-		return dao.returnRestaurantAddress(conn, cnpj);
+	public RestaurantAddress returnRestaurantAddress(String id) {
+		return adressDAO.returnRestaurantAddress(conn, id);
 	}
 	
 	/**
 	 * Returns the customer address based on the provided CPF
-	 * @param cpf customer CPF
+	 * @param id customer CPF
 	 * @return customer address object
 	 */
-	public CustomerAddress retornarEnderecoCliente(String cpf) {
-		return dao.returnCustomerAddress(conn, cpf);
+	public CustomerAddress returnCustomerAddress(String id) {
+		return adressDAO.returnCustomerAddress(conn, id);
 	}
 	
 	/**
 	 * Inserts a restaurant address into the system
-	 * @param er restaurant address object
+	 * @param restaurantAddress restaurant address object
 	 * @return boolean
 	 */
-	public boolean inserirEnderecoRestaurante(Address er) {
-		return dao.addRestaurantAddress(conn, er);
+	public boolean addRestaurantAddress(Address restaurantAddress) {
+		return adressDAO.addRestaurantAddress(conn, restaurantAddress);
 	}
 	
 	/**
 	 * Inserts a customer address into the system
-	 * @param ec customer address object
+	 * @param customerAddress customer address object
 	 * @return boolean
 	 */
-	public boolean inserirEnderecoCliente(Address ec) {
-		return dao.addCustomerAddress(conn, ec);
+	public boolean addCustomerAddress(Address customerAddress) {
+		return adressDAO.addCustomerAddress(conn, customerAddress);
 	}
 	
 	/**
 	 * Validates whether the provided ZIP code is valid
-	 * @param cep address ZIP code
+	 * @param postalCode address ZIP code
 	 */
-	public void validarCep(String cep) {
-		if (!cepValido(cep)) {
-			throw new IllegalArgumentException("Digite um CEP válido");
+	public void checkPostalCode(String postalCode) {
+		if (!isPostalCodeValid(postalCode)) {
+			throw new IllegalArgumentException("Enter a valid postal code");
 		}
 	}
 	
 	/**
 	 * Validates whether the provided street name is valid
-	 * @param nome street name
+	 * @param name street name
 	 */
-	public void validarNome(String nome) {
-		if (!nomeValido(nome)) {
-			throw new IllegalArgumentException("Digite um nome válido");
+	public void checkName(String name) {
+		if (!isNameValid(name)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 	}
 	
 	/**
 	 * Validates whether the provided address number is valid
-	 * @param numero address number
+	 * @param number address number
 	 */
-	public void validarNumero(int numero) {
-		if (!numeroValido(numero)) {
-			throw new IllegalArgumentException("Digite um número válido");
+	public void checkNumber(int number) {
+		if (!isNumberValid(number)) {
+			throw new IllegalArgumentException("Enter a valid number");
 		}
 	}
 	
 	/**
 	 * Updates the customer address ZIP code in the system
-	 * @param ec customer address object
-	 * @param cep address ZIP code
+	 * @param customerAddress customer address object
+	 * @param newPostalCode address ZIP code
 	 * @return boolean
 	 */
-	public boolean atualizarCepEnderecoCliente(Address ec, String cep) {
-		if (!cepValido(cep)) {
-			throw new IllegalArgumentException("Digite um CEP válido");
+	public boolean updatePostalCodeCustomerAddress(Address customerAddress, String newPostalCode) {
+		if (!isPostalCodeValid(newPostalCode)) {
+			throw new IllegalArgumentException("Enter a valid postal code");
 		}
 		
-		ec.setPostalCode(cep);
-		return dao.updateCustomerAddress(conn, ec);
+		customerAddress.setPostalCode(newPostalCode);
+		return adressDAO.updateCustomerAddress(conn, customerAddress);
 	}
 	
 	/**
 	 * Updates the customer street name in the system
-	 * @param ec customer address object
-	 * @param nome customer street name
+	 * @param customerAddress customer address object
+	 * @param newName customer street name
 	 * @return boolean
 	 */
-	public boolean atualizarNomeEnderecoCliente(Address ec, String nome) {
-		if (!nomeValido(nome)) {
-			throw new IllegalArgumentException("Digite um nome válido");
+	public boolean updateNameCustomerAddress(Address customerAddress, String newName) {
+		if (!isNameValid(newName)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 		
-		ec.setName(nome);
-		return dao.updateCustomerAddress(conn, ec);
+		customerAddress.setName(newName);
+		return adressDAO.updateCustomerAddress(conn, customerAddress);
 	}
 	
 	/**
 	 * Updates the customer address number in the system
-	 * @param ec customer address object
-	 * @param numero customer address number
+	 * @param customerAddress customer address object
+	 * @param number customer address number
 	 * @return boolean
 	 */
-	public boolean atualizarNumeroEnderecoCliente(Address ec, int numero) {
-		if (!numeroValido(numero)) {
-			throw new IllegalArgumentException("Digite um número válido");
+	public boolean updateNumberCustomerAddress(Address customerAddress, int number) {
+		if (!isNumberValid(number)) {
+			throw new IllegalArgumentException("Enter a valid number");
 		}
 		
-		ec.setNumber(numero);
-		return dao.updateCustomerAddress(conn, ec);
+		customerAddress.setNumber(number);
+		return adressDAO.updateCustomerAddress(conn, customerAddress);
 	}
 	
 	/**
 	 * Updates the restaurant address ZIP code in the system
-	 * @param er restaurant address object
-	 * @param cep address ZIP code
+	 * @param restaurantAddress restaurant address object
+	 * @param newPostalCode address ZIP code
 	 * @return boolean
 	 */
-	public boolean atualizarCepEnderecoRestaurante(Address er, String cep) {
-		if (!cepValido(cep)) {
-			throw new IllegalArgumentException("Digite um CEP válido");
+	public boolean updatePostalCodeRestaurantAddress(Address restaurantAddress, String newPostalCode) {
+		if (!isPostalCodeValid(newPostalCode)) {
+			throw new IllegalArgumentException("Enter a valid postal code");
 		}
 		
-		er.setPostalCode(cep);
-		return dao.updateRestaurantAddress(conn, er);
+		restaurantAddress.setPostalCode(newPostalCode);
+		return adressDAO.updateRestaurantAddress(conn, restaurantAddress);
 	}
 	
 	/**
 	 * Updates the restaurant street name in the system
-	 * @param er restaurant address object
-	 * @param nome restaurant street name
+	 * @param customerAddress restaurant address object
+	 * @param newName restaurant street name
 	 * @return boolean
 	 */
-	public boolean atualizarNomeEnderecoRestaurante(Address er, String nome) {
-		if (!nomeValido(nome)) {
-			throw new IllegalArgumentException("Digite um nome válido");
+	public boolean updateNameRestaurantAddress(Address customerAddress, String newName) {
+		if (!isNameValid(newName)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 		
-		er.setName(nome);
-		return dao.updateRestaurantAddress(conn, er);
+		customerAddress.setName(newName);
+		return adressDAO.updateRestaurantAddress(conn, customerAddress);
 	}
 	
 	/**
 	 * Updates the restaurant address number in the system
-	 * @param er restaurant address object
-	 * @param numero restaurant address number
+	 * @param restaurantAddress restaurant address object
+	 * @param newNumber restaurant address number
 	 * @return boolean
 	 */
-	public boolean atualizarNumeroEnderecoRestaurante(Address er, int numero) {
-		if (!numeroValido(numero)) {
-			throw new IllegalArgumentException("Digite um número válido");
+	public boolean updateNumberRestaurantAddress(Address restaurantAddress, int newNumber) {
+		if (!isNumberValid(newNumber)) {
+			throw new IllegalArgumentException("Enter a valid number");
 		}
 		
-		er.setNumber(numero);
-		return dao.updateRestaurantAddress(conn, er);
+		restaurantAddress.setNumber(newNumber);
+		return adressDAO.updateRestaurantAddress(conn, restaurantAddress);
 	}
 	
-	private boolean cepValido(String cep) {
-		return cep.length() <= 8 && cep.matches("^[0-9]+$");
+	private boolean isPostalCodeValid(String postalCode) {
+		return postalCode.length() <= 8 && postalCode.matches("^[0-9]+$");
 	}
 	
-	private boolean nomeValido(String nome) {
-		return nome.length() <= 100 && nome.matches("^[a-zA-ZÀ-ÿ ]+$");
+	private boolean isNameValid(String name) {
+		return name.length() <= 100 && name.matches("^[a-zA-ZÀ-ÿ ]+$");
 	}
 	
-	private boolean numeroValido(int numero) {
-		return numero >= 0;
+	private boolean isNumberValid(int number) {
+		return number >= 0;
 	}
 }

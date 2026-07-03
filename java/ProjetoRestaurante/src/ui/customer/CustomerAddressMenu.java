@@ -46,7 +46,7 @@ public class CustomerAddressMenu {
 		int option = 9;
 		
 		// store the customer's address
-		enderecoCliente = servicoendereco.retornarEnderecoCliente(c.getId());
+		enderecoCliente = servicoendereco.returnCustomerAddress(c.getId());
 		
 		if (enderecoCliente == null) {
 			System.out.println("Você não possui um endereço cadastrado!");
@@ -157,7 +157,7 @@ public class CustomerAddressMenu {
 		    cep = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.validarCep(cep);
+		        servicoendereco.checkPostalCode(cep);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -170,7 +170,7 @@ public class CustomerAddressMenu {
 		    nome = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.validarNome(nome);
+		        servicoendereco.checkName(nome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -186,7 +186,7 @@ public class CustomerAddressMenu {
 		    	numero = sc.nextInt();
 			    sc.nextLine();
 			    
-		        servicoendereco.validarNumero(numero);
+		        servicoendereco.checkNumber(numero);
 		        break;
 		    } catch (Exception e) {
 		        System.out.println(e.getMessage());
@@ -217,7 +217,7 @@ public class CustomerAddressMenu {
 				
 				
 				//chamada do método para cadastro e verificação se houve êxito na ação
-				if(servicoendereco.inserirEnderecoCliente(ec)) {
+				if(servicoendereco.addCustomerAddress(ec)) {
 					System.out.println("Endereço do cliente cadastrado com sucesso!");
 					return;
 					
@@ -252,7 +252,7 @@ public class CustomerAddressMenu {
 			String cep = sc.next().trim();
 			
 			try {
-				if(servicoendereco.atualizarCepEnderecoCliente(ec, cep)) {
+				if(servicoendereco.updatePostalCodeCustomerAddress(ec, cep)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -278,7 +278,7 @@ public class CustomerAddressMenu {
 			String nome = sc.nextLine().trim();
 			
 			try {
-				if(servicoendereco.atualizarNomeEnderecoCliente(ec, nome)) {
+				if(servicoendereco.updateNameCustomerAddress(ec, nome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -305,7 +305,7 @@ public class CustomerAddressMenu {
 				int numero = sc.nextInt();
 				sc.nextLine();
 				
-				if(servicoendereco.atualizarNumeroEnderecoCliente(ec, numero)) {
+				if(servicoendereco.updateNumberCustomerAddress(ec, numero)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
