@@ -48,7 +48,7 @@ public class ProductSelectionMenu {
 	public void mostrarProdutos(Restaurant r, Customer c) {
 
 		// Stores all products offered by the restaurant selected by the customer
-		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(r.getId());
+		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.returnAllProductsPerRestaurant(r.getId());
 		
 		// Stores all products that the user has added to the shopping cart
 		ArrayList<OrderItemView> carrinhoCompras = new ArrayList<OrderItemView>();
@@ -178,7 +178,7 @@ public class ProductSelectionMenu {
 			    
 				index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
-		        servicopedido.validarIndex(listaProdutos, index);
+		        servicopedido.checkIndex(listaProdutos, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -209,10 +209,10 @@ public class ProductSelectionMenu {
 				case "s":
 					// Before adding, check if the product is already in the cart
 					// and store its index (or -1 if it does not exist)
-					int indexProdutoExistente = servicopedido.retornarPosicaoItemCarrinho(carrinhoCompras, produtoTemp.getProductNumber());
+					int indexProdutoExistente = servicopedido.returnCartItemPosition(carrinhoCompras, produtoTemp.getProductNumber());
 					
 					if (indexProdutoExistente != -1) {
-						RestaurantProductView produto = servicopedido.retornarProdutoPeloCodigo(listaProdutos, produtoTemp.getProductNumber());
+						RestaurantProductView produto = servicopedido.returnProductByNumber(listaProdutos, produtoTemp.getProductNumber());
 						this.atualizarItemPedido(produto, carrinhoCompras.get(indexProdutoExistente));
 					} else {
 						carrinhoCompras.add(this.criarItemPedido(produtoTemp, carrinhoCompras));
@@ -248,7 +248,7 @@ public class ProductSelectionMenu {
 		    	quantidade  = sc.nextInt();
 			    sc.nextLine();
 
-		        servicopedido.validarQuantidade(produtoTemp, quantidade);
+		        servicopedido.checkQuantity(produtoTemp, quantidade);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -258,7 +258,7 @@ public class ProductSelectionMenu {
 		    }
 		}
 		
-		return servicopedido.criarItemPedido(produtoTemp, quantidade);	
+		return servicopedido.createOrderItem(produtoTemp, quantidade);	
 	}
 	
 	/**
@@ -290,7 +290,7 @@ public class ProductSelectionMenu {
 				    	quantidade  = sc.nextInt();
 					    sc.nextLine();
 
-				        servicopedido.validarQuantidade(produto, quantidade);
+				        servicopedido.checkQuantity(produto, quantidade);
 				        item.setQuantity(quantidade);
 				        break;
 				    } catch (IllegalArgumentException e) {
@@ -335,7 +335,7 @@ public class ProductSelectionMenu {
 		    	
 			    index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 				
-		        servicopedido.validarIndex(carrinhoCompras, index);
+		        servicopedido.checkIndex(carrinhoCompras, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());

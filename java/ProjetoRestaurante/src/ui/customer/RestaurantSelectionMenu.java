@@ -46,7 +46,7 @@ public class RestaurantSelectionMenu {
 		int contador = 1; //enumerador dos restaurantes
 		int index;		  //escolha do usuário
 		
-		ArrayList<Restaurant> listaRestaurantes = servicorestaurante.listarRestaurantes();
+		ArrayList<Restaurant> listaRestaurantes = servicorestaurante.returnRestaurantList();
 		
 		// prevents the user from advancing if there are no restaurants
 		if (listaRestaurantes.isEmpty()) {
@@ -73,7 +73,7 @@ public class RestaurantSelectionMenu {
 			    
 			    index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
-		        servicopedido.validarIndex(listaRestaurantes, index);
+		        servicopedido.checkIndex(listaRestaurantes, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());

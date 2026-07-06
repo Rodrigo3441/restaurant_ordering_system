@@ -122,7 +122,7 @@ public class RestaurantDeliveryPersonMenu {
 		    cpf = sc.nextLine().trim();
 
 		    try {
-		        servicoentregador.validarCpf(cpf);
+		        servicoentregador.checkDelivererId(cpf);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -135,7 +135,7 @@ public class RestaurantDeliveryPersonMenu {
 		    primeiroNome = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.validarPrimeiroNome(primeiroNome);
+		    	servicoentregador.checkFirstName(primeiroNome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -148,7 +148,7 @@ public class RestaurantDeliveryPersonMenu {
 		    ultimoNome = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.validarUltimoNome(ultimoNome);
+		    	servicoentregador.checkLastName(ultimoNome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -161,7 +161,7 @@ public class RestaurantDeliveryPersonMenu {
 		    nomeMeio = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.validarNomeMeio(nomeMeio);
+		    	servicoentregador.checkMiddleName(nomeMeio);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -174,7 +174,7 @@ public class RestaurantDeliveryPersonMenu {
 		    telefone = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.validarTelefone(telefone);
+		    	servicoentregador.checkPhone(telefone);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -187,7 +187,7 @@ public class RestaurantDeliveryPersonMenu {
 		    placaVeiculo = sc.nextLine().trim().toUpperCase();
 
 		    try {
-		    	servicoentregador.validarPlacaVeiculo(placaVeiculo);
+		    	servicoentregador.checkVehiclePlate(placaVeiculo);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -223,7 +223,7 @@ public class RestaurantDeliveryPersonMenu {
 				e.setAvailable((short) 0);
 				
 				// call the registration method and check if it succeeded
-				if(servicoentregador.cadastrarEntregador(e)) {
+				if(servicoentregador.addDeliveryPerson(e)) {
 					System.out.println("O entregador foi cadastrado com sucesso!");
 					
 				} else {
@@ -247,7 +247,7 @@ public class RestaurantDeliveryPersonMenu {
 	 * List all delivery persons registered in the system
 	 */
 	private void listarEntregadores() {
-		ArrayList<DeliveryPerson> listaEntregadores = servicoentregador.listarEntregadores();
+		ArrayList<DeliveryPerson> listaEntregadores = servicoentregador.returnDeliveryPersonList();
 
 		// stop execution when there are no delivery persons registered
 		if (listaEntregadores.isEmpty()) {
@@ -280,7 +280,7 @@ public class RestaurantDeliveryPersonMenu {
 		String cpf = sc.next().trim();
 		
 		// store the target delivery person for operations
-		DeliveryPerson entregador = servicoentregador.retornarEntregador(cpf);
+		DeliveryPerson entregador = servicoentregador.returnDeliveryPerson(cpf);
 		
 		if (entregador != null) {
 			System.out.println(entregador);
@@ -295,7 +295,7 @@ public class RestaurantDeliveryPersonMenu {
 				
 					// call the deletion method and check if it succeeded
 					try {
-						servicoentregador.removerEntregador(cpf);
+						servicoentregador.deleteDeliveryPerson(cpf);
 						System.out.println("Entregador deletado do sistema com sucesso!");
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
@@ -334,7 +334,7 @@ public class RestaurantDeliveryPersonMenu {
 		String cpf = sc.next().trim();
 		
 		// store the target delivery person for operations
-		DeliveryPerson entregador = servicoentregador.retornarEntregador(cpf);
+		DeliveryPerson entregador = servicoentregador.returnDeliveryPerson(cpf);
 		
 		if (entregador != null) {
 			DeliveryPersonProfileMenu menu = new DeliveryPersonProfileMenu(conn, sc);

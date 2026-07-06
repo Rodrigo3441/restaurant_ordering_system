@@ -108,7 +108,7 @@ public class DeliveryPersonProfileMenu {
 			String primeiroNome = sc.next().trim();
 			
 			try {
-				if(servicoentregador.atualizarPrimeiroNome(entregador, primeiroNome)) {
+				if(servicoentregador.updateFirstName(entregador, primeiroNome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -133,7 +133,7 @@ public class DeliveryPersonProfileMenu {
 			String nomeMeio = sc.next().trim();
 			
 			try {
-				if(servicoentregador.atualizarNomeMeio(entregador, nomeMeio)) {
+				if(servicoentregador.updateMiddleName(entregador, nomeMeio)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 					
@@ -159,7 +159,7 @@ public class DeliveryPersonProfileMenu {
 			String ultimoNome = sc.next().trim();
 			
 			try {
-				if(servicoentregador.atualizarUltimoNome(entregador, ultimoNome)) {
+				if(servicoentregador.updateLastName3(entregador, ultimoNome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -184,7 +184,7 @@ public class DeliveryPersonProfileMenu {
 			String telefone = sc.next().trim();
 			
 			try {
-				if(servicoentregador.atualizarTelefone(entregador, telefone)) {
+				if(servicoentregador.updatePhone(entregador, telefone)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -209,7 +209,7 @@ public class DeliveryPersonProfileMenu {
 			String placaVeiculo = sc.next().trim().toUpperCase();
 			
 			try {
-				if(servicoentregador.atualizarPlacaVeiculo(entregador, placaVeiculo)) {
+				if(servicoentregador.updateVehiclePlate(entregador, placaVeiculo)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {

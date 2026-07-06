@@ -111,7 +111,7 @@ public class RestaurantMenu {
 		    cnpj = sc.nextLine().trim();
 
 		    try {
-		        servicorestaurante.validarCnpj(cnpj);
+		        servicorestaurante.checkRestaurantId(cnpj);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -124,7 +124,7 @@ public class RestaurantMenu {
 		    nome = sc.nextLine().trim();
 
 		    try {
-		        servicorestaurante.validarNome(nome);
+		        servicorestaurante.checkName(nome);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -137,7 +137,7 @@ public class RestaurantMenu {
 		    telefone = sc.nextLine().trim();
 
 		    try {
-		        servicorestaurante.validarTelefone(telefone);
+		        servicorestaurante.checkPhone(telefone);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -150,7 +150,7 @@ public class RestaurantMenu {
 		    senha = sc.nextLine().trim();
 
 		    try {
-		        servicorestaurante.validarSenha(senha);
+		        servicorestaurante.checkPasscode(senha);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -181,7 +181,7 @@ public class RestaurantMenu {
 				r.setPasscode(senha);
 				
 				// call the registration method and verify whether it succeeded
-				if(servicorestaurante.cadastrarRestaurante(r)) {
+				if(servicorestaurante.addRestaurant(r)) {
 					System.out.println("Restaurante cadastrado com sucesso!");
 					
 				} else {
@@ -210,7 +210,7 @@ public class RestaurantMenu {
 		String cnpj = sc.next().trim();
 		
 		// store all restaurant information
-		Restaurant r = servicorestaurante.retornarRestaurante(cnpj);
+		Restaurant r = servicorestaurante.returnRestaurant(cnpj);
 		
 		// check whether a restaurant was returned
 		if(r != null) {

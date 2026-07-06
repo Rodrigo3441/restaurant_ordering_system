@@ -39,7 +39,7 @@ public class CustomerOrderMenu {
 	public void mostrarPedidosCliente(Customer c) {
 		int option;
 		
-		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosCliente(c.getId());
+		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByCustomer(c.getId());
 		
 		if (listaPedidos.isEmpty()) {
 			System.out.println("Você ainda não possui pedidos no sistema!");
@@ -113,7 +113,7 @@ public class CustomerOrderMenu {
 			    
 			    index--; // User sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
-		        servicoPedido.validarIndex(listaPedidos, index);
+		        servicoPedido.checkIndex(listaPedidos, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -127,7 +127,7 @@ public class CustomerOrderMenu {
 		int codigoPedido = listaPedidos.get(index).getOrderNumber();
 		
 		// Stores all items from the order the user chose
-		ArrayList<OrderItemView> listaItensPedido = servicoPedido.retornarItensPedido(codigoPedido);
+		ArrayList<OrderItemView> listaItensPedido = servicoPedido.returnOrderItems(codigoPedido);
 		
 		System.out.printf("\nEXIBINDO ITENS DO PEDIDO %d:\n", codigoPedido);
 		System.out.println("============================================================================");
@@ -143,14 +143,14 @@ public class CustomerOrderMenu {
 		System.out.println("============================================================================");
 		System.out.println("SUB-TOTAL COM DESCONTO");
 		
-		valorTotal = servicoPedido.calcularDesconto(valorTotal);
+		valorTotal = servicoPedido.calculateDiscount(valorTotal);
 		
 		System.out.printf("R$ %.2f\n", valorTotal);
 		System.out.println("============================================================================");
 		System.out.println("TAXA DE ENTREGA:");
 		System.out.println("R$ 8.00 adicionados ao total");
 		
-		valorTotal = servicoPedido.adicionarTaxaEntrega(valorTotal);
+		valorTotal = servicoPedido.addDeliveryFee(valorTotal);
 		
 		System.out.println("============================================================================");
 		System.out.println("VALOR TOTAL");

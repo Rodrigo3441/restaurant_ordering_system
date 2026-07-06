@@ -106,7 +106,7 @@ public class RestaurantProfileMenu {
 			String nome = sc.nextLine().trim();
 			
 			try {
-				if(servicorestaurante.atualizarNome(r, nome)) {
+				if(servicorestaurante.updateName(r, nome)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -131,7 +131,7 @@ public class RestaurantProfileMenu {
 			String telefone = sc.next().trim();
 			
 			try {
-				if(servicorestaurante.atualizarTelefone(r, telefone)) {
+				if(servicorestaurante.updatePhone(r, telefone)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {
@@ -155,7 +155,7 @@ public class RestaurantProfileMenu {
 			String senha = sc.next().trim();
 			
 			try {
-				if(servicorestaurante.atualizarSenha(r, senha)) {
+				if(servicorestaurante.updatePasscode(r, senha)) {
 					System.out.println("Informações alteradas com sucesso!");
 					break;
 				} else {

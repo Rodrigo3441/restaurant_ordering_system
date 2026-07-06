@@ -64,14 +64,14 @@ public class OrderConfirmationMenu {
 		System.out.println("============================================================================");
 		System.out.println("SUB-TOTAL COM DESCONTO");
 		
-		valorTotal = servicopedido.calcularDesconto(valorTotal);
+		valorTotal = servicopedido.calculateDiscount(valorTotal);
 		
 		System.out.printf("R$ %.2f\n", valorTotal);
 		System.out.println("============================================================================");
 		System.out.println("TAXA DE ENTREGA:");
 		System.out.println("R$ 8.00 adicionados ao total");
 		
-		valorTotal = servicopedido.adicionarTaxaEntrega(valorTotal);
+		valorTotal = servicopedido.addDeliveryFee(valorTotal);
 		
 		System.out.println("============================================================================");
 		System.out.println("VALOR TOTAL");
@@ -85,7 +85,7 @@ public class OrderConfirmationMenu {
 		switch (escolhaUsuario) {
 			case 1:
 				System.out.println("Pedido concluído com sucesso!");
-				servicopedido.cadastrarPedido(r, c, carrinhoCompras);
+				servicopedido.createOrder(r, c, carrinhoCompras);
 				return true;
 			case 2:
 				System.out.println("Voltando ao menu de pedidos");

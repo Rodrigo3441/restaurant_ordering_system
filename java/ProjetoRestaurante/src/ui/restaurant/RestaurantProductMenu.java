@@ -104,18 +104,18 @@ public class RestaurantProductMenu {
 			nomeProduto = sc.nextLine().trim().toLowerCase();
 
 		    try {
-		    	servicoproduto.validarNome(nomeProduto);
+		    	servicoproduto.checkName(nomeProduto);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    }
 		}
 		
-		Product p = servicoproduto.buscarProdutoPorNome(nomeProduto);
+		Product p = servicoproduto.returnProductByName(nomeProduto);
 		
 		// check whether a product with the same name was returned
 		if (p != null) {
-			if (servicoprodutorestaurante.produtoJaEstaCadastrado(cnpj, p.getNumber())) {
+			if (servicoprodutorestaurante.isProductAlreadyAdded(cnpj, p.getNumber())) {
 				System.out.println("Esse produto já está associado ao restaurante!");
 				return;
 			}
@@ -172,7 +172,7 @@ public class RestaurantProductMenu {
 			descricaoProduto = sc.nextLine().trim().toLowerCase();
 
 		    try {
-		    	servicoproduto.validarDescricao(descricaoProduto);
+		    	servicoproduto.checkDescription(descricaoProduto);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -187,7 +187,7 @@ public class RestaurantProductMenu {
 		    	codigo = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoproduto.validarCodigo(codigo);
+		    	servicoproduto.checkNumber(codigo);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -217,7 +217,7 @@ public class RestaurantProductMenu {
 				p.setDescription(descricaoProduto);
 				
 				// call the registration method and verify success
-				if(servicoproduto.inserirProduto(p)) {
+				if(servicoproduto.addProduct(p)) {
 					System.out.println("Produto cadastrado no catálogo global com sucesso!");
 					
 					// after registering globally, associate with the restaurant
@@ -257,7 +257,7 @@ public class RestaurantProductMenu {
 		    	quantidadeEstoque = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.validarQuantidadeEstoque(quantidadeEstoque);
+		    	servicoprodutorestaurante.checkStockAmount(quantidadeEstoque);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -275,7 +275,7 @@ public class RestaurantProductMenu {
 		    	preco = sc.nextDouble();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.validarPrecoProduto(preco);
+		    	servicoprodutorestaurante.checkProductPrice(preco);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -310,7 +310,7 @@ public class RestaurantProductMenu {
 				pr.setPrice(preco);
 				
 				// call the association method and verify success
-				if(servicoprodutorestaurante.associarProdutoRestaurante(pr)) {
+				if(servicoprodutorestaurante.addRestaurantProduct(pr)) {
 					System.out.println("Produto associado ao catálogo do restaurante com sucesso!");
 					return;
 					
@@ -338,7 +338,7 @@ public class RestaurantProductMenu {
 	 */
 	public void gerenciarProdutosCadastrados(String cnpj) {
 		int option = 0;
-		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.retornarTodoProdutoRestaurante(cnpj);
+		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.returnAllProductsPerRestaurant(cnpj);
 
 		// stop execution when there are no registered products
 		if (listaProdutos.isEmpty()) {
@@ -415,7 +415,7 @@ public class RestaurantProductMenu {
 			    
 			    index--; // user sees from 1 to N, computer uses 0 to N-1
 			    
-		        servicoPedido.validarIndex(listaProdutos, index);
+		        servicoPedido.checkIndex(listaProdutos, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -437,7 +437,7 @@ public class RestaurantProductMenu {
 		    	quantidadeEstoque = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.validarQuantidadeEstoque(quantidadeEstoque);
+		    	servicoprodutorestaurante.checkStockAmount(quantidadeEstoque);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -454,7 +454,7 @@ public class RestaurantProductMenu {
 		
 			switch (escolha) {
 				case "s":	
-					if (servicoprodutorestaurante.atualizarProdutoRestaurante(cnpj, produtoAlvo, quantidadeEstoque)) {
+					if (servicoprodutorestaurante.updateProductRestaurant(cnpj, produtoAlvo, quantidadeEstoque)) {
 						System.out.println("Quantidade em estoque do produto atualizada com sucesso!");
 					} else {
 						System.out.println("Ocorreu um erro");
@@ -486,7 +486,7 @@ public class RestaurantProductMenu {
 		    	codigo = sc.nextInt();
 				sc.nextLine();
 			    	
-		        servicoprodutorestaurante.validarCodigoProduto(codigo);
+		        servicoprodutorestaurante.checkProductNumber(codigo);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -496,7 +496,7 @@ public class RestaurantProductMenu {
 		    }
 		}
 		
-		Product alvo = servicoproduto.buscarProdutoPorId(codigo);
+		Product alvo = servicoproduto.returnProductById(codigo);
 		
 		if (alvo != null) {
 			System.out.printf("Deseja apagar o produto %s do seu restaurante? (s-sim/n-não): ",alvo.getName());
@@ -510,7 +510,7 @@ public class RestaurantProductMenu {
 				
 					// try to remove the product from the restaurant's catalog and verify success
 					try {
-						servicoprodutorestaurante.apagarProdutoRestaurante(cnpj, codigo);
+						servicoprodutorestaurante.deleteProductRestaurant(cnpj, codigo);
 						System.out.println("Produto deletado do restaurante com sucesso!");
 					} catch (Exception e) {
 						System.out.println(e.getMessage());

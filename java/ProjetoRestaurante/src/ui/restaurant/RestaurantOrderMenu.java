@@ -99,7 +99,7 @@ public class RestaurantOrderMenu {
 	private void gerenciarPedidosEmPreparo(String cnpj) {
 
 		// list with all orders to allow access to the first position (oldest order)
-		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Em preparo");
+		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Em preparo");
 		
 		// prevent operations if the list is empty
 		if (listaPedidos.isEmpty()) {
@@ -149,7 +149,7 @@ public class RestaurantOrderMenu {
 		int index;
 		
 		// list to store all delivery persons in the system
-		ArrayList<DeliveryPerson> listaEntregadores = servicoEntregador.listarEntregadores();
+		ArrayList<DeliveryPerson> listaEntregadores = servicoEntregador.returnDeliveryPersonList();
 		
 		// prevent operation if the delivery person list is empty
 		if (listaEntregadores.isEmpty()) {
@@ -183,7 +183,7 @@ public class RestaurantOrderMenu {
 		    	
 		    	index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 		    	
-		        servicoPedido.validarIndex(listaEntregadores, index);
+		        servicoPedido.checkIndex(listaEntregadores, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -204,7 +204,7 @@ public class RestaurantOrderMenu {
 		
 			switch (escolha) {
 				case "s":	
-					if (servicoPedido.atualizarEntregaPedido(p, entregador, (short) 1, "Saiu entrega")) {
+					if (servicoPedido.updateOrderStatus(p, entregador, (short) 1, "Saiu entrega")) {
 						System.out.printf("Entregador atribuído ao pedido %d com sucesso!\n", p.getOrderNumber());
 					} else {
 						System.out.println("Ocorreu um erro");
@@ -226,7 +226,7 @@ public class RestaurantOrderMenu {
 	 */
 	private void gerenciarPedidosEnviados(String cnpj) {
 		
-		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Saiu entrega");
+		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Saiu entrega");
 		
 		if (listaPedidos.isEmpty()) {
 			System.out.println("Não há nenhum pedido concluído no momento!");
@@ -282,7 +282,7 @@ public class RestaurantOrderMenu {
 		    	
 		    	index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 		    	
-		        servicoPedido.validarIndex(listaPedidos, index);
+		        servicoPedido.checkIndex(listaPedidos, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -293,7 +293,7 @@ public class RestaurantOrderMenu {
 		}
 		
 		Order pedido = listaPedidos.get(index);
-		DeliveryPerson entregador = servicoEntregador.retornarEntregador(pedido.getDeliveryPersonId());
+		DeliveryPerson entregador = servicoEntregador.returnDeliveryPerson(pedido.getDeliveryPersonId());
 		
 		System.out.printf("Deseja confirmar a conclusão do pedido %d? (s-sim/n-não): ", pedido.getOrderNumber());
 		// restaurant confirms whether to mark the order as delivered
@@ -302,7 +302,7 @@ public class RestaurantOrderMenu {
 		
 			switch (escolha) {
 				case "s":	
-					if (servicoPedido.atualizarEntregaPedido(pedido, entregador, (short) 0, "Entregue")) {
+					if (servicoPedido.updateOrderStatus(pedido, entregador, (short) 0, "Entregue")) {
 						System.out.printf("Pedido %d entregue com sucesso!\n", pedido.getOrderNumber());
 					} else {
 						System.out.println("Ocorreu um erro");
@@ -324,7 +324,7 @@ public class RestaurantOrderMenu {
 	 */
 	private void visualizarPedidosConcluidos(String cnpj) {
 		
-		ArrayList<Order> listaPedidos = servicoPedido.retornarPedidosRestaurante(cnpj, "Entregue");
+		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Entregue");
 		
 		// prevent operations if the list is empty
 		if (listaPedidos.isEmpty()) {
