@@ -22,114 +22,114 @@ import view.RestaurantProductView;
 
 public class RestaurantProductService {
 
-	private RestaurantProductDAO dao;
+	private RestaurantProductDAO restaurantProductDAO;
 	private Connection conn;
 	
 	public RestaurantProductService(Connection conn) {
-		this.dao = new RestaurantProductDAO();
+		this.restaurantProductDAO = new RestaurantProductDAO();
 		this.conn = conn;
 	}
 	
 	/**
 	 * Validates whether a product stock quantity is valid.
-	 * @param quantidadeEstoque stock quantity
+	 * @param stockAmount stock quantity
 	 */
-	public void validarQuantidadeEstoque(int quantidadeEstoque) {
-		if(!quantidadeEstoqueValida(quantidadeEstoque)) {
-			throw new IllegalArgumentException("Insira uma quantidade de estoque válida");
+	public void checkStockAmount(int stockAmount) {
+		if(!isStockAmountValid(stockAmount)) {
+			throw new IllegalArgumentException("Enter a valid stock amount");
 		}
 	}
 	
 	/**
 	 * Validates whether a product price is valid.
-	 * @param preco product price
+	 * @param price product price
 	 */
-	public void validarPrecoProduto(double preco) {
-		if(!precoProdutoValido(preco)) {
-			throw new IllegalArgumentException("Digite um preço válido para o produto");
+	public void checkProductPrice(double price) {
+		if(!isProductPriceValid(price)) {
+			throw new IllegalArgumentException("Enter a valid product price");
 		}
 	}
 	
 	/**
 	 * Validates whether a product code is valid.
-	 * @param codigo product code
+	 * @param productNumber product code
 	 */
-	public void validarCodigoProduto(int codigo) {
-		if(!codigoProdutoValido(codigo)) {
-			throw new IllegalArgumentException("Digite um código válido");
+	public void checkProductNumber(int productNumber) {
+		if(!isProductNumberValid(productNumber)) {
+			throw new IllegalArgumentException("Enter a valid product number");
 		}
 	}
 	
 	/**
 	 * Checks whether a product is already registered in the restaurant catalog.
-	 * @param cnpj restaurant CNPJ
-	 * @param codigo product code
+	 * @param id restaurant CNPJ
+	 * @param productNumber product code
 	 * @return true if the product is already registered
 	 */
-	public boolean produtoJaEstaCadastrado(String cnpj, int codigo) {
-		return dao.isProductAlreadyAdded(conn, cnpj, codigo);
+	public boolean isProductAlreadyAdded(String id, int productNumber) {
+		return restaurantProductDAO.isProductAlreadyAdded(conn, id, productNumber);
 	}
 	
 	/**
 	 * Removes a product from the restaurant catalog.
-	 * @param cnpj restaurant CNPJ
-	 * @param codigo product code
+	 * @param id restaurant CNPJ
+	 * @param productNumber product code
 	 * @throws Exception if an error occurs while deleting the product
 	 */
-	public void apagarProdutoRestaurante(String cnpj, int codigo) throws Exception {
-		if(!dao.deleteProductRestaurant(conn, cnpj, codigo)) {
-			throw new Exception("Ocorreu um erro desconhecido ao apagar o produto.");		
+	public void deleteProductRestaurant(String id, int productNumber) throws Exception {
+		if(!restaurantProductDAO.deleteProductRestaurant(conn, id, productNumber)) {
+			throw new Exception("An error has occurred while trying to delete the product");		
 		} 
 		
 	}
 	
 	/**
 	 * Associates a global catalog product with the restaurant catalog.
-	 * @param pr restaurant product object
+	 * @param restaurantProduct restaurant product object
 	 * @return true if the association was successful
 	 */
-	public boolean associarProdutoRestaurante(RestaurantProduct pr) {
-		return dao.addRestaurantProduct(conn, pr);
+	public boolean addRestaurantProduct(RestaurantProduct restaurantProduct) {
+		return restaurantProductDAO.addRestaurantProduct(conn, restaurantProduct);
 	}
 	
 	/**
 	 * Updates the stock quantity for a product registered in a restaurant.
-	 * @param cnpj restaurant CNPJ
-	 * @param prView object with product data
-	 * @param quantidadeEstoque new stock quantity
+	 * @param id restaurant CNPJ
+	 * @param restaurantProductView object with product data
+	 * @param stockAmount new stock quantity
 	 * @return true if the update was successful
 	 */
-	public boolean atualizarProdutoRestaurante(String cnpj, RestaurantProductView prView, int quantidadeEstoque) {
+	public boolean updateProductRestaurant(String id, RestaurantProductView restaurantProductView, int stockAmount) {
 		
-		RestaurantProduct pr = new RestaurantProduct();
+		RestaurantProduct restaurantProduct = new RestaurantProduct();
 		
-		pr.setRestaurantId(cnpj);
-		pr.setProductNumber(prView.getProductNumber());
-		pr.setPrice(prView.getProductPrice());
-		pr.setStockAmount(quantidadeEstoque);
+		restaurantProduct.setRestaurantId(id);
+		restaurantProduct.setProductNumber(restaurantProductView.getProductNumber());
+		restaurantProduct.setPrice(restaurantProductView.getProductPrice());
+		restaurantProduct.setStockAmount(stockAmount);
 		
-		return dao.updateProductRestaurant(conn, pr);
+		return restaurantProductDAO.updateProductRestaurant(conn, restaurantProduct);
 	}
 	
 	/**
 	 * Returns all products registered for the restaurant identified by the provided CNPJ.
-	 * @param cnpj restaurant CNPJ in session
+	 * @param id restaurant CNPJ in session
 	 * @return list of restaurant product views
 	 */
-	public ArrayList<RestaurantProductView> retornarTodoProdutoRestaurante(String cnpj){
-		return dao.returnAllProductsPerRestaurant(conn, cnpj);
+	public ArrayList<RestaurantProductView> returnAllProductsPerRestaurant(String id){
+		return restaurantProductDAO.returnAllProductsPerRestaurant(conn, id);
 	}
 	
-	private boolean quantidadeEstoqueValida(int quantidadeEstoque) {
-		return quantidadeEstoque >= 0;
+	private boolean isStockAmountValid(int stockAmount) {
+		return stockAmount >= 0;
 	}
 	
-	private boolean precoProdutoValido(double preco) {
-		return preco > 0;
+	private boolean isProductPriceValid(double price) {
+		return price > 0;
 	}
 	
-	private boolean codigoProdutoValido(int codigo) {
-		return codigo > 0 && codigo < 2_000_000_000;
+	private boolean isProductNumberValid(int productNumber) {
+		return productNumber > 0 && productNumber < 2_000_000_000;
 	}
 	
 	

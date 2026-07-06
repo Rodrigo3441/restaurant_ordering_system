@@ -18,95 +18,95 @@ import entities.Product;
  * @since 27-04-2026
  */
 public class ProductService {
-	private ProductDAO dao;
+	private ProductDAO productDAO;
 	private Connection conn;
 	
 	public ProductService(Connection conn) {
-		this.dao = new ProductDAO();
+		this.productDAO = new ProductDAO();
 		this.conn = conn;
 	}
 
 	/**
 	 * Validates that the product name is valid
-	 * @param nome product name
+	 * @param name product name
 	 */
-	public void validarNome(String nome) {
-		if (!nomeValido(nome)) {
-			throw new IllegalArgumentException("Digite um nome válido");
+	public void checkName(String name) {
+		if (!isNameValid(name)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 	}
 	
 	/**
 	 * Validates that the product description is valid
-	 * @param descricao product description
+	 * @param description product description
 	 */
-	public void validarDescricao(String descricao) {
-		if (!descricaoValida(descricao)) {
-			throw new IllegalArgumentException("Digite uma descrição válida");
+	public void checkDescription(String description) {
+		if (!isDescriptionValid(description)) {
+			throw new IllegalArgumentException("Enter a valid description");
 		}
 	}
 	
 	/**
 	 * Checks if the product code is valid and not already used by another product
-	 * @param codigo product code
+	 * @param productNumber product code
 	 */
-	public void validarCodigo(int codigo) {
-		if (!codigoValido(codigo)) {
-			throw new IllegalArgumentException("Digite um código válido");
+	public void checkNumber(int productNumber) {
+		if (!isProductNumberValid(productNumber)) {
+			throw new IllegalArgumentException("Enter a valid product number");
 		}
 		
-		if (!codigoDisponivel(codigo)) {
-			throw new IllegalArgumentException("Esse código já está em uso. Tente outro");
+		if (!isProductNumberAvailable(productNumber)) {
+			throw new IllegalArgumentException("This product number is already used");
 		}
 	}
 	
 	/**
 	 * Searches and returns a product by the given name
-	 * @param nome product name to search for
+	 * @param name product name to search for
 	 * @return Product object or null if not found
 	 */
-	public Product buscarProdutoPorNome(String nome) {
-		nome = nome.toLowerCase().trim();
-		return dao.returnProductByName(conn, nome);
+	public Product returnProductByName(String name) {
+		name = name.toLowerCase().trim();
+		return productDAO.returnProductByName(conn, name);
 	}
 	
 	/**
 	 * Searches and returns a product by the given id/code
-	 * @param codigo product id
+	 * @param productNumber product id
 	 * @return Product object or null if not found
 	 */
-	public Product buscarProdutoPorId(int codigo) {
-		return dao.returnProductById(conn, codigo);
+	public Product returnProductById(int productNumber) {
+		return productDAO.returnProductById(conn, productNumber);
 	}
 	
 	/**
 	 * Inserts a product into the system catalog
-	 * @param p Product object to insert
+	 * @param product Product object to insert
 	 * @return true if insertion succeeded
 	 */
-	public boolean inserirProduto(Product p) {
-		return dao.addProduct(conn, p);
+	public boolean addProduct(Product product) {
+		return productDAO.addProduct(conn, product);
 	}
 	
-	private boolean nomeValido(String nome) {
-		return nome.length() >= 3 && nome.length() < 40;
+	private boolean isNameValid(String name) {
+		return name.length() >= 3 && name.length() < 40;
 	}
 	
-	private boolean descricaoValida(String descricao) {
-		return descricao.length() < 255;
+	private boolean isDescriptionValid(String description) {
+		return description.length() < 255;
 	}
 	
-	private boolean codigoValido(int codigo) {
-		return codigo > 0 && codigo < 2_000_000_000;
+	private boolean isProductNumberValid(int productNumber) {
+		return productNumber > 0 && productNumber < 2_000_000_000;
 	}
 	
 	/**
 	 * Checks whether the given product code is available for use
-	 * @param codigo product code to check
+	 * @param productNumber product code to check
 	 * @return true if the code is available
 	 */
-	private boolean codigoDisponivel(int codigo) {
-		return dao.returnProductById(conn, codigo) == null;
+	private boolean isProductNumberAvailable(int productNumber) {
+		return productDAO.returnProductById(conn, productNumber) == null;
 	}
 	
 }

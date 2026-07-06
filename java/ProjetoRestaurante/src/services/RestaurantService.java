@@ -21,148 +21,148 @@ import entities.Restaurant;
  */
 
 public class RestaurantService {
-	private RestaurantDAO dao;
+	private RestaurantDAO restaurantDAO;
 	private Connection conn;
 	
 	
 	public RestaurantService(Connection conn) {
-		this.dao = new RestaurantDAO();
+		this.restaurantDAO = new RestaurantDAO();
 		this.conn = conn;
 	}
 	
 	/**
 	 * Validates that a CNPJ is correctly formatted and not already in use.
-	 * @param cnpj restaurant CNPJ
+	 * @param id restaurant CNPJ
 	 */
-	public void validarCnpj(String cnpj) {
-		if (!cnpjValido(cnpj)) {
-	        throw new IllegalArgumentException("Digite um CNPJ válido.");
+	public void checkRestaurantId(String id) {
+		if (!isRestaurantIdValid(id)) {
+	        throw new IllegalArgumentException("Enter a valid restaurant ID");
 	    }
 
-	    if (!cnpjDisponivel(cnpj)) {
-	        throw new IllegalArgumentException("O CNPJ já está em uso.");
+	    if (!isRestaurantIdAvailable(id)) {
+	        throw new IllegalArgumentException("This restaurant ID is already used");
 	    }
 	}
 	
 	/**
 	 * Validates the integrity of the restaurant name.
-	 * @param nome restaurant name
+	 * @param name restaurant name
 	 */
-	public void validarNome(String nome) {
-		if(!nomeValido(nome)) {
-			throw new IllegalArgumentException("Utilize um nome válido");
+	public void checkName(String name) {
+		if(!isNameValid(name)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 	}
 	
 	/**
 	 * Validates the integrity of the restaurant phone number.
-	 * @param telefone restaurant phone
+	 * @param phone restaurant phone
 	 */
-	public void validarTelefone(String telefone) {
-		if(!telefoneValido(telefone)) {
-			throw new IllegalArgumentException("Utilize um telefone válido");
+	public void checkPhone(String phone) {
+		if(!isPhoneValid(phone)) {
+			throw new IllegalArgumentException("Enter a valid phone number");
 		}
 	}
 		
 	/**
 	 * Validates the integrity of the restaurant password.
-	 * @param senha restaurant password
+	 * @param passcode restaurant password
 	 */
-	public void validarSenha(String senha) {
-		if(!senhaValida(senha)) {
-			throw new IllegalArgumentException("Utilize uma senha válida");
+	public void checkPasscode(String passcode) {
+		if(!isPasscodeValid(passcode)) {
+			throw new IllegalArgumentException("Enter a valid password");
 		}
 	}
 	
 	/**
 	 * Updates the restaurant's name.
-	 * @param r restaurant object
-	 * @param nome new restaurant name
+	 * @param restaurant restaurant object
+	 * @param newName new restaurant name
 	 * @return boolean indicating success
 	 */
-	public boolean atualizarNome(Restaurant r, String nome) {
-		if (!nomeValido(nome)) {
-			throw new IllegalArgumentException("Utilize um nome válido: ");
+	public boolean updateName(Restaurant restaurant, String newName) {
+		if (!isNameValid(newName)) {
+			throw new IllegalArgumentException("Enter a valid name");
 		}
 		
-		r.setName(nome);
-		return dao.updateRestaurant(conn, r);
+		restaurant.setName(newName);
+		return restaurantDAO.updateRestaurant(conn, restaurant);
 	}
 	
 	/**
 	 * Updates the restaurant's phone number.
-	 * @param r restaurant object
-	 * @param telefone new phone number
+	 * @param restaurant restaurant object
+	 * @param newPhone new phone number
 	 * @return boolean indicating success
 	 */
-	public boolean atualizarTelefone(Restaurant r, String telefone) {
-		if (!telefoneValido(telefone)) {
-			throw new IllegalArgumentException("Utilize um nome válido: ");
+	public boolean updatePhone(Restaurant restaurant, String newPhone) {
+		if (!isPhoneValid(newPhone)) {
+			throw new IllegalArgumentException("Enter a valid phone number");
 		}
 		
-		r.setPhone(telefone);
-		return dao.updateRestaurant(conn, r);
+		restaurant.setPhone(newPhone);
+		return restaurantDAO.updateRestaurant(conn, restaurant);
 	}
 	
 	/**
 	 * Updates the restaurant's password.
-	 * @param r restaurant object
-	 * @param senha new password
+	 * @param restaurant restaurant object
+	 * @param newPasscode new password
 	 * @return boolean indicating success
 	 */
-	public boolean atualizarSenha(Restaurant r, String senha) {
-		if (!senhaValida(senha)) {
-			throw new IllegalArgumentException("Utilize uma senha válida: ");
+	public boolean updatePasscode(Restaurant restaurant, String newPasscode) {
+		if (!isPasscodeValid(newPasscode)) {
+			throw new IllegalArgumentException("Enter a valid password");
 		}
 		
-		r.setPasscode(senha);
-		return dao.updateRestaurant(conn, r);
+		restaurant.setPasscode(newPasscode);
+		return restaurantDAO.updateRestaurant(conn, restaurant);
 	}
 	
 	/**
 	 * Registers a new restaurant in the system.
-	 * @param r restaurant object
+	 * @param restaurant restaurant object
 	 * @return boolean indicating success
 	 */
-	public boolean cadastrarRestaurante(Restaurant r) {
-		return dao.addRestaurant(conn, r);
+	public boolean addRestaurant(Restaurant restaurant) {
+		return restaurantDAO.addRestaurant(conn, restaurant);
 	}
 	
 	/**
 	 * Returns a restaurant by the given CNPJ.
-	 * @param cnpj restaurant CNPJ
+	 * @param id restaurant CNPJ
 	 * @return Restaurant object
 	 */
-	public Restaurant retornarRestaurante(String cnpj) {
-		return dao.returnRestaurant(conn, cnpj);
+	public Restaurant returnRestaurant(String id) {
+		return restaurantDAO.returnRestaurant(conn, id);
 	}
 	
 	/**
 	 * Returns a list of all restaurants in the system.
 	 * @return ArrayList of Restaurant
 	 */
-	public ArrayList<Restaurant> listarRestaurantes(){
-		return dao.returnRestaurantList(conn);
+	public ArrayList<Restaurant> returnRestaurantList(){
+		return restaurantDAO.returnRestaurantList(conn);
 	}
 
-	private boolean cnpjValido(String cnpj) {	
-		return cnpj.length() == 14 && cnpj.matches("^[0-9]+$");
+	private boolean isRestaurantIdValid(String id) {	
+		return id.length() == 14 && id.matches("^[0-9]+$");
 	}
 
-	private boolean cnpjDisponivel(String cnpj) {
-		return dao.returnRestaurant(conn, cnpj) == null;
+	private boolean isRestaurantIdAvailable(String id) {
+		return restaurantDAO.returnRestaurant(conn, id) == null;
 	}
 	
-	private boolean nomeValido(String nome) {
-		return nome.length() >= 3 && nome.length() <= 40;
+	private boolean isNameValid(String name) {
+		return name.length() >= 3 && name.length() <= 40;
 	}
 
-	private boolean telefoneValido(String telefone) {
-		return telefone.length() <= 11 && telefone.matches("^[0-9]+$");
+	private boolean isPhoneValid(String phone) {
+		return phone.length() <= 11 && phone.matches("^[0-9]+$");
 	}
 		
-	private boolean senhaValida(String senha) {
-		return senha.length() < 255;
+	private boolean isPasscodeValid(String passcode) {
+		return passcode.length() < 255;
 	}	
 	
 	
