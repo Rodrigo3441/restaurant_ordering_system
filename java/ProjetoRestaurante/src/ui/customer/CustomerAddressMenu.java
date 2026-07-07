@@ -41,7 +41,7 @@ public class CustomerAddressMenu {
 	 * - otherwise, show the add-address menu
 	 * @param customer customer object
 	 */
-	public void mostrar(Customer customer) {
+	public void displayAddressMenu(Customer customer) {
 		
 		int option = 9;
 		
@@ -122,10 +122,10 @@ public class CustomerAddressMenu {
 						this.updatePostalCode(customerAddress);
 						break;
 					case 2:
-						this.atualizarNomeEnderecoCliente(customerAddress);
+						this.updateStreetName(customerAddress);
 						break;
 					case 3:
-						this.atualizarNumeroEnderecoCliente(customerAddress);
+						this.updateStreetNumber(customerAddress);
 						break;
 					case 4:
 						System.out.println("Returning to the previous menu");
@@ -269,7 +269,7 @@ public class CustomerAddressMenu {
 	 * Implements update of the address name
 	 * @param address address object
 	 */
-	private void atualizarNomeEnderecoCliente(Address address) {
+	private void updateStreetName(Address address) {
 		
 		// field for street name validation
 		while (true) {
@@ -294,7 +294,7 @@ public class CustomerAddressMenu {
 	 * Implements update of the customer's address number
 	 * @param address address object
 	 */
-	private void atualizarNumeroEnderecoCliente(Address address) {
+	private void updateStreetNumber(Address address) {
 		
 		// field for street number validation
 		while (true) {

@@ -93,7 +93,7 @@ public class CustomerProfileMenu {
 					break;
 				case 7:
 					CustomerAddressMenu customerAddressMenu = new CustomerAddressMenu(conn, sc);
-					customerAddressMenu.mostrar(customer);
+					customerAddressMenu.displayAddressMenu(customer);
 					break;
 				case 8:
 					System.out.println("Returning to the previous menu");

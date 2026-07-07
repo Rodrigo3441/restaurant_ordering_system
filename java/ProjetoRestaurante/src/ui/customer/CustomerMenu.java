@@ -326,7 +326,7 @@ public class CustomerMenu {
 					break;
 				case 3:
 					RestaurantSelectionMenu restaurantSelectionMenu = new RestaurantSelectionMenu(conn, c, sc);
-					restaurantSelectionMenu.mostrarRestaurantes();
+					restaurantSelectionMenu.displayRestaurants();
 					break;
 				case 4:
 					System.out.println("See you next time.");

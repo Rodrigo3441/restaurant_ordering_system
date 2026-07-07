@@ -42,7 +42,7 @@ public class RestaurantSelectionMenu {
 	/**
 	 * Displays the interface for the user to choose which restaurant they want to order from.
 	 */
-	public void mostrarRestaurantes() {
+	public void displayRestaurants() {
 		int counter = 1; //restaurants enumerator
 		int index;		  //user choice
 		
@@ -86,8 +86,8 @@ public class RestaurantSelectionMenu {
 		// gets the restaurant chosen by the user from the list based on the index
 		Restaurant restaurant = restaurantList.get(index);
 
-		ProductSelectionMenu menuselecaoproduto = new ProductSelectionMenu(conn, sc);
-		menuselecaoproduto.mostrarProdutos(restaurant, customer);
+		ProductSelectionMenu productSelectionMenu = new ProductSelectionMenu(conn, sc);
+		productSelectionMenu.displayRestaurantProducts(restaurant, customer);
 		
 	}	
 	
