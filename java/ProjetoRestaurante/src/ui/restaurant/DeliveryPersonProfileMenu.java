@@ -21,37 +21,37 @@ import services.DeliveryPersonService;
 
 public class DeliveryPersonProfileMenu {
 	
-	private DeliveryPersonService servicoentregador;
+	private DeliveryPersonService deliveryPersonService;
 	private Scanner sc;
 
 	public DeliveryPersonProfileMenu(Connection conn, Scanner sc) {
-		this.servicoentregador = new DeliveryPersonService(conn);
+		this.deliveryPersonService = new DeliveryPersonService(conn);
 		this.sc = sc;
 	}
 	
 	/**
 	 * Responsible for displaying profile customization actions
-	 * @param entregador delivery person object
+	 * @param deliverer delivery person object
 	 */
-	public void mostrarMenuPerfil(DeliveryPerson entregador) {
+	public void displayDeliverersProfile(DeliveryPerson deliverer) {
 		int option = 9;
 		
 		// validate the user's menu option input
 		while (true) {
 			
-			System.out.println("\nMENU DE EDIÇÃO DE ENTREGADOR");
+			System.out.println("\nDELIVERY PERSON PROFILE MENU");
 			System.out.println("================================================");
-			System.out.println("Editando:");
-			System.out.println(entregador);
-			System.out.println("1- Atualizar primeiro nome");
-			System.out.println("2- Atualizar nome do meio");
-			System.out.println("3- Atualizar ultimo nome");
-			System.out.println("4- Atualizar telefone");
-			System.out.println("5- Atualizar placa do veículo");
-			System.out.println("6- Sair da edição de perfil");
+			System.out.println("Updating:");
+			System.out.println(deliverer);
+			System.out.println("1- Update first name");
+			System.out.println("2- Update middle name");
+			System.out.println("3- Update last name");
+			System.out.println("4- Update phone number");
+			System.out.println("5- Update vehicle plate");
+			System.out.println("6- Return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -60,31 +60,31 @@ public class DeliveryPersonProfileMenu {
 				
 				// validate if the option is within the valid range
 				if (!(option >= 0 && option <= 6)) {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 			
 			// execute the action corresponding to the user's option			
 			switch (option) {
 				case 1:
-					this.atualizarPrimeiroNome(entregador);
+					this.updateFirstName(deliverer);
 					break;
 				case 2:
-					this.atualizarNomeMeio(entregador);
+					this.updateMiddleName(deliverer);
 					break;
 				case 3:
-					this.atualizarUltimoNome(entregador);
+					this.updateLastName(deliverer);
 					break;
 				case 4:
-					this.atualizarTelefone(entregador);
+					this.updatePhone(deliverer);
 					break;
 				case 5:
-					this.atualizarPlacaVeiculo(entregador);
+					this.updateVehiclePlate(deliverer);
 					break;
 				case 6:
 					return;
@@ -97,22 +97,22 @@ public class DeliveryPersonProfileMenu {
 	
 	/**
 	 * Responsible for updating the delivery person's first name
-	 * @param entregador delivery person object
+	 * @param deliverer delivery person object
 	 */
-	private void atualizarPrimeiroNome(DeliveryPerson entregador) {
+	private void updateFirstName(DeliveryPerson deliverer) {
 
 		// field for first name validation
 		while (true) {
-			System.out.print("Insira o primeiro nome do entregador (3-20 letras): ");
+			System.out.print("Enter the first name of the deliverer (3-20 letters): ");
 			
-			String primeiroNome = sc.next().trim();
+			String firstName = sc.next().trim();
 			
 			try {
-				if(servicoentregador.updateFirstName(entregador, primeiroNome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(deliveryPersonService.updateFirstName(deliverer, firstName)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -124,21 +124,21 @@ public class DeliveryPersonProfileMenu {
 	 * Responsible for updating the delivery person's middle name
 	 * @param entregador delivery person object
 	 */
-	private void atualizarNomeMeio(DeliveryPerson entregador) {
+	private void updateMiddleName(DeliveryPerson entregador) {
 
 		// field for middle name validation
 		while (true) {
-			System.out.print("Insira o seu nome do meio (3-40 letras): ");
+			System.out.print("Enter the middle name of the deliverer (3-40 letters): ");
 			
-			String nomeMeio = sc.next().trim();
+			String middleName = sc.next().trim();
 			
 			try {
-				if(servicoentregador.updateMiddleName(entregador, nomeMeio)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(deliveryPersonService.updateMiddleName(entregador, middleName)) {
+					System.out.println("Information updated successfully!");
 					break;
 					
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -150,20 +150,20 @@ public class DeliveryPersonProfileMenu {
 	 * Responsible for updating the delivery person's last name
 	 * @param entregador delivery person object
 	 */
-	private void atualizarUltimoNome(DeliveryPerson entregador) {
+	private void updateLastName(DeliveryPerson entregador) {
 
 		// field for last name validation
 		while (true) {
-			System.out.print("Insira o seu ultimo nome (3-20 letras): ");
+			System.out.print("Enter the last name of the deliverer (3-20 letters): ");
 			
-			String ultimoNome = sc.next().trim();
+			String lastName = sc.next().trim();
 			
 			try {
-				if(servicoentregador.updateLastName3(entregador, ultimoNome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(deliveryPersonService.updateLastName3(entregador, lastName)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -175,20 +175,20 @@ public class DeliveryPersonProfileMenu {
 	 * Responsible for updating the delivery person's phone
 	 * @param entregador delivery person object
 	 */
-	private void atualizarTelefone(DeliveryPerson entregador) {
+	private void updatePhone(DeliveryPerson entregador) {
 
 		// field for phone validation
 		while (true) {
-			System.out.print("Insira o seu novo telefone (até 11 dígitos): ");
+			System.out.print("Enter the phone number of the deliverer (maximum of 11 numbers): ");
 			
-			String telefone = sc.next().trim();
+			String phone = sc.next().trim();
 			
 			try {
-				if(servicoentregador.updatePhone(entregador, telefone)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(deliveryPersonService.updatePhone(entregador, phone)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -200,20 +200,20 @@ public class DeliveryPersonProfileMenu {
 	 * Responsible for updating the delivery person's vehicle plate
 	 * @param entregador delivery person object
 	 */
-	private void atualizarPlacaVeiculo(DeliveryPerson entregador) {
+	private void updateVehiclePlate(DeliveryPerson entregador) {
 
 		// field for vehicle plate validation
 		while (true) {
-			System.out.print("Insira a nova placa do veículo do entregador: ");
+			System.out.print("Enter the vehicle plate of the deliverer: ");
 			
-			String placaVeiculo = sc.next().trim().toUpperCase();
+			String vehiclePlate = sc.next().trim().toUpperCase();
 			
 			try {
-				if(servicoentregador.updateVehiclePlate(entregador, placaVeiculo)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(deliveryPersonService.updateVehiclePlate(entregador, vehiclePlate)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());

@@ -28,36 +28,36 @@ import view.RestaurantProductView;
 public class RestaurantProductMenu {
 	
 	private Scanner sc;
-	private ProductService servicoproduto;
-	private RestaurantProductService servicoprodutorestaurante;
-	private OrderService servicoPedido;
+	private ProductService productService;
+	private RestaurantProductService restaurantProductService;
+	private OrderService orderService;
 	
 	
 	public RestaurantProductMenu(Connection conn, Scanner sc) {
-		this.servicoprodutorestaurante = new RestaurantProductService(conn);
-		this.servicoproduto = new ProductService(conn);
-		this.servicoPedido = new OrderService(conn);
+		this.restaurantProductService = new RestaurantProductService(conn);
+		this.productService = new ProductService(conn);
+		this.orderService = new OrderService(conn);
 		this.sc = sc;
 	}
 	
 	/**
 	 * Display the menu for the restaurant to manage its product catalog
-	 * @param r restaurant object
+	 * @param restaurant restaurant object
 	 */
-	public void mostrarMenuProdutos(Restaurant r) {
+	public void displayProductMenu(Restaurant restaurant) {
 		int option = 9;
 		
 		// validate the user's menu option input
 		while (true) {
 			
-			System.out.println("\nMENU PRODUTOS DO RESTAURANTE");
+			System.out.println("\nRESTAURANT PRODUCT MANAGEMENT");
 			System.out.println("================================================");
-			System.out.println("1- Cadastrar um novo produto");
-			System.out.println("2- Gerenciar produtos cadastrados");
-			System.out.println("3- Voltar ao menu anterior");
+			System.out.println("1- Add a new product");
+			System.out.println("2- Manage added products");
+			System.out.println("3- Return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -66,22 +66,22 @@ public class RestaurantProductMenu {
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.print("Digite apenas números (1-3): ");
+				System.out.print("Enter only numbers: ");
 			}
 			
 			// process the menu options
 			switch (option) {
 				case 1:
-					this.cadastrarProduto(r.getId());
+					this.addProduct(restaurant.getId());
 					break;
 				case 2:
-					this.gerenciarProdutosCadastrados(r.getId());
+					this.manageAddedProducts(restaurant.getId());
 					break;
 				case 3:
-					System.out.println("Voltando ao menu anterior");
+					System.out.println("returning to the previous menu");
 					return;
 				default:
-					System.out.print("Opção inválida, tente novamente: ");
+					System.out.print("Invalid option, try again: ");
 				
 			}
 
@@ -93,34 +93,34 @@ public class RestaurantProductMenu {
 	 * Display the interface for the restaurant to add a product to its catalog
 	 * Determines whether the product is already globally registered and should only be associated,
 	 * or if it should be inserted from scratch
-	 * @param cnpj restaurant identifier in session
+	 * @param id restaurant identifier in session
 	 */
-	private void cadastrarProduto(String cnpj) {
-		String nomeProduto;
+	private void addProduct(String id) {
+		String productName;
 		
 		// field for validating the product name
 		while (true) {
-			System.out.print("Insira o nome do produto que você deseja cadastrar (3-40 letras): ");
-			nomeProduto = sc.nextLine().trim().toLowerCase();
+			System.out.print("Enter the name of the product you want to add to the restaurant (3-40 letters): ");
+			productName = sc.nextLine().trim().toLowerCase();
 
 		    try {
-		    	servicoproduto.checkName(nomeProduto);
+		    	productService.checkName(productName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    }
 		}
 		
-		Product p = servicoproduto.returnProductByName(nomeProduto);
+		Product product = productService.returnProductByName(productName);
 		
 		// check whether a product with the same name was returned
-		if (p != null) {
-			if (servicoprodutorestaurante.isProductAlreadyAdded(cnpj, p.getNumber())) {
-				System.out.println("Esse produto já está associado ao restaurante!");
+		if (product != null) {
+			if (restaurantProductService.isProductAlreadyAdded(id, product.getNumber())) {
+				System.out.println("This product is already added to the restaurant!");
 				return;
 			}
 			
-			System.out.print("Esse produto já está cadastrado no catálogo global. Deseja adicionar ele no catálogo do seu restaurante? (1-sim/2-não): ");
+			System.out.print("This product is already registered on the global catalog. Do you want to add it to the restaurant catalog? (1-yes/2-no): ");
 			
 			int option = 9;
 			
@@ -132,20 +132,20 @@ public class RestaurantProductMenu {
 
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 				
 				// process decision options
 				switch (option) {
 					case 1:
-						this.associarProdutoRestaurante(p, cnpj);
+						this.addProductRestaurant(product, id);
 						return;
 					case 2:
-						System.out.println("A operação foi cancelada pelo usuário.");
+						System.out.println("Nothing has changed");
 						return;
 					default:
-					    System.out.println("Digite uma opção válida (1 ou 2)");
+					    System.out.println("Enter a valid option: ");
 						
 				}
 
@@ -153,26 +153,26 @@ public class RestaurantProductMenu {
 			
 		}
 		
-		this.cadastrarProdutoNovo(cnpj, nomeProduto);
+		this.addNewProduct(id, productName);
 	}
 		
 	/**
 	 * If the product name entered by the user is not found in the database,
 	 * this method is used to register it globally and then associate it with the restaurant
-	 * @param cnpj
-	 * @param nomeProduto
+	 * @param id
+	 * @param productName
 	 */
-	private void cadastrarProdutoNovo(String cnpj, String nomeProduto) {
-		int codigo;
-		String descricaoProduto;
+	private void addNewProduct(String id, String productName) {
+		int productNumber;
+		String description;
 		
 		// field for validating the product description
 		while (true) {
-			System.out.print("Insira a descrição do produto: ");
-			descricaoProduto = sc.nextLine().trim().toLowerCase();
+			System.out.print("Enter the product description: ");
+			description = sc.nextLine().trim().toLowerCase();
 
 		    try {
-		    	servicoproduto.checkDescription(descricaoProduto);
+		    	productService.checkDescription(description);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -181,60 +181,60 @@ public class RestaurantProductMenu {
 		
 		// field for validating the product code
 		while (true) {
-			System.out.print("Insira o código do produto no catálogo global (Um valor numérico): ");
+			System.out.print("Enter the number of the product to add it on the global catalog (a numerical value): ");
 			
 		    try {
-		    	codigo = sc.nextInt();
+		    	productNumber = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoproduto.checkNumber(codigo);
+		    	productService.checkNumber(productNumber);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("Código global do produto: %s\n", codigo);
-		System.out.printf("Nome do produto: %s\n", nomeProduto);
-		System.out.printf("Descrição do produto: %s\n", descricaoProduto);
+		System.out.printf("Global product number: %s\n", productNumber);
+		System.out.printf("Product name: %s\n", productName);
+		System.out.printf("Product description: %s\n", description);
 		System.out.println("================================================\n");
 		
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these informations correct? (y-yes/n-no): ");
 		
 		// validate the user's choice
 		while (true) {
 			
 			String opt = sc.next();
 			
-			if (opt.equals("s")) {
+			if (opt.equals("y")) {
 				// instantiate a new product and assign attributes
-				Product p = new Product();
+				Product product = new Product();
 				
-				p.setNumber(codigo);
-				p.setName(nomeProduto);
-				p.setDescription(descricaoProduto);
+				product.setNumber(productNumber);
+				product.setName(productName);
+				product.setDescription(description);
 				
 				// call the registration method and verify success
-				if(servicoproduto.addProduct(p)) {
-					System.out.println("Produto cadastrado no catálogo global com sucesso!");
+				if(productService.addProduct(product)) {
+					System.out.println("Product added to global catalog successfully!");
 					
 					// after registering globally, associate with the restaurant
-					this.associarProdutoRestaurante(p, cnpj);
+					this.addProductRestaurant(product, id);
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao tentar cadastrar.");
+					System.out.println("An error has occurred while trying to add the product to the global catalog.");
 				}
 				
 				break;
 				
 			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -242,90 +242,90 @@ public class RestaurantProductMenu {
 	
 	/**
 	 * Associate a product from the global catalog with a specific restaurant
-	 * @param p product object
-	 * @param cnpj restaurant identifier
+	 * @param product product object
+	 * @param id restaurant identifier
 	 */
-	private void associarProdutoRestaurante(Product p, String cnpj) {
-		int quantidadeEstoque;
-		double preco;
+	private void addProductRestaurant(Product product, String id) {
+		int stockAmount;
+		double price;
 		
 		// field for validating the product stock quantity
 		while (true) {
-			System.out.printf("Insira a quantidade atual em estoque do produto %s: ", p.getName());
+			System.out.printf("Enter the stock amount of the product %s: ", product.getName());
 			
 		    try {
-		    	quantidadeEstoque = sc.nextInt();
+		    	stockAmount = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.checkStockAmount(quantidadeEstoque);
+		    	restaurantProductService.checkStockAmount(stockAmount);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.println("Digite um valor válido para a quantidade em estoque");
+		    	System.out.println("Enter a numerical value for the stock amount");
 		    }
 		}
 		
 		// field for validating the product price
 		while (true) {
-			System.out.printf("Insira o preço do produto %s: ", p.getName());
+			System.out.printf("Enter the price of the product %s: ", product.getName());
 			
 		    try {
-		    	preco = sc.nextDouble();
+		    	price = sc.nextDouble();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.checkProductPrice(preco);
+		    	restaurantProductService.checkProductPrice(price);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.println("Digite um preço válido para o produto");
+		    	System.out.println("Enter a valid price for the product");
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("Código global do produto: %d\n", p.getNumber());
-		System.out.printf("Nome do produto: %s\n", p.getName());
-		System.out.printf("Quantidade em estoque: %d\n", quantidadeEstoque);
-		System.out.printf("Preço do produto: R$ %.2f\n", preco);
+		System.out.printf("Global product number: %d\n", product.getNumber());
+		System.out.printf("Product name: %s\n", product.getName());
+		System.out.printf("Stock amount: %d\n", stockAmount);
+		System.out.printf("Product price: R$ %.2f\n", price);
 		System.out.println("================================================\n");
 		
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these informations correct? (y-yes/n-no): ");
 		
 		// validate the user's choice
 		while (true) {
 			
-			String opt = sc.next();
+			String option = sc.next();
 			
-			if (opt.equals("s")) {
+			if (option.equals("y")) {
 				// instantiate a new restaurant product and assign attributes
-				RestaurantProduct pr = new RestaurantProduct();
+				RestaurantProduct resProduct = new RestaurantProduct();
 				
-				pr.setRestaurantId(cnpj);
-				pr.setProductNumber(p.getNumber());
-				pr.setStockAmount(quantidadeEstoque);
-				pr.setPrice(preco);
+				resProduct.setRestaurantId(id);
+				resProduct.setProductNumber(product.getNumber());
+				resProduct.setStockAmount(stockAmount);
+				resProduct.setPrice(price);
 				
 				// call the association method and verify success
-				if(servicoprodutorestaurante.addRestaurantProduct(pr)) {
-					System.out.println("Produto associado ao catálogo do restaurante com sucesso!");
+				if(restaurantProductService.addRestaurantProduct(resProduct)) {
+					System.out.println("Product added to the restaurant catalog successfully!");
 					return;
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao tentar associar.");
+					System.out.println("An error has occurred while trying to add the product to the restaurant catalog.");
 				}
 				
 				break;
 				
-			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+			} else if (option.equals("n")) {
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -334,35 +334,35 @@ public class RestaurantProductMenu {
 	
 	/**
 	 * Display all products associated with the restaurant in session
-	 * @param cnpj restaurant identifier
+	 * @param id restaurant identifier
 	 */
-	public void gerenciarProdutosCadastrados(String cnpj) {
+	public void manageAddedProducts(String id) {
 		int option = 0;
-		ArrayList<RestaurantProductView> listaProdutos = servicoprodutorestaurante.returnAllProductsPerRestaurant(cnpj);
+		ArrayList<RestaurantProductView> productList = restaurantProductService.returnAllProductsPerRestaurant(id);
 
 		// stop execution when there are no registered products
-		if (listaProdutos.isEmpty()) {
-			System.out.println("Não há produtos cadastrados para o restaurante!");
+		if (productList.isEmpty()) {
+			System.out.println("There are no products added in the restaurant!");
 			return;
 		}
 		
-		System.out.println("EXIBINDO TODOS OS PRODUTOS DO RESTAURANTE:");
+		System.out.println("SHOWING ALL THE PRODUCTS OF THE RESTAURANT:");
 		
 		// print each product for that restaurant with an index
 		System.out.println("\n============================================================================");
-		for (int i = 0; i < listaProdutos.size(); i++) {
-			System.out.println(i+1 + "- " + listaProdutos.get(i));
+		for (int i = 0; i < productList.size(); i++) {
+			System.out.println(i+1 + "- " + productList.get(i));
 		}
 		System.out.println("============================================================================\n");
 		
-		System.out.println("Deseja realizar alguma ação?");
+		System.out.println("What do you want to do?");
 		System.out.println("================================================");
-		System.out.println("1- Atualizar a quantidade em estoque");
-		System.out.println("2- Remover um produto do restaurante");
-		System.out.println("3- Voltar ao menu anterior");
+		System.out.println("1- Update stock amount");
+		System.out.println("2- Remove a product from restaurant");
+		System.out.println("3- Return");
 		System.out.println("================================================");
 		
-		System.out.print("Informe a ação desejada: ");
+		System.out.print("Select what you want to do: ");
 		
 		while (true) {
 			
@@ -378,18 +378,18 @@ public class RestaurantProductMenu {
 			// process the menu options for the user
 			switch (option) {					
 				case 1:
-					this.atualizarQuantidadeEstoque(cnpj, listaProdutos);
+					this.updateStockAmount(id, productList);
 					return;
 					
 				case 2:
-					this.removerProduto(cnpj);
+					this.removeProduct(id);
 					return;
 				case 3:
-					System.out.println("Voltando ao menu principal");
+					System.out.println("Returning to the previous menu");
 					return;
 					
 				default: 
-					System.out.print("Opção inválida, tente novamente (1-4): ");
+					System.out.print("Invalid option, try again: ");
 			}
 
 		}
@@ -398,14 +398,14 @@ public class RestaurantProductMenu {
 	
 	/**
 	 * Provide the interaction for the restaurant to update the stock quantity of a specific product
-	 * @param cnpj restaurant identifier
-	 * @param listaProdutos all products of the restaurant
+	 * @param id restaurant identifier
+	 * @param productList all products of the restaurant
 	 */
-	private void atualizarQuantidadeEstoque(String cnpj, ArrayList<RestaurantProductView> listaProdutos) {
+	private void updateStockAmount(String id, ArrayList<RestaurantProductView> productList) {
 		int index;
-		int quantidadeEstoque;
+		int stockAmount;
 		
-		System.out.println("Digite o índice do produto que você deseja atualizar: ");
+		System.out.println("Enter the index of the product you want to update: ");
 		
 		// field for validating user input
 		while (true) {
@@ -415,56 +415,56 @@ public class RestaurantProductMenu {
 			    
 			    index--; // user sees from 1 to N, computer uses 0 to N-1
 			    
-		        servicoPedido.checkIndex(listaProdutos, index);
+		        orderService.checkIndex(productList, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.print("Digite um índice válido: ");
+		    	System.out.print("Enter a valid index: ");
 		    }
 		}
 		
-		RestaurantProductView produtoAlvo = listaProdutos.get(index);
+		RestaurantProductView targetProduct = productList.get(index);
 
 		
-		System.out.printf("Digite a nova quantidade em estoque do produto %s: ", produtoAlvo.getProductName());
+		System.out.printf("Enter the new stock amount for the product %s: ", targetProduct.getProductName());
 		
 		// field for validating the product's stock quantity
 		while (true) {
 		
 		    try {
-		    	quantidadeEstoque = sc.nextInt();
+		    	stockAmount = sc.nextInt();
 				sc.nextLine();
 				
-		    	servicoprodutorestaurante.checkStockAmount(quantidadeEstoque);
+		    	restaurantProductService.checkStockAmount(stockAmount);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.println("Digite um valor válido para a quantidade em estoque");
+		    	System.out.println("Enter a numerical value for the stock amount");
 		    }
 		}
 		
-		System.out.printf("Deseja confirmar a atualização da quantidade em estoque do produto %s? (s-sim/n-não): ", produtoAlvo.getProductName());
+		System.out.printf("Do you want to confirm the stock amount update for the product %s? (s-sim/n-não): ", targetProduct.getProductName());
 		// the restaurant confirms whether to update the stock quantity
 		while (true) {
 			String escolha = sc.next().trim().toLowerCase();
 		
 			switch (escolha) {
 				case "s":	
-					if (servicoprodutorestaurante.updateProductRestaurant(cnpj, produtoAlvo, quantidadeEstoque)) {
-						System.out.println("Quantidade em estoque do produto atualizada com sucesso!");
+					if (restaurantProductService.updateProductRestaurant(id, targetProduct, stockAmount)) {
+						System.out.println("Stock amount updated successfully!");
 					} else {
-						System.out.println("Ocorreu um erro");
+						System.out.println("An error has occurred");
 					}
 					return;
 				case "n":
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 				default:
-					System.out.print("Digite uma opção válida: ");
+					System.out.print("Enter a valid option: ");
 			}
 		}
 		
@@ -473,63 +473,63 @@ public class RestaurantProductMenu {
 	
 	/**
 	 * Allow the restaurant to provide a product code and remove it from its catalog
-	 * @param cnpj restaurant identifier in session
+	 * @param id restaurant identifier in session
 	 */
-	private void removerProduto(String cnpj) {
-		int codigo;
-		System.out.print("Insira o código do produto que você deseja remover do restaurante: ");
+	private void removeProduct(String id) {
+		int productNumber;
+		System.out.print("Enter the code of the product you want to remove from the restaurant: ");
 		
 		// field for validating the product code
 		while (true) {
 	
 		    try {	
-		    	codigo = sc.nextInt();
+		    	productNumber = sc.nextInt();
 				sc.nextLine();
 			    	
-		        servicoprodutorestaurante.checkProductNumber(codigo);
+		        restaurantProductService.checkProductNumber(productNumber);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.print("Digite um código válido: ");
+		    	System.out.print("Enter a valid code: ");
 		    }
 		}
 		
-		Product alvo = servicoproduto.returnProductById(codigo);
+		Product target = productService.returnProductById(productNumber);
 		
-		if (alvo != null) {
-			System.out.printf("Deseja apagar o produto %s do seu restaurante? (s-sim/n-não): ",alvo.getName());
+		if (target != null) {
+			System.out.printf("Do you want to remove the product %s from the restaurant? (y-yes/n-no): ",target.getName());
 			
 			// validate the user's choice
 			while (true) {
 				
-				String opt = sc.next();
+				String option = sc.next();
 				
-				if (opt.equals("s")) {
+				if (option.equals("y")) {
 				
 					// try to remove the product from the restaurant's catalog and verify success
 					try {
-						servicoprodutorestaurante.deleteProductRestaurant(cnpj, codigo);
-						System.out.println("Produto deletado do restaurante com sucesso!");
+						restaurantProductService.deleteProductRestaurant(id, productNumber);
+						System.out.println("Product removed from the restaurant successfully!");
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
 					
 					break;
 					
-				} else if (opt.equals("n")) {
-					System.out.println("Nada foi alterado");
+				} else if (option.equals("n")) {
+					System.out.println("Nothing has changed");
 					return;
 					
 				} else {
-					System.out.print("Opção inválida, tente novamente: ");
+					System.out.print("Invalid option, try again: ");
 				}
 				
 			}
 			
 		} else {
-			System.out.println("Não há nenhum produto cadastrado com esse código.");
+			System.out.println("There are no products registered with this code.");
 			return;
 		}
 		

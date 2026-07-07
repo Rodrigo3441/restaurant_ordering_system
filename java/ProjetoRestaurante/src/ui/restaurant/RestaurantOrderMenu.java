@@ -24,35 +24,35 @@ import services.OrderService;
  */
 
 public class RestaurantOrderMenu {
-	private OrderService servicoPedido;
-	private DeliveryPersonService servicoEntregador;
+	private OrderService orderService;
+	private DeliveryPersonService deliveryPersonService;
 	private Scanner sc;
 	
 	public RestaurantOrderMenu(Connection conn, Scanner sc) {
-		this.servicoPedido = new OrderService(conn);
-		this.servicoEntregador = new DeliveryPersonService(conn);
+		this.orderService = new OrderService(conn);
+		this.deliveryPersonService = new DeliveryPersonService(conn);
 		this.sc = sc;
 	}
 		
 	/**
 	 * Displays all restaurant orders so the restaurant can manage them
-	 * @param r restaurant object
+	 * @param restaurant restaurant object
 	 */
-	public void mostrarMenuPedidos(Restaurant r) {
+	public void displayOrderMenu(Restaurant restaurant) {
 		
 		int option;
 		
 		while (true) {
 		
-			System.out.println("\nMENU GERENCIADOR DE PEDIDOS");
+			System.out.println("\nORDER MANAGEMENT MENU");
 			System.out.println("================================================");
-			System.out.println("1- Gerenciar pedidos em preparo");
-			System.out.println("2- Gerenciar pedidos que saíram para entrega");
-			System.out.println("3- Visualizar pedidos concluídos");
-			System.out.println("4- Voltar ao menu anterior");
+			System.out.println("1- Manage orders that are being prepared");
+			System.out.println("2- Manage orders that were shipped");
+			System.out.println("3- Check orders completed");
+			System.out.println("4- Return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Choose what you want to do: ");
 				
 			while (true) {
 				try {
@@ -63,28 +63,28 @@ public class RestaurantOrderMenu {
 					if (option >= 1 && option <= 4) {
 						break;
 					} else {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 			}
 			
 			switch (option) {
 				case 1:
-					this.gerenciarPedidosEmPreparo(r.getId());
+					this.managePreparingOrders(restaurant.getId());
 					break;
 				case 2:
-					this.gerenciarPedidosEnviados(r.getId());
+					this.manageShippedOrders(restaurant.getId());
 					break;
 				case 3:
-					this.visualizarPedidosConcluidos(r.getId());
+					this.checkCompletedOrders(restaurant.getId());
 					break;
 				case 4: 
-					System.out.println("Voltando ao menu anterior");
+					System.out.println("Returning to the previous menu");
 					return;
 			}
 			
@@ -94,48 +94,48 @@ public class RestaurantOrderMenu {
 	
 	/**
 	 * Provides a visual interface for the restaurant to manage orders that are still being prepared
-	 * @param cnpj restaurant cnpj
+	 * @param id restaurant cnpj
 	 */
-	private void gerenciarPedidosEmPreparo(String cnpj) {
+	private void managePreparingOrders(String id) {
 
 		// list with all orders to allow access to the first position (oldest order)
-		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Em preparo");
+		ArrayList<Order> orderList = orderService.returnOrdersByRestaurant(id, "Preparing");
 		
 		// prevent operations if the list is empty
-		if (listaPedidos.isEmpty()) {
-			System.out.println("Não há nenhum pedido sendo preparado no momento!");
+		if (orderList.isEmpty()) {
+			System.out.println("There is no orders being prepared at the moment!");
 			return;
 		}
 		
-		System.out.println("EXIBINDO PEDIDOS EM PREPARO PELO RESTAURANTE: ");
+		System.out.println("SHOWING ALL ORDERS BEING PREPARED BY THE RESTAURANT: ");
 		System.out.println("\n============================================================================");
 		
 		// reverse the list to show the oldest orders first
-		Collections.reverse(listaPedidos);
+		Collections.reverse(orderList);
 		
-		for (Order p: listaPedidos) {
+		for (Order p: orderList) {
 			System.out.println(p);
 		}
 		
 		System.out.println("============================================================================\n");
 		
 		
-		System.out.printf("Próximo pedido a ter seu status alterado: %d\n", listaPedidos.get(0).getOrderNumber());
-		System.out.print("Deseja atribuir um entregador ao pedido e atualizar o seu status? (s-sim/n-não): ");
+		System.out.printf("Next order to have your status updated: %d\n", orderList.get(0).getOrderNumber());
+		System.out.print("Do you want to assign a deliverer to the order and update the status? (y-yes/n-no): ");
 		
 		// ask the user if they want to assign a delivery person and update the order status
 		while (true) {
-			String escolha = sc.next().trim().toLowerCase();
+			String choice = sc.next().trim().toLowerCase();
 		
-			switch (escolha) {
-				case "s":	
-					this.atribuirEntregadorPedido(listaPedidos.get(0));			
+			switch (choice) {
+				case "y":	
+					this.assignDelivererOrder(orderList.get(0));			
 					return;
 				case "n":
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 				default:
-					System.out.print("Digite uma opção válida: ");
+					System.out.print("Enter a valid option: ");
 			}
 		}
 		
@@ -143,36 +143,36 @@ public class RestaurantOrderMenu {
 	
 	/**
 	 * Assigns a delivery person to an order and updates availability status from 0 (free) to 1 (busy)
-	 * @param p order object
+	 * @param order order object
 	 */
-	private void atribuirEntregadorPedido(Order p) {
+	private void assignDelivererOrder(Order order) {
 		int index;
 		
 		// list to store all delivery persons in the system
-		ArrayList<DeliveryPerson> listaEntregadores = servicoEntregador.returnDeliveryPersonList();
+		ArrayList<DeliveryPerson> delivererList = deliveryPersonService.returnDeliveryPersonList();
 		
 		// prevent operation if the delivery person list is empty
-		if (listaEntregadores.isEmpty()) {
-			System.out.println("Não há nenhum entregador disponível no momento!");
+		if (delivererList.isEmpty()) {
+			System.out.println("There is no deliverers available at the moment!");
 			return;
 		}
 		
 		// remove all occupied delivery persons from the list for better visibility
-		for (int i = 0; i < listaEntregadores.size(); i++) {
-			if (listaEntregadores.get(i).getAvailable() == 1) {
-				listaEntregadores.remove(i);
+		for (int i = 0; i < delivererList.size(); i++) {
+			if (delivererList.get(i).getAvailable() == 1) {
+				delivererList.remove(i);
 			}
 		}
 		
-		System.out.println("\nENTREGADORES DISPONÍVEIS PARA ENTREGA");
+		System.out.println("\nDELIVERERS CURRENTLY AVAILABLE");
 		System.out.println("============================================================================");
 				
-		for (int i = 0; i < listaEntregadores.size(); i++) {
-				System.out.println(i+1 + "-  " + listaEntregadores.get(i));
+		for (int i = 0; i < delivererList.size(); i++) {
+				System.out.println(i+1 + "-  " + delivererList.get(i));
 		}
 		
 		System.out.println("============================================================================\n");
-		System.out.printf("Digite o índice do entregador que você deseja atribuir ao pedido %d: ", p.getOrderNumber());
+		System.out.printf("Enter the index of the deliverer you want to assign to the order %d: ", order.getOrderNumber());
 		
 	
 		// field to validate user input
@@ -183,38 +183,38 @@ public class RestaurantOrderMenu {
 		    	
 		    	index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 		    	
-		        servicoPedido.checkIndex(listaEntregadores, index);
+		        orderService.checkIndex(delivererList, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.print("Digite um índice válido: ");
+		    	System.out.print("Enter a valid index: ");
 		    }
 		}
 		
 		// from the available delivery persons list, store the chosen delivery person
-		DeliveryPerson entregador = listaEntregadores.get(index);
+		DeliveryPerson entregador = delivererList.get(index);
 		
 		
-		System.out.printf("Deseja confirmar a atribuição do entregador %s ao pedido %d? (s-sim/n-não): ", entregador.getId(), p.getOrderNumber());
+		System.out.printf("Do you want to confirm the assignment of the deliverer %s to the order %d? (y-yes/n-no): ", entregador.getId(), order.getOrderNumber());
 		// restaurant confirms whether to assign the delivery person to the order
 		while (true) {
-			String escolha = sc.next().trim().toLowerCase();
+			String choice = sc.next().trim().toLowerCase();
 		
-			switch (escolha) {
-				case "s":	
-					if (servicoPedido.updateOrderStatus(p, entregador, (short) 1, "Saiu entrega")) {
-						System.out.printf("Entregador atribuído ao pedido %d com sucesso!\n", p.getOrderNumber());
+			switch (choice) {
+				case "y":	
+					if (orderService.updateOrderStatus(order, entregador, (short) 1, "Shipped")) {
+						System.out.printf("Deliverer assigned to the order %d successfully!\n", order.getOrderNumber());
 					} else {
-						System.out.println("Ocorreu um erro");
+						System.out.println("An error has occurred");
 					}
 					return;
 				case "n":
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 				default:
-					System.out.print("Digite uma opção válida: ");
+					System.out.print("Enter a valid option: ");
 			}
 		}
 				
@@ -222,45 +222,45 @@ public class RestaurantOrderMenu {
 	
 	/**
 	 * Provides a visual interface for the restaurant to mark an order as completed
-	 * @param cnpj restaurant cnpj
+	 * @param id restaurant cnpj
 	 */
-	private void gerenciarPedidosEnviados(String cnpj) {
+	private void manageShippedOrders(String id) {
 		
-		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Saiu entrega");
+		ArrayList<Order> orderList = orderService.returnOrdersByRestaurant(id, "Shipped");
 		
-		if (listaPedidos.isEmpty()) {
-			System.out.println("Não há nenhum pedido concluído no momento!");
+		if (orderList.isEmpty()) {
+			System.out.println("There is no shipped orders at the moment!");
 			return;
 		}
 		
-		System.out.println("PRODUTOS QUE SAÍRAM PARA ENTREGA: ");
+		System.out.println("ORDERS THAT ARE BEING SHIPPED: ");
 		System.out.println("\n============================================================================");
 		
 		// reverse the list to show the oldest orders first
-		Collections.reverse(listaPedidos);
+		Collections.reverse(orderList);
 		
-		for (int i = 0; i < listaPedidos.size(); i++) {
-			System.out.println(i+1 + "-  " + listaPedidos.get(i));
+		for (int i = 0; i < orderList.size(); i++) {
+			System.out.println(i+1 + "-  " + orderList.get(i));
 		}
 		
 		System.out.println("============================================================================\n");
 		
 		
-		System.out.print("Deseja marcar um pedido como concluído? (s-sim/n-não): ");
+		System.out.print("Do you want to mark an order as delivered? (y-yes/n-no): ");
 		
 		// ask the user if they want to mark an order as completed
 		while (true) {
-			String escolha = sc.next().trim().toLowerCase();
+			String choice = sc.next().trim().toLowerCase();
 		
-			switch (escolha) {
-				case "s":	
-					this.marcarPedidoConcluido(listaPedidos);			
+			switch (choice) {
+				case "y":	
+					this.markAsDelivered(orderList);			
 					return;
 				case "n":
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 				default:
-					System.out.print("Digite uma opção válida: ");
+					System.out.print("Enter a valid option: ");
 			}
 		}
 		
@@ -268,11 +268,11 @@ public class RestaurantOrderMenu {
 	
 	/**
 	 * Receives the index of the order the restaurant wants to mark as completed
-	 * @param listaPedidos list of orders
+	 * @param orderList list of orders
 	 */
-	private void marcarPedidoConcluido(ArrayList<Order> listaPedidos) {
+	private void markAsDelivered(ArrayList<Order> orderList) {
 		int index;
-		System.out.print("Digite o índice do pedido que você deseja marcar como concluído: ");
+		System.out.print("Enter the index of the order you want to mark as delivered: ");
 		
 		// field to validate user input
 		while (true) {
@@ -282,37 +282,37 @@ public class RestaurantOrderMenu {
 		    	
 		    	index--; // user sees from (1) to (N). Computer sees from (0) to (N-1)
 		    	
-		        servicoPedido.checkIndex(listaPedidos, index);
+		        orderService.checkIndex(orderList, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.print("Digite um índice válido: ");
+		    	System.out.print("Enter a valid index: ");
 		    }
 		}
 		
-		Order pedido = listaPedidos.get(index);
-		DeliveryPerson entregador = servicoEntregador.returnDeliveryPerson(pedido.getDeliveryPersonId());
+		Order order = orderList.get(index);
+		DeliveryPerson deliverer = deliveryPersonService.returnDeliveryPerson(order.getDeliveryPersonId());
 		
-		System.out.printf("Deseja confirmar a conclusão do pedido %d? (s-sim/n-não): ", pedido.getOrderNumber());
+		System.out.printf("Do you want to mark the order %d as delivered? (y-yes/n-no): ", order.getOrderNumber());
 		// restaurant confirms whether to mark the order as delivered
 		while (true) {
-			String escolha = sc.next().trim().toLowerCase();
+			String choice = sc.next().trim().toLowerCase();
 		
-			switch (escolha) {
-				case "s":	
-					if (servicoPedido.updateOrderStatus(pedido, entregador, (short) 0, "Entregue")) {
-						System.out.printf("Pedido %d entregue com sucesso!\n", pedido.getOrderNumber());
+			switch (choice) {
+				case "y":	
+					if (orderService.updateOrderStatus(order, deliverer, (short) 0, "Delivered")) {
+						System.out.printf("Order %d delivered successfully!\n", order.getOrderNumber());
 					} else {
-						System.out.println("Ocorreu um erro");
+						System.out.println("An error has occurred");
 					}
 					return;
 				case "n":
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 				default:
-					System.out.print("Digite uma opção válida: ");
+					System.out.print("Enter a valid option: ");
 			}
 		}
 		
@@ -320,30 +320,30 @@ public class RestaurantOrderMenu {
 	
 	/**
 	 * Shows all orders that have already been marked as delivered by the restaurant
-	 * @param cnpj restaurant cnpj
+	 * @param id restaurant cnpj
 	 */
-	private void visualizarPedidosConcluidos(String cnpj) {
+	private void checkCompletedOrders(String id) {
 		
-		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByRestaurant(cnpj, "Entregue");
+		ArrayList<Order> orderList = orderService.returnOrdersByRestaurant(id, "Delivered");
 		
 		// prevent operations if the list is empty
-		if (listaPedidos.isEmpty()) {
-			System.out.println("Não há pedidos realizados no restaurante!");
+		if (orderList.isEmpty()) {
+			System.out.println("There are no orders delivered in the restaurat!");
 			return;
 		}
 		
-		System.out.println("PEDIDOS QUE JÁ FORAM CONCLUÍDOS: ");
+		System.out.println("DELIVERED ORDERS: ");
 		System.out.println("\n============================================================================");
 		
 		// reverse the list to show the oldest orders first
-		Collections.reverse(listaPedidos);
+		Collections.reverse(orderList);
 		
-		for (int i = 0; i < listaPedidos.size(); i++) {
-			System.out.println(i+1 + "-  " + listaPedidos.get(i));
+		for (int i = 0; i < orderList.size(); i++) {
+			System.out.println(i+1 + "-  " + orderList.get(i));
 		}
 		
 		System.out.println("============================================================================\n");
-		System.out.println("Aperte enter para continuar");
+		System.out.println("Press any key to continue");
 		sc.nextLine();
 	
 	}

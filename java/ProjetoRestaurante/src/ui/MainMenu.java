@@ -84,7 +84,7 @@ public class MainMenu {
 	
 				case 2:
 					RestaurantMenu restaurantMenu = new RestaurantMenu(conn, sc);
-					restaurantMenu.mostrarMenuPrincipal();
+					restaurantMenu.displayMainMenu();
 					break;
 					
 				case 3:

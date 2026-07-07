@@ -23,11 +23,11 @@ import services.DeliveryPersonService;
 public class RestaurantDeliveryPersonMenu {
 	
 	private Scanner sc;
-	private DeliveryPersonService servicoentregador;
+	private DeliveryPersonService deliveryPersonService;
 	private Connection conn;
 	
 	public RestaurantDeliveryPersonMenu(Connection conn, Scanner sc) {
-		this.servicoentregador = new DeliveryPersonService(conn);
+		this.deliveryPersonService = new DeliveryPersonService(conn);
 		this.conn = conn;
 		this.sc = sc;
 	}
@@ -38,23 +38,23 @@ public class RestaurantDeliveryPersonMenu {
 	 * Responsible for offering the initial menu options for restaurant delivery person management
 	 * 
 	 */
-	public void mostrarMenuEntregador() {
+	public void displayDelivererMenu() {
 			
 			int option = 9;
 			
 			// validate user's menu choice input
 			do {
 				
-				System.out.println("\nMENU GERENCIADOR DE ENTREGADORES");
+				System.out.println("\nDELIVERY PERSON MANAGEMENT MENU");
 				System.out.println("================================================");
-				System.out.println("1- Cadastrar um novo entregador");
-				System.out.println("2- Listar todos os entregadores");
-				System.out.println("3- Atualizar informação de algum entregador");
-				System.out.println("4- Apagar um entregador do sistema de entregas");
-				System.out.println("5- Voltar ao menu anterior");
+				System.out.println("1- Add a new deliverer");
+				System.out.println("2- Show all deliverers");
+				System.out.println("3- Update deliverer information");
+				System.out.println("4- Delete a deliverer from the system");
+				System.out.println("5- Return");
 				System.out.println("================================================\n");
 				
-				System.out.print("Informe a ação desejada: ");
+				System.out.print("Choose what you want to do: ");
 				
 				try {
 					
@@ -63,36 +63,36 @@ public class RestaurantDeliveryPersonMenu {
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 				
 				// access the menu options
 				switch (option) {
 					case 1:
-						this.fazerCadastro();
+						this.addDeliverer();
 						break;
 						
 					case 2:
-						this.listarEntregadores();
-						System.out.println("Aperte enter para continuar");
+						this.showDeliverers();
+						System.out.println("Press any key to continue");
 						sc.nextLine();
 						break;
 						
 					case 3:
-						this.atualizarEntregador();
+						this.updateDeliverer();
 						break;
 						
 					case 4:
-						this.removerEntregador();
+						this.removeDeliverer();
 						break;
 						
 					case 5:
-						System.out.println("Voltando ao menu principal");
+						System.out.println("Returning to the previous menu");
 						return;
 						
 					default: 
-						System.out.println("Opção inválida, tente novamente: ");
+						System.out.println("Invalid option, try again: ");
 				}
 	
 				
@@ -105,24 +105,24 @@ public class RestaurantDeliveryPersonMenu {
 	 * Responsible for providing the registration interface for a new delivery person
 	 * 
 	 */
-	private void fazerCadastro() {
+	private void addDeliverer() {
 		
-		String cpf;
-		String primeiroNome;
-		String nomeMeio;
-		String ultimoNome;
-		String telefone;
-		String placaVeiculo;
+		String delivererId;
+		String firstName;
+		String middleName;
+		String lastName;
+		String phone;
+		String vehiclePlate;
 		
-		System.out.println("CADASTRO DE NOVO ENTREGADOR");
+		System.out.println("NEW DELIVERER REGISTRATION");
 		
 		// field for CPF validation
 		while (true) {
-		    System.out.print("Digite o seu CPF (11 dígitos): ");
-		    cpf = sc.nextLine().trim();
+		    System.out.print("Enter the deliverer ID (11 characters): ");
+		    delivererId = sc.nextLine().trim();
 
 		    try {
-		        servicoentregador.checkDelivererId(cpf);
+		        deliveryPersonService.checkDelivererId(delivererId);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -131,11 +131,11 @@ public class RestaurantDeliveryPersonMenu {
 		
 		// field for first name validation
 		while (true) {
-		    System.out.print("Digite o seu primeiro nome: ");
-		    primeiroNome = sc.nextLine().trim();
+			System.out.print("Enter the deliverer first name: ");
+		    firstName = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.checkFirstName(primeiroNome);
+		    	deliveryPersonService.checkFirstName(firstName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -144,11 +144,11 @@ public class RestaurantDeliveryPersonMenu {
 		
 		// field for last name validation
 		while (true) {
-		    System.out.print("Digite o seu último nome: ");
-		    ultimoNome = sc.nextLine().trim();
+			System.out.print("Enter the deliverer last name: ");
+		    lastName = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.checkLastName(ultimoNome);
+		    	deliveryPersonService.checkLastName(lastName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -157,11 +157,11 @@ public class RestaurantDeliveryPersonMenu {
 		
 		// field for middle name validation
 		while (true) {
-		    System.out.print("Digite o seu nome do meio: ");
-		    nomeMeio = sc.nextLine().trim();
+			System.out.print("Enter the deliverer middle name: ");
+		    middleName = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.checkMiddleName(nomeMeio);
+		    	deliveryPersonService.checkMiddleName(middleName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -170,11 +170,11 @@ public class RestaurantDeliveryPersonMenu {
 				
 		// field for phone validation
 		while (true) {
-		    System.out.print("Digite o seu telefone: ");
-		    telefone = sc.nextLine().trim();
+			System.out.print("Enter the deliverer phone number: ");
+		    phone = sc.nextLine().trim();
 
 		    try {
-		    	servicoentregador.checkPhone(telefone);
+		    	deliveryPersonService.checkPhone(phone);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -183,61 +183,61 @@ public class RestaurantDeliveryPersonMenu {
 		
 		// field for vehicle plate validation
 		while (true) {
-		    System.out.print("Digite a placa do veículo do entregador: ");
-		    placaVeiculo = sc.nextLine().trim().toUpperCase();
+			System.out.print("Enter the deliverer vehicle plate: ");
+		    vehiclePlate = sc.nextLine().trim().toUpperCase();
 
 		    try {
-		    	servicoentregador.checkVehiclePlate(placaVeiculo);
+		    	deliveryPersonService.checkVehiclePlate(vehiclePlate);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("CPF: %s\n", cpf);
-		System.out.printf("Primeiro nome: %s\n", primeiroNome);
-		System.out.printf("Nome do meio: %s\n", nomeMeio);
-		System.out.printf("Ultimo nome: %s\n", ultimoNome);
-		System.out.printf("Telefone: %s\n", telefone);
-		System.out.printf("Placa do veículo: %s\n", placaVeiculo);
+		System.out.printf("Deliverer ID: %s\n", delivererId);
+		System.out.printf("First name: %s\n", firstName);
+		System.out.printf("Middle name: %s\n", middleName);
+		System.out.printf("Last name: %s\n", lastName);
+		System.out.printf("Phone number: %s\n", phone);
+		System.out.printf("Vehicle plate: %s\n", vehiclePlate);
 		System.out.println("================================================\n");
 		
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these information correct? (y-yes /c-cancel): ");
 		
 		// validate user's choice
 		while (true) {
 			
 			String opt = sc.next();
 			
-			if (opt.equals("s")) {
+			if (opt.equals("y")) {
 				// instantiate a new DeliveryPerson and set attributes			
-				DeliveryPerson e = new DeliveryPerson();
-				e.setId(cpf);
-				e.setFirstName(primeiroNome);
-				e.setMiddleName(nomeMeio);
-				e.setLastName(ultimoNome);
-				e.setPhone(telefone);
-				e.setVehicle(placaVeiculo);
-				e.setAvailable((short) 0);
+				DeliveryPerson deliverer = new DeliveryPerson();
+				deliverer.setId(delivererId);
+				deliverer.setFirstName(firstName);
+				deliverer.setMiddleName(middleName);
+				deliverer.setLastName(lastName);
+				deliverer.setPhone(phone);
+				deliverer.setVehicle(vehiclePlate);
+				deliverer.setAvailable((short) 0);
 				
 				// call the registration method and check if it succeeded
-				if(servicoentregador.addDeliveryPerson(e)) {
-					System.out.println("O entregador foi cadastrado com sucesso!");
+				if(deliveryPersonService.addDeliveryPerson(deliverer)) {
+					System.out.println("Deliverer's account has been created!");
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao tentar cadastrar.");
+					System.out.println("An error has occurred while trying to create the deliverer's account.");
 				}
 				
 				break;
 				
-			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+			} else if (opt.equals("c")) {
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -246,19 +246,19 @@ public class RestaurantDeliveryPersonMenu {
 	/**
 	 * List all delivery persons registered in the system
 	 */
-	private void listarEntregadores() {
-		ArrayList<DeliveryPerson> listaEntregadores = servicoentregador.returnDeliveryPersonList();
+	private void showDeliverers() {
+		ArrayList<DeliveryPerson> deliverersList = deliveryPersonService.returnDeliveryPersonList();
 
 		// stop execution when there are no delivery persons registered
-		if (listaEntregadores.isEmpty()) {
-			System.out.println("Não há nenhum entregador cadastrado no sistema!");
+		if (deliverersList.isEmpty()) {
+			System.out.println("There is no deliverers on the system!");
 			return;
 		}
 		
-		System.out.println("\nTODOS OS ENTREGADORES DO SISTEMA:");
+		System.out.println("\nSHOWING ALL DELIVERERS FROM THE SYSTEM:");
 		System.out.println("================================================");
 		// print each delivery person for the restaurant
-		for (DeliveryPerson e: listaEntregadores) {
+		for (DeliveryPerson e: deliverersList) {
 			System.out.println(e);
 		}
 		System.out.println("================================================\n");
@@ -270,33 +270,33 @@ public class RestaurantDeliveryPersonMenu {
 	 * Displays the list of all delivery persons in the system and asks the restaurant to provide the CPF
 	 * that will be deleted from the system
 	 */
-	private void removerEntregador() {
+	private void removeDeliverer() {
 		
-		this.listarEntregadores();
+		this.showDeliverers();
 		
-		System.out.print("Insira o CPF do entregador que você deseja remover do restaurante: ");
+		System.out.print("Enter the ID of the deliverer you want to remove from the system: ");
 		
 		// CPF of the delivery person to be deleted
-		String cpf = sc.next().trim();
+		String id = sc.next().trim();
 		
 		// store the target delivery person for operations
-		DeliveryPerson entregador = servicoentregador.returnDeliveryPerson(cpf);
+		DeliveryPerson deliverer = deliveryPersonService.returnDeliveryPerson(id);
 		
-		if (entregador != null) {
-			System.out.println(entregador);
-			System.out.printf("Deseja apagar o entregador de cpf %s do seu restaurante? (s-sim/n-não): ",entregador.getId());
+		if (deliverer != null) {
+			System.out.println(deliverer);
+			System.out.printf("Do you want to remove the deliverer %s from the system? (y-yes/n-no): ",deliverer.getId());
 			
 			// validate user's choice
 			while (true) {
 				
 				String opt = sc.next();
 				
-				if (opt.equals("s")) {
+				if (opt.equals("y")) {
 				
 					// call the deletion method and check if it succeeded
 					try {
-						servicoentregador.deleteDeliveryPerson(cpf);
-						System.out.println("Entregador deletado do sistema com sucesso!");
+						deliveryPersonService.deleteDeliveryPerson(id);
+						System.out.println("Deliverer removed from the system!");
 					} catch (Exception e) {
 						System.out.println(e.getMessage());
 					}
@@ -304,17 +304,17 @@ public class RestaurantDeliveryPersonMenu {
 					break;
 					
 				} else if (opt.equals("n")) {
-					System.out.println("Nada foi alterado");
+					System.out.println("Nothing has changed");
 					return;
 					
 				} else {
-					System.out.print("Opção inválida, tente novamente: ");
+					System.out.print("Invalid option, try again: ");
 				}
 				
 			}
 			
 		} else {
-			System.out.println("Não há nenhum entregador com esse cpf.");
+			System.out.println("There is no deliverers with the specified ID.");
 			return;
 		}
 		
@@ -324,24 +324,24 @@ public class RestaurantDeliveryPersonMenu {
 	 * Displays the list of all delivery persons in the system and asks the restaurant to provide the CPF
 	 * of the delivery person whose information should be updated
 	 */
-	private void atualizarEntregador() {
+	private void updateDeliverer() {
 		
-		this.listarEntregadores();
+		this.showDeliverers();
 		
-		System.out.print("Insira o CPF do entregador que você deseja atualizar as informações: ");
+		System.out.print("Enter the ID of the deliverer you want to update informations: ");
 		
 		// CPF of the delivery person to be updated
 		String cpf = sc.next().trim();
 		
 		// store the target delivery person for operations
-		DeliveryPerson entregador = servicoentregador.returnDeliveryPerson(cpf);
+		DeliveryPerson deliverer = deliveryPersonService.returnDeliveryPerson(cpf);
 		
-		if (entregador != null) {
-			DeliveryPersonProfileMenu menu = new DeliveryPersonProfileMenu(conn, sc);
-			menu.mostrarMenuPerfil(entregador);
+		if (deliverer != null) {
+			DeliveryPersonProfileMenu deliveryPersonProfileMenu = new DeliveryPersonProfileMenu(conn, sc);
+			deliveryPersonProfileMenu.displayDeliverersProfile(deliverer);
 			
 		} else {
-			System.out.println("Não há nenhum entregador com esse cpf.");
+			System.out.println("There is no deliverers with the specified ID.");
 		}
 	}
 	

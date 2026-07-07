@@ -21,12 +21,12 @@ import services.RestaurantService;
 
 public class RestaurantProfileMenu {
 	
-	private RestaurantService servicorestaurante;
+	private RestaurantService restaurantService;
 	private Connection conn;
 	private Scanner sc;
 	
 	public RestaurantProfileMenu(RestaurantService servicorestaurante, Connection conn, Scanner sc) {
-		this.servicorestaurante = servicorestaurante;
+		this.restaurantService = servicorestaurante;
 		this.conn = conn;
 		this.sc = sc;
 	}
@@ -36,22 +36,22 @@ public class RestaurantProfileMenu {
 	 * Responsible for displaying restaurant profile customization actions
 	 * @param r Restaurant object
 	 */
-	public void mostrarMenuPerfil(Restaurant r) {
+	public void displayProfileMenu(Restaurant r) {
 		int option = 9;
 		
 		// validation of the user's option input
 		while (true) {
 			
-			System.out.println("\nMENU EDITAR PERFIL DO RESTAURANTE");
+			System.out.println("\nRESTAURANT PROFILE");
 			System.out.println("================================================");
-			System.out.println("1- Atualizar nome");
-			System.out.println("2- Atualizar telefone");
-			System.out.println("3- Atualizar senha");
-			System.out.println("4- Atualizar endereço");
-			System.out.println("5- Sair da edição de perfil");
+			System.out.println("1- Update name");
+			System.out.println("2- Update phone number");
+			System.out.println("3- Update password");
+			System.out.println("4- Update address");
+			System.out.println("5- Return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -60,32 +60,32 @@ public class RestaurantProfileMenu {
 				
 				// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 6)) {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 			
 			// access menu options			
 			switch (option) {
 				case 1:
-					this.atualizarNome(r);
+					this.updateName(r);
 					break;
 				case 2:
-					this.atualizarTelefone(r);
+					this.updatePhone(r);
 					break;
 				case 3:
-					this.atualizarSenha(r);
+					this.updatePasscode(r);
 					break;
 				case 4:
-					RestaurantAddressMenu menuendereco = new RestaurantAddressMenu(conn, sc);
-					menuendereco.mostrar(r);
+					RestaurantAddressMenu restaurantAddressMenu = new RestaurantAddressMenu(conn, sc);
+					restaurantAddressMenu.displayAddressMenu(r);
 					break;
 				case 5:
-					System.out.println("Voltando ao menu anterior");
+					System.out.println("Returning to the previous menu");
 					return;
 				
 			}
@@ -98,19 +98,19 @@ public class RestaurantProfileMenu {
 	 * Responsible for updating the restaurant name
 	 * @param r restaurant object
 	 */
-	private void atualizarNome(Restaurant r) {
+	private void updateName(Restaurant r) {
 		// field for restaurant name validation
 		while (true) {
-			System.out.print("Insira o seu primeiro nome (3-40 letras): ");
+			System.out.print("Enter the restaurant name (3-40 letters): ");
 			
-			String nome = sc.nextLine().trim();
+			String name = sc.nextLine().trim();
 			
 			try {
-				if(servicorestaurante.updateName(r, nome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(restaurantService.updateName(r, name)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -123,19 +123,19 @@ public class RestaurantProfileMenu {
 	 * Responsible for updating the restaurant phone
 	 * @param r restaurant object
 	 */
-	private void atualizarTelefone(Restaurant r) {
+	private void updatePhone(Restaurant r) {
 		// field for phone validation
 		while (true) {
-			System.out.print("Insira o novo telefone do restaurante (até 11 dígitos): ");
+			System.out.print("Enter the new phone number (maximum of 11 numbers): ");
 			
-			String telefone = sc.next().trim();
+			String phone = sc.next().trim();
 			
 			try {
-				if(servicorestaurante.updatePhone(r, telefone)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(restaurantService.updatePhone(r, phone)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -147,19 +147,19 @@ public class RestaurantProfileMenu {
 	 * Responsible for updating the restaurant password
 	 * @param r
 	 */
-	private void atualizarSenha(Restaurant r) {
+	private void updatePasscode(Restaurant r) {
 		// field for password validation
 		while (true) {
-			System.out.print("Insira a nova senha do restaurante: ");
+			System.out.print("Enter the new password of the restaurant: ");
 			
-			String senha = sc.next().trim();
+			String passcode = sc.next().trim();
 			
 			try {
-				if(servicorestaurante.updatePasscode(r, senha)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(restaurantService.updatePasscode(r, passcode)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());

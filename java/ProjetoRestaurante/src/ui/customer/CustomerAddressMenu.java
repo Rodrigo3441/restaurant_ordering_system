@@ -218,7 +218,7 @@ public class CustomerAddressMenu {
 				
 				//chamada do método para cadastro e verificação se houve êxito na ação
 				if(addressService.addCustomerAddress(address)) {
-					System.out.println("Your added has been added!");
+					System.out.println("Your address has been added!");
 					return;
 					
 				} else {

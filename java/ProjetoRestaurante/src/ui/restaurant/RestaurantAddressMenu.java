@@ -24,13 +24,13 @@ import services.AddressService;
 
 public class RestaurantAddressMenu {
 
-	private Address enderecoRestaurante;
-	private AddressService servicoendereco;
+	private Address restaurantAddress;
+	private AddressService addressService;
 	private Scanner sc;
 	
 	
 	public RestaurantAddressMenu(Connection conn, Scanner sc) {
-		this.servicoendereco = new AddressService(conn);
+		this.addressService = new AddressService(conn);
 		this.sc = sc;
 	}
 
@@ -38,25 +38,25 @@ public class RestaurantAddressMenu {
 	 * Responsible for displaying the address interface for the restaurant to manage
 	 * has two states:
 	 * if the restaurant has an address displays one menu, otherwise another
-	 * @param r restaurant object
+	 * @param restaurant restaurant object
 	 */
-	public void mostrar(Restaurant r) {
+	public void displayAddressMenu(Restaurant restaurant) {
 		
 		int option = 9;
 		
 		//stores the restaurant's address
-		enderecoRestaurante = servicoendereco.returnRestaurantAddress(r.getId());
+		restaurantAddress = addressService.returnRestaurantAddress(restaurant.getId());
 		
-		if (enderecoRestaurante == null) {
-			System.out.println("Você não possui um endereço cadastrado!");
-			System.out.println("O que deseja fazer?");
+		if (restaurantAddress == null) {
+			System.out.println("You don't have a registered address!");
+			System.out.println("What do you want to do?");
 			
 			System.out.println("\n================================================");
-			System.out.println("1- Adicionar endereço");
-			System.out.println("2- Voltar ao menu anterior");
+			System.out.println("1- Add new address");
+			System.out.println("2- Return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			//choice for menu without registered address 
 			do {
@@ -67,18 +67,18 @@ public class RestaurantAddressMenu {
 					
 					//check if the user's option is outside the allowed range
 					if (!(option > 0 && option <= 2)) {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 				
 					} catch (Exception e) {
 						sc.nextLine();
-						System.out.println("Digite apenas números: ");
+						System.out.println("Enter only numbers: ");
 						option = -1;
 					}
 			
 					switch (option) {
 					case 1:
-						this.cadastrarEndereco(r);
+						this.addAddress(restaurant);
 						return;
 					
 					case 2:
@@ -90,17 +90,17 @@ public class RestaurantAddressMenu {
 		} else {
 			
 			do {
-				System.out.println("\nENDERECO ATUAL RESTAURANTE:");
+				System.out.println("\nCURRENT ADDRESS:");
 				System.out.println("================================================");
-				System.out.println(enderecoRestaurante.formatAddress());
+				System.out.println(restaurantAddress.formatAddress());
 				System.out.println("================================================");
-				System.out.println("1- Atualizar CEP");
-				System.out.println("2- Atualizar nome da rua");
-				System.out.println("3- Atualizar o número da rua");
-				System.out.println("4- voltar ao menu anterior");
+				System.out.println("1- Update Postal Code");
+				System.out.println("2- Update Street Name");
+				System.out.println("3- Update Street Number");
+				System.out.println("4- Return");
 				System.out.println("================================================\n");
 				
-				System.out.print("Informe a ação desejada: ");
+				System.out.print("Select what do you want to do: ");
 				
 				// choice for menu with address already registered
 				try {
@@ -110,32 +110,32 @@ public class RestaurantAddressMenu {
 					
 					//check if the user's option is outside the allowed range
 					if (!(option > 0 && option <= 4)) {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 
 				//access the menu options			
 				switch (option) {
 					case 1:
-						this.atualizarCepRestaurante(enderecoRestaurante);
+						this.updateRestaurantPostalCode(restaurantAddress);
 						break;
 					case 2:
-						this.atualizarNomeEnderecoRestaurante(enderecoRestaurante);
+						this.updateRestaurantStreetName(restaurantAddress);
 						break;
 					case 3:
-						this.atualizarNumeroEnderecoRestaurante(enderecoRestaurante);
+						this.updateRestaurantStreetNumber(restaurantAddress);
 						break;
 					case 4:
-						System.out.println("Voltando ao menu anterior");
+						System.out.println("Returning to the previous menu");
 						return;
 						
 					default: 
-						System.out.println("Opção inválida, tente novamente: ");
+						System.out.println("Invalid option, try again: ");
 				}
 				
 			} while (option != 4);		
@@ -149,18 +149,18 @@ public class RestaurantAddressMenu {
 	 * Implements address registration for a restaurant
 	 * @param r restaurant object
 	 */
-	private void cadastrarEndereco(Restaurant r) {
-		String cep;
-		String nome;
-		int numero;
+	private void addAddress(Restaurant r) {
+		String postalCode;
+		String name;
+		int number;
 	
 		//field for CEP validation
 		while (true) {
-		    System.out.print("Digite o CEP da rua do restaurante (8 dígitos): ");
-		    cep = sc.nextLine().trim();
+		    System.out.print("Enter your postal code (8 numbers): ");
+		    postalCode = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.checkPostalCode(cep);
+		        addressService.checkPostalCode(postalCode);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -169,11 +169,11 @@ public class RestaurantAddressMenu {
 		
 		//field for street name validation
 		while (true) {
-		    System.out.print("Digite o nome da rua do restaurante: ");
-		    nome = sc.nextLine().trim();
+		    System.out.print("Enter the street name of the restaurant: ");
+		    name = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.checkName(nome);
+		        addressService.checkName(name);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -182,14 +182,14 @@ public class RestaurantAddressMenu {
 		
 		// validation of the restaurant's street number
 		while (true) {
-		    System.out.print("Digite o número do restaurante: ");
+		    System.out.print("Enter the street number of the restaurant: ");
 	
 		    try {
 		    	
-		    	numero = sc.nextInt();
+		    	number = sc.nextInt();
 			    sc.nextLine();
 			    
-		        servicoendereco.checkNumber(numero);
+		        addressService.checkNumber(number);
 		        break;
 		    } catch (Exception e) {
 		        System.out.println(e.getMessage());
@@ -197,46 +197,45 @@ public class RestaurantAddressMenu {
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("CEP: %s\n", cep);
-		System.out.printf("Nome da rua: %s\n", nome);
-		System.out.printf("Número: %d\n", numero);
+		System.out.printf("Postal code: %s\n", postalCode);
+		System.out.printf("Street name: %s\n", name);
+		System.out.printf("Street number: %d\n", number);
 		System.out.println("================================================\n");
-		
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these informations correct? (y-yes/c-cancel): ");
 		
 		//validation of user choice
 		while (true) {
 			
 			String opt = sc.next();
 			
-			if (opt.equals("s")) {
+			if (opt.equals("y")) {
 				//instantiation of a new restaurant address and linking of attributes
-				RestaurantAddress er = new RestaurantAddress();
-				er.setPostalCode(cep);
-				er.setRestaurantId(r.getId());
-				er.setName(nome);
-				er.setNumber(numero);
+				RestaurantAddress address = new RestaurantAddress();
+				address.setPostalCode(postalCode);
+				address.setRestaurantId(r.getId());
+				address.setName(name);
+				address.setNumber(number);
 				
 				
 				//call the method to register and check if the action was successful
-				if(servicoendereco.addRestaurantAddress(er)) {
-					System.out.println("Endereço do restaurante cadastrado com sucesso!");
+				if(addressService.addRestaurantAddress(address)) {
+					System.out.println("Restaurant address has been added!");
 					return;
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao cadastrar o Endereço.");
+					System.out.println("An error has occurred while trying to add restaurant address.");
 				}
 				
 				break;
 				
 			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -247,19 +246,19 @@ public class RestaurantAddressMenu {
 	 * Edit the restaurant's address
 	 * @param er restaurant address object
 	 */
-	private void atualizarCepRestaurante(Address er) {
+	private void updateRestaurantPostalCode(Address er) {
 		//field for CEP validation
 		while (true) {
-			System.out.print("Digite o novo CEP do restaurante (8 dígitos): ");
+			System.out.print("Enter the new restaurant postal code (8 numbers): ");
 			
-			String cep = sc.next().trim();
+			String postalCode = sc.next().trim();
 			
 			try {
-				if(servicoendereco.updatePostalCodeRestaurantAddress(er, cep)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updatePostalCodeRestaurantAddress(er, postalCode)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -272,20 +271,20 @@ public class RestaurantAddressMenu {
 	 * Implements editing the address name
 	 * @param er restaurant address object
 	 */
-	private void atualizarNomeEnderecoRestaurante(Address er) {
+	private void updateRestaurantStreetName(Address er) {
 		
 		//field for street name validation
 		while (true) {
-			System.out.print("Digite o novo nome da sua rua: ");
+			System.out.print("Enter the new street name of the restaurant: ");
 			
-			String nome = sc.nextLine().trim();
+			String name = sc.nextLine().trim();
 			
 			try {
-				if(servicoendereco.updateNameRestaurantAddress(er, nome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updateNameRestaurantAddress(er, name)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -297,22 +296,22 @@ public class RestaurantAddressMenu {
 	 * Implements editing the address number
 	 * @param er restaurant address object
 	 */
-	private void atualizarNumeroEnderecoRestaurante(Address er) {
+	private void updateRestaurantStreetNumber(Address er) {
 		
 		//field for street number validation
 		while (true) {
-			System.out.print("Digite o novo número da sua rua: ");
+			System.out.print("Enter the new street number of the restaurant: ");
 	
 			try {
 				
-				int numero = sc.nextInt();
+				int number = sc.nextInt();
 				sc.nextLine();
 				
-				if(servicoendereco.updateNumberRestaurantAddress(er, numero)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updateNumberRestaurantAddress(er, number)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
