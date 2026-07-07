@@ -71,7 +71,7 @@ public class OrderItemDAO {
 						+ "INNER JOIN product AS p "
 						+ "ON oi.order_item_product_id_pk_fk = p.product_id_pk "
 						+ "INNER JOIN restaurant_product AS rp "
-						+ "ON p.product_id_pk = rp.res_pro_product_id_pk_fk"
+						+ "ON p.product_id_pk = rp.res_pro_product_id_pk_fk "
 						+ "WHERE oi.order_item_order_id_pk_fk = ?;";
 		
 		// List to store all order item view instances
@@ -87,9 +87,9 @@ public class OrderItemDAO {
 			
 			while (result.next()) {
 				OrderItemView ip = new OrderItemView();
-				ip.setName(result.getString("prd_nome"));
-				ip.setPrice(result.getDouble("pdr_preco"));
-				ip.setQuantity(result.getInt("itp_quantidade"));
+				ip.setName(result.getString("name"));
+				ip.setPrice(result.getDouble("price"));
+				ip.setQuantity(result.getInt("quantity"));
 				
 				orderItemList.add(ip);
 			}

@@ -37,7 +37,7 @@ public class RestaurantProductDAO {
 				"res_pro_restaurant_id_pk_fk, " +
 				"res_pro_product_id_pk_fk, " +
 				"stock_amount, " +
-				"price VALUES (?, ?, ?, ?)";
+				"price) VALUES (?, ?, ?, ?)";
 		
 		// prepare the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
@@ -75,7 +75,7 @@ public class RestaurantProductDAO {
 				+ "FROM restaurant_product AS rp "
 				+ "INNER JOIN product AS p "
 				+ "ON p.product_id_pk = rp.res_pro_product_id_pk_fk "
-				+ "WHERE rp.res_pro_product_id_pk_fk = ?";
+				+ "WHERE rp.res_pro_restaurant_id_pk_fk = ?";
 		
 		// list to store all restaurant product instances
 		ArrayList<RestaurantProductView> productList = new ArrayList<RestaurantProductView>();

@@ -127,7 +127,7 @@ public class ProductDAO {
 				product.setName(result.getString("name"));
 				product.setDescription(result.getString("description"));
 				
-				//categoria do produto pode ser null
+				//product category can be null
 				int categoria = result.getInt("cat_id_fk");
 				if (!result.wasNull()) {
 					product.setCategoryId(categoria);

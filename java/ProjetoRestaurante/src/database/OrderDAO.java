@@ -238,7 +238,7 @@ public class OrderDAO {
 				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
 				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
 				order.setCustomerId(result.getString("customer_id_fk"));
-				order.setOrderDate(result.getTimestamp("order_id").toLocalDateTime());
+				order.setOrderDate(result.getTimestamp("order_date").toLocalDateTime());
 				
 				ordersList.add(order);
 			}

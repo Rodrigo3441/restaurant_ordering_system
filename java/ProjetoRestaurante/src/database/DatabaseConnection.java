@@ -20,7 +20,7 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-	private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/free_food_en";
+	private static final String DATABASE_URL = "jdbc:postgresql://localhost:5432/order_system";
 	private static final String DATABASE_USER = "postgres";
 	private static final String DATABASE_PASSWORD = "root";
 	

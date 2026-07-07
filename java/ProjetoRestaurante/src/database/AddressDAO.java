@@ -183,7 +183,7 @@ public class AddressDAO {
 				CustomerAddress customerAddress = new CustomerAddress();
 				
 				customerAddress.setCustomerId(result.getString("cus_add_customer_id_pk_fk"));
-				customerAddress.setPostalCode(result.getString("cust_add_postal_code_pk"));
+				customerAddress.setPostalCode(result.getString("cus_add_postal_code_pk"));
 				customerAddress.setName(result.getString("name"));
 				customerAddress.setNumber(result.getInt("number"));
 				

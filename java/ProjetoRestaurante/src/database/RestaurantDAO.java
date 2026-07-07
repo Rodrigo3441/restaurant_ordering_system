@@ -35,7 +35,7 @@ public class RestaurantDAO {
 				+ "restaurant_id_pk, "
 				+ "name, "
 				+ "phone, "
-				+ "res_senha) VALUES (?, ?, ?, ?)";
+				+ "passcode) VALUES (?, ?, ?, ?)";
 		
 		// preparing the query before execution
 		try (PreparedStatement stmt = conn.prepareStatement(sqlQuery)){
