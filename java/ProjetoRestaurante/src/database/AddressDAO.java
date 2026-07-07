@@ -182,10 +182,10 @@ public class AddressDAO {
 			if (result.next()) {
 				CustomerAddress customerAddress = new CustomerAddress();
 				
-				customerAddress.setCustomerId(result.getString("pk_fk_cli_cpf"));
-				customerAddress.setPostalCode(result.getString("pk_enc_cep"));
-				customerAddress.setName(result.getString("enc_nome"));
-				customerAddress.setNumber(result.getInt("enc_numero"));
+				customerAddress.setCustomerId(result.getString("cus_add_customer_id_pk_fk"));
+				customerAddress.setPostalCode(result.getString("cust_add_postal_code_pk"));
+				customerAddress.setName(result.getString("name"));
+				customerAddress.setNumber(result.getInt("number"));
 				
 				return customerAddress;
 
