@@ -447,13 +447,13 @@ public class RestaurantProductMenu {
 		    }
 		}
 		
-		System.out.printf("Do you want to confirm the stock amount update for the product %s? (s-sim/n-não): ", targetProduct.getProductName());
+		System.out.printf("Do you want to confirm the stock amount update for the product %s? (y-yes/n-no): ", targetProduct.getProductName());
 		// the restaurant confirms whether to update the stock quantity
 		while (true) {
-			String escolha = sc.next().trim().toLowerCase();
+			String choice = sc.next().trim().toLowerCase();
 		
-			switch (escolha) {
-				case "s":	
+			switch (choice) {
+				case "y":	
 					if (restaurantProductService.updateProductRestaurant(id, targetProduct, stockAmount)) {
 						System.out.println("Stock amount updated successfully!");
 					} else {
