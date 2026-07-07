@@ -104,7 +104,7 @@ public class ProductSelectionMenu {
 					OrderConfirmationMenu menuconfirmacao = new OrderConfirmationMenu(conn, sc);
 					
 					// Calls the method and stores whether the order was placed or not
-					boolean pedidoRealizado = menuconfirmacao.mostrarDetalhesPedido(r, c, carrinhoCompras);
+					boolean pedidoRealizado = menuconfirmacao.displayOrderDetails(r, c, carrinhoCompras);
 					
 					// If it was placed, this method will return here
 					if (pedidoRealizado) {

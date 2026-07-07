@@ -42,23 +42,23 @@ public class MainMenu {
 	 * Responsible for showing the main menu on the screen for system users,
 	 * whether Customers or Restaurants.
 	 */
-	public void mostrar() {
+	public void display() {
 		
 		int option = 9;
 		
 		// validate user's menu option input
 		while (true) {
 			
-			System.out.println("\nMENU PRINCIPAL");
+			System.out.println("\nMAIN MENU");
 			System.out.println("================================================");
-			System.out.println("Fred Food - Delivery");
-			System.out.println("Seja bem vindo ao nosso sistema!\n");
+			System.out.println("Restaurant Ordering System");
+			System.out.println("Welcome to our system!\n");
 			
-			System.out.println("1- Acessar menu para clientes");
-			System.out.println("2- Acessar menu para restaurantes");
-			System.out.println("3- Sair do sistema");
+			System.out.println("1- Access customer menu");
+			System.out.println("2- Access restaurant menu");
+			System.out.println("3- Exit system");
 			System.out.println("================================================\n");
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -66,29 +66,29 @@ public class MainMenu {
 				
 				// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 3)) {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 			
 			// handle menu options
 			switch (option) {
 				case 1:
-					CustomerMenu menucliente = new CustomerMenu(conn, sc);
-					menucliente.mostrarMenuPrincipal();
+					CustomerMenu customerMenu = new CustomerMenu(conn, sc);
+					customerMenu.displayMainMenu();
 					break;
 	
 				case 2:
-					RestaurantMenu menurestaurante = new RestaurantMenu(conn, sc);
-					menurestaurante.mostrarMenuPrincipal();
+					RestaurantMenu restaurantMenu = new RestaurantMenu(conn, sc);
+					restaurantMenu.mostrarMenuPrincipal();
 					break;
 					
 				case 3:
-					System.out.println("Obrigado por utilizar o Fred Food Delivery");
+					System.out.println("Thanks for using our system.");
 					return;
 			}
 

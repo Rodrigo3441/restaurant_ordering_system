@@ -22,11 +22,11 @@ import services.CustomerService;
 public class CustomerProfileMenu {
 	
 	private Scanner sc;
-	private CustomerService servicocliente;
+	private CustomerService customerService;
 	private Connection conn;
 	
-	public CustomerProfileMenu(CustomerService servicocliente, Connection conn, Scanner sc) {
-		this.servicocliente = servicocliente;
+	public CustomerProfileMenu(CustomerService customerService, Connection conn, Scanner sc) {
+		this.customerService = customerService;
 		this.conn = conn;
 		this.sc = sc;
 	}
@@ -34,26 +34,26 @@ public class CustomerProfileMenu {
 
 	/**
 	 * Displays the profile editing actions menu
-	 * @param c Customer object
+	 * @param customer Customer object
 	 */
-	public void mostrarMenuPerfil(Customer c) {
+	public void displayProfileMenu(Customer customer) {
 		int option = 9;
 		
 		// validate the user's menu option input
 		while (true) {
 			
-			System.out.println("\nMENU DE EDIÇÃO DE PERFIL");
+			System.out.println("\nCUSTOMER PROFILE MENU");
 			System.out.println("================================================");
-			System.out.println("1- Atualizar primeiro nome");
-			System.out.println("2- Atualizar nome do meio");
-			System.out.println("3- Atualizar ultimo nome");
-			System.out.println("4- Atualizar telefone");
-			System.out.println("5- Atualizar email");
-			System.out.println("6- Atualizar senha");
-			System.out.println("7- Atualizar endereço");
-			System.out.println("8- Sair da edição de perfil");
+			System.out.println("1- Update first name");
+			System.out.println("2- Update middle name");
+			System.out.println("3- Update last name");
+			System.out.println("4- Update phone number");
+			System.out.println("5- Update email address");
+			System.out.println("6- Update passcode");
+			System.out.println("7- Update address");
+			System.out.println("8- exit profile menu");
 			System.out.println("================================================\n");
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -62,41 +62,41 @@ public class CustomerProfileMenu {
 				
 				// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 8)) {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 			
 			// access menu options
 			switch (option) {
 				case 1:
-					this.atualizarPrimeiroNome(c);
+					this.updateFirstName(customer);
 					break;
 				case 2:
-					this.atualizarNomeMeio(c);
+					this.updateMiddleName(customer);
 					break;
 				case 3:
-					this.atualizarUltimoNome(c);
+					this.updateLastName(customer);
 					break;
 				case 4:
-					this.atualizarTelefone(c);
+					this.updatePhone(customer);
 					break;
 				case 5:
-					this.atualizarEmail(c);
+					this.updateEmail(customer);
 					break;
 				case 6:
-					this.atualizarSenha(c);		
+					this.updatePasscode(customer);		
 					break;
 				case 7:
-					CustomerAddressMenu menuenderecocliente = new CustomerAddressMenu(conn, sc);
-					menuenderecocliente.mostrar(c);
+					CustomerAddressMenu customerAddressMenu = new CustomerAddressMenu(conn, sc);
+					customerAddressMenu.mostrar(customer);
 					break;
 				case 8:
-					System.out.println("Voltando ao menu anterior");
+					System.out.println("Returning to the previous menu");
 					return;
 				
 			}
@@ -107,23 +107,23 @@ public class CustomerProfileMenu {
 	
 	/**
 	 * Updates the customer's first name
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarPrimeiroNome(Customer c) {
+	private void updateFirstName(Customer customer) {
 
 
 		// input loop for validating first name
 		while (true) {
-			System.out.print("Insira o seu primeiro nome (3-20 letras): ");
+			System.out.print("Enter your first name (3-20 letters): ");
 			
-			String primeiroNome = sc.next().trim();
+			String newFirstName = sc.next().trim();
 			
 			try {
-				if(servicocliente.updateFirstName(c, primeiroNome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updateFirstName(customer, newFirstName)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -133,24 +133,24 @@ public class CustomerProfileMenu {
 	
 	/**
 	 * Updates the customer's middle name
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarNomeMeio(Customer c) {
+	private void updateMiddleName(Customer customer) {
 
 
 		// input loop for validating middle name
 		while (true) {
-			System.out.print("Insira o seu nome do meio (3-40 letras): ");
+			System.out.print("Enter your middle name (3-40 letters): ");
 			
-			String nomeMeio = sc.next().trim();
+			String newMiddleName = sc.next().trim();
 			
 			try {
-				if(servicocliente.updateMiddleName(c, nomeMeio)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updateMiddleName(customer, newMiddleName)) {
+					System.out.println("Information updated successfully!");
 					break;
 					
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -160,23 +160,23 @@ public class CustomerProfileMenu {
 	
 	/**
 	 * Updates the customer's last name
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarUltimoNome(Customer c) {
+	private void updateLastName(Customer customer) {
 
 
 		// input loop for validating last name
 		while (true) {
-			System.out.print("Insira o seu ultimo nome (3-20 letras): ");
+			System.out.print("Enter your last name (3-20 letters): ");
 			
-			String ultimoNome = sc.next().trim();
+			String newLastName = sc.next().trim();
 			
 			try {
-				if(servicocliente.updateLastName(c, ultimoNome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updateLastName(customer, newLastName)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -186,23 +186,23 @@ public class CustomerProfileMenu {
 	
 	/**
 	 * Updates the customer's phone number
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarTelefone(Customer c) {
+	private void updatePhone(Customer customer) {
 
 
 		// input loop for validating phone number
 		while (true) {
-			System.out.print("Insira o seu novo telefone (até 11 dígitos): ");
+			System.out.print("Enter your phone number (maximum of 11 numbers): ");
 			
-			String telefone = sc.next().trim();
+			String phone = sc.next().trim();
 			
 			try {
-				if(servicocliente.updatePhone(c, telefone)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updatePhone(customer, phone)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -212,23 +212,23 @@ public class CustomerProfileMenu {
 		
 	/**
 	 * Updates the customer's email
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarEmail(Customer c) {
+	private void updateEmail(Customer customer) {
 
 
 		// input loop for validating email
 		while (true) {
-			System.out.print("Insira o seu novo email: ");
+			System.out.print("Enter your email address: ");
 			
 			String email = sc.next().trim();
 			
 			try {
-				if(servicocliente.updateEmail(c, email)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updateEmail(customer, email)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());
@@ -238,23 +238,23 @@ public class CustomerProfileMenu {
 		
 	/**
 	 * Updates the customer's password
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void atualizarSenha(Customer c) {
+	private void updatePasscode(Customer customer) {
 
 
 		// input loop for validating password
 		while (true) {
-			System.out.print("Insira a sua nova senha: ");
+			System.out.print("Enter your password: ");
 			
-			String senha = sc.next().trim();
+			String passcode = sc.next().trim();
 			
 			try {
-				if(servicocliente.updatePasscode(c, senha)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(customerService.updatePasscode(customer, passcode)) {
+					System.out.println("Information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException  e) {
 				System.out.println(e.getMessage());

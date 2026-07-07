@@ -25,70 +25,74 @@ import view.OrderItemView;
 
 public class OrderConfirmationMenu {
 	
-	private OrderService servicopedido;
+	private OrderService orderService;
 	private Scanner sc;
 	
 	public OrderConfirmationMenu(Connection conn, Scanner sc) {
-		this.servicopedido = new OrderService(conn);
+		this.orderService = new OrderService(conn);
 		this.sc = sc;
 	}
 	
 	
 	/**
 	 * Displays all order details for the user, asks for confirmation, and returns whether the order was confirmed or not
-	 * @param r restaurant object
-	 * @param c customer object
-	 * @param carrinhoCompras customer's shopping cart
+	 * @param restaurant restaurant object
+	 * @param customer customer object
+	 * @param cart customer's shopping cart
 	 * @return true if the order was created
 	 */
-	public boolean mostrarDetalhesPedido(Restaurant r, Customer c, ArrayList<OrderItemView> carrinhoCompras) {
-		double valorTotal = 0;
+	public boolean displayOrderDetails(
+			Restaurant restaurant, 
+			Customer customer, 
+			ArrayList<OrderItemView> cart) {
+		
+		double totalValue = 0;
 		
 		System.out.println("\n============================================================================");
-		System.out.println("RESUMO DETALHADO DO PEDIDO");
+		System.out.println("ORDER DETAILS");
 		System.out.println("============================================================================");
-		System.out.printf("Nome do cliente: %s %s\n", c.getFirstName(), c.getLastName());
+		System.out.printf("Customer name: %s %s\n", customer.getFirstName(), customer.getLastName());
 		
 		System.out.println("============================================================================");
-		System.out.println("Lista de produtos:");
+		System.out.println("Product list:");
 		
-		for (int i = 0; i < carrinhoCompras.size(); i++) {
-			double precoQuantidade = carrinhoCompras.get(i).getPrice()*carrinhoCompras.get(i).getQuantity();
-			valorTotal += precoQuantidade;
-			System.out.println(	carrinhoCompras.get(i));
+		for (int i = 0; i < cart.size(); i++) {
+			double quantityPrice = cart.get(i).getPrice()*cart.get(i).getQuantity();
+			totalValue += quantityPrice;
+			System.out.println(	cart.get(i));
 		}
 		
 		System.out.println("============================================================================");
-		System.out.println("SUB-TOTAL");
-		System.out.printf("R$ %.2f\n", valorTotal);
+		System.out.println("SUBTOTAL");
+		System.out.printf("R$ %.2f\n", totalValue);
 		System.out.println("============================================================================");
-		System.out.println("SUB-TOTAL COM DESCONTO");
+		System.out.println("SUBTOTAL AFTER DISCOUNT");
 		
-		valorTotal = servicopedido.calculateDiscount(valorTotal);
+		totalValue = orderService.calculateDiscount(totalValue);
 		
-		System.out.printf("R$ %.2f\n", valorTotal);
+		System.out.printf("R$ %.2f\n", totalValue);
 		System.out.println("============================================================================");
-		System.out.println("TAXA DE ENTREGA:");
-		System.out.println("R$ 8.00 adicionados ao total");
+		System.out.println("DELIVERY FEE:");
+		System.out.println("R$ 8.00 added to the total value");
 		
-		valorTotal = servicopedido.addDeliveryFee(valorTotal);
+		totalValue = orderService.addDeliveryFee(totalValue);
 		
 		System.out.println("============================================================================");
-		System.out.println("VALOR TOTAL");
-		System.out.printf("%.2f\n", valorTotal);
+		System.out.println("TOTAL VALUE");
+		System.out.printf("%.2f\n", totalValue);
 		System.out.print("============================================================================\n\n");
 		
-		System.out.println("Deseja confirmar o pedido?");
+		System.out.println("Do you want to confirm your order?");
 		
-		int escolhaUsuario = this.exibirMenuAcao();
+		int userChoice = this.displayChoiceMenu();
 		
-		switch (escolhaUsuario) {
+		switch (userChoice) {
 			case 1:
-				System.out.println("Pedido concluído com sucesso!");
-				servicopedido.createOrder(r, c, carrinhoCompras);
+				System.out.println("Order placed successfully!");
+				orderService.createOrder(restaurant, customer, cart);
 				return true;
 			case 2:
-				System.out.println("Voltando ao menu de pedidos");
+				System.out.println("returning to the order menu");
 		}
 		
 		return false;	
@@ -98,15 +102,15 @@ public class OrderConfirmationMenu {
 	 * Displays the action menu for the user to confirm the order, cancel, or add more products
 	 * @return selected action number
 	 */
-	private int exibirMenuAcao() {
+	private int displayChoiceMenu() {
 		int option;
 	
 		System.out.println("================================================");
-		System.out.println("1- Confirmar pedido");
-		System.out.println("2- Voltar ao menu de produtos");
+		System.out.println("1- Confirm order");
+		System.out.println("2- return");
 		System.out.println("================================================\n");
 		
-		System.out.print("Informe a ação desejada: ");
+		System.out.print("Select what you want to do: ");
 			
 		while (true) {
 			try {
@@ -118,12 +122,12 @@ public class OrderConfirmationMenu {
 					// return the user's chosen action
 					return option; 
 				} else {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 		}

@@ -20,7 +20,7 @@ import services.CustomerService;
 
 public class CustomerMenu {
 	
-	private CustomerService servicocliente;
+	private CustomerService customerService;
 	private Connection conn;
 	private Scanner sc;
 	
@@ -30,7 +30,7 @@ public class CustomerMenu {
 	 * @param conn database connection
 	 */
 	public CustomerMenu(Connection conn, Scanner sc) {
-		this.servicocliente = new CustomerService(conn);
+		this.customerService = new CustomerService(conn);
 		this.conn = conn;
 		this.sc = sc;
 	}
@@ -38,20 +38,20 @@ public class CustomerMenu {
 	/**
 	 * Presents initial options for a customer to log in or register an account
 	 */
-	public void mostrarMenuPrincipal() {
+	public void displayMainMenu() {
 			
 			int option = 9;
 			
 			// validate user's menu option input
 			while (true) {
 				
-				System.out.println("\nMENU CLIENTE");
+				System.out.println("\nCUSTOMER MENU");
 				System.out.println("================================================");
-				System.out.println("1- Iniciar Sessão");
-				System.out.println("2- Fazer cadastro de cliente");
-				System.out.println("3- Voltar ao menu principal");
+				System.out.println("1- Sign in");
+				System.out.println("2- Create an account");
+				System.out.println("3- Return");
 				System.out.println("================================================\n");
-				System.out.print("Informe a ação desejada: ");
+				System.out.print("Select what you want to do: ");
 
 				
 				try {
@@ -61,31 +61,31 @@ public class CustomerMenu {
 					
 					// check if the user's option is outside the allowed range
 					if (!(option >= 0 && option <= 3)) {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 				
 				//access the corresponding method based on the user's choice			
 				switch (option) {
 					case 1:
-						this.fazerLogin();
+						this.signIn();
 						break;
 						
 					case 2:
-						this.fazerCadastro();
+						this.createAnAccount();
 						break;
 						
 					case 3:
-						System.out.println("Voltando ao menu principal");
+						System.out.println("Returning to the main menu");
 						return;
 						
 					default: 
-						System.out.println("Opção inválida, tente novamente: ");
+						System.out.println("Invalid option, try again: ");
 				}
 	
 			}
@@ -96,25 +96,25 @@ public class CustomerMenu {
 	/**
 	 * Provides the registration interface for a new customer
 	 */
-	private void fazerCadastro() {
+	private void createAnAccount() {
 		
-		String cpf;
-		String primeiroNome;
-		String nomeMeio;
-		String ultimoNome;
-		String telefone;
+		String customerId;
+		String firstName;
+		String middleName;
+		String lastName;
+		String phone;
 		String email;
-		String senha;
+		String passcode;
 		
-		System.out.println("\nCADASTRO DE NOVO CLIENTE");
+		System.out.println("\nCUSTOMER ACCOUNT CREATION");
 		
 		// field for CPF validation
 		while (true) {
-		    System.out.print("Digite o seu CPF (11 dígitos): ");
-		    cpf = sc.nextLine().trim();
+		    System.out.print("Enter your customer ID (11 characters): ");
+		    customerId = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkCustomerId(cpf);
+		        customerService.checkCustomerId(customerId);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -123,11 +123,11 @@ public class CustomerMenu {
 		
 		// field for first name validation
 		while (true) {
-		    System.out.print("Digite o seu primeiro nome: ");
-		    primeiroNome = sc.nextLine().trim();
+		    System.out.print("Enter your first name: ");
+		    firstName = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkFirstName(primeiroNome);
+		        customerService.checkFirstName(firstName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -136,11 +136,11 @@ public class CustomerMenu {
 		
 		// field for last name validation
 		while (true) {
-		    System.out.print("Digite o seu último nome: ");
-		    ultimoNome = sc.nextLine().trim();
+		    System.out.print("Enter your last name: ");
+		    lastName = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkLastName(ultimoNome);
+		        customerService.checkLastName(lastName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -149,11 +149,11 @@ public class CustomerMenu {
 		
 		// field for middle name validation
 		while (true) {
-		    System.out.print("Digite o seu nome do meio: ");
-		    nomeMeio = sc.nextLine().trim();
+		    System.out.print("Enter your middle name: ");
+		    middleName = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkMiddleName(nomeMeio);
+		        customerService.checkMiddleName(middleName);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -162,11 +162,11 @@ public class CustomerMenu {
 				
 		// field for phone validation
 		while (true) {
-		    System.out.print("Digite o seu telefone: ");
-		    telefone = sc.nextLine().trim();
+		    System.out.print("Enter your phone number: ");
+		    phone = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkPhone(telefone);
+		        customerService.checkPhone(phone);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -175,11 +175,11 @@ public class CustomerMenu {
 		
 		// field for email validation
 		while (true) {
-		    System.out.print("Digite o seu email: ");
+		    System.out.print("Enter your email address: ");
 		    email = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkEmail(email);
+		        customerService.checkEmail(email);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -188,61 +188,61 @@ public class CustomerMenu {
 	
 		// field for password validation
 		while (true) {
-		    System.out.print("Digite a sua senha de usuário: ");
-		    senha = sc.nextLine().trim();
+		    System.out.print("Enter your password for the account: ");
+		    passcode = sc.nextLine().trim();
 
 		    try {
-		        servicocliente.checkPasscode(senha);
+		        customerService.checkPasscode(passcode);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO AS INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("CPF: %s\n", cpf);
-		System.out.printf("Primeiro nome: %s\n", primeiroNome);
-		System.out.printf("Nome do meio: %s\n", nomeMeio);
-		System.out.printf("Ultimo nome: %s\n", ultimoNome);
-		System.out.printf("Telefone: %s\n", telefone);
-		System.out.printf("Email: %s\n", email);
-		System.out.printf("Senha da conta: %s\n", senha);
+		System.out.printf("Customer ID: %s\n", customerId);
+		System.out.printf("First name: %s\n", firstName);
+		System.out.printf("Middle name: %s\n", middleName);
+		System.out.printf("Last name: %s\n", lastName);
+		System.out.printf("Phone number: %s\n", phone);
+		System.out.printf("Email address: %s\n", email);
+		System.out.printf("Account password: %s\n", passcode);
 		System.out.println("================================================\n");
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these informations correct? (y-yes /c-cancel): ");
 		
 		// validate user's confirmation choice
 		while (true) {
 			
 			String opt = sc.next();
 			
-			if (opt.equals("s")) {
+			if (opt.equals("y")) {
 				// instantiate a new customer and set attributes
-				Customer c = new Customer();
-				c.setId(cpf);
-				c.setFirstName(primeiroNome);
-				c.setMiddleName(nomeMeio);
-				c.setLastName(ultimoNome);
-				c.setPhone(telefone);
-				c.setEmail(email);
-				c.setPasscode(senha);
+				Customer customer = new Customer();
+				customer.setId(customerId);
+				customer.setFirstName(firstName);
+				customer.setMiddleName(middleName);
+				customer.setLastName(lastName);
+				customer.setPhone(phone);
+				customer.setEmail(email);
+				customer.setPasscode(passcode);
 				
 					// call service method to register and check success
-				if(servicocliente.addCustomer(c)) {
-					System.out.println("Você foi cadastrado com sucesso!");
+				if(customerService.addCustomer(customer)) {
+					System.out.println("Your account has been created!");
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao tentar cadastrar.");
+					System.out.println("An error has occurred while trying to create your account.");
 				}
 				
 				break;
 				
-			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+			} else if (opt.equals("c")) {
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -251,31 +251,31 @@ public class CustomerMenu {
 	/**
 	 * Collects user credentials and forwards them to the service layer
 	 */
-	private void fazerLogin() {
-		System.out.print("Digite o seu CPF para poder inciar sessão: ");
+	private void signIn() {
+		System.out.print("Enter your customer ID to log in to your account: ");
 		
-		String cpf = sc.next().trim();
+		String customerId = sc.next().trim();
 		
 		// retrieve the customer information
-		Customer c = servicocliente.returnCustomer(cpf);
+		Customer customer = customerService.returnCustomer(customerId);
 		
 		// check if a customer was returned
-		if(c != null) {
+		if(customer != null) {
 
-			System.out.print("Digite a senha da sua conta: ");
+			System.out.print("Enter your account password: ");
 			
-			String senha = sc.next().trim();
+			String passcode = sc.next().trim();
 			
 			// verify that the stored password matches the entered password
-			if (c.getPasscode().equals(senha)) {
-				System.out.println("Seja bem vindo, " + c.getFirstName() + "!");
-				this.menuClienteLogado(c);
+			if (customer.getPasscode().equals(passcode)) {
+				System.out.println("Welcome, " + customer.getFirstName() + "!");
+				this.customerLoggedMenu(customer);
 			} else {
-				System.out.println("Usuário ou senha incorretos.");
+				System.out.println("User or password invalid.");
 			}
 			
 		} else {
-			System.out.println("O CPF informado não está cadastrado. (será que você digitou errado?)");
+			System.out.println("This customer ID is not on the system. (maybe you entered the wrong ID)");
 		}
 		
 	}
@@ -284,20 +284,20 @@ public class CustomerMenu {
 	 * Presents action menu for a logged-in customer
 	 * @param c customer object
 	 */
-	private void menuClienteLogado(Customer c) {
+	private void customerLoggedMenu(Customer c) {
 		int option = -1;
 		
 		while (true) {
-			System.out.println("\nMENU DO CLIENTE");
+			System.out.println("\nCUSTOMER MENU");
 			System.out.println("================================================");
-			System.out.printf("O que deseja fazer hoje, %s?\n", c.getFirstName());
-			System.out.println("1- Editar perfil");
-			System.out.println("2- Visualizar pedidos");
-			System.out.println("3- Fazer um pedido");
-			System.out.println("4- Fazer Logoff");
+			System.out.printf("What do you want to do today, %s?\n", c.getFirstName());
+			System.out.println("1- Update profile");
+			System.out.println("2- Check your orders");
+			System.out.println("3- Create an order");
+			System.out.println("4- Sign out");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what you want to do: ");
 			
 			try {
 				
@@ -306,30 +306,30 @@ public class CustomerMenu {
 				
 					// check if the user's option is outside the allowed range
 				if (!(option >= 0 && option <= 4)) {
-					System.out.println("Digite uma opção válida: ");
+					System.out.println("Enter a valid option: ");
 				}
 				
 			} catch (Exception e) {
 				sc.nextLine();
-				System.out.println("Digite apenas números: ");
+				System.out.println("Enter only numbers: ");
 				option = -1;
 			}
 			
 			switch (option) {
 				case 1:
-					CustomerProfileMenu menuPerfil = new CustomerProfileMenu(servicocliente, conn, sc);
-					menuPerfil.mostrarMenuPerfil(c);
+					CustomerProfileMenu customerProfileMenu = new CustomerProfileMenu(customerService, conn, sc);
+					customerProfileMenu.displayProfileMenu(c);
 					break;
 				case 2:
-					CustomerOrderMenu menuPedidos = new CustomerOrderMenu(conn, sc);
-					menuPedidos.mostrarPedidosCliente(c);
+					CustomerOrderMenu customerOrderMenu = new CustomerOrderMenu(conn, sc);
+					customerOrderMenu.displayCustomerOrders(c);
 					break;
 				case 3:
-					RestaurantSelectionMenu menuCompras = new RestaurantSelectionMenu(conn, c, sc);
-					menuCompras.mostrarRestaurantes();
+					RestaurantSelectionMenu restaurantSelectionMenu = new RestaurantSelectionMenu(conn, c, sc);
+					restaurantSelectionMenu.mostrarRestaurantes();
 					break;
 				case 4:
-					System.out.println("Até uma próxima.");
+					System.out.println("See you next time.");
 					return;
 			}
 			

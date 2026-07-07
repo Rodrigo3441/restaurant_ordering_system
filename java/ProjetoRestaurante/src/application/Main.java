@@ -34,7 +34,7 @@ public class Main {
 		
 		// instantiate the main menu for application start
 		MainMenu mainMenu = new MainMenu(conn, sc);
-		mainMenu.mostrar();
+		mainMenu.display();
 		
 		// close the scanner when application execution ends
 		sc.close();

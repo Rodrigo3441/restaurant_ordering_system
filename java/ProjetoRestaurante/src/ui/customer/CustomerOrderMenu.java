@@ -24,45 +24,45 @@ import view.OrderItemView;
 
 public class CustomerOrderMenu {
 	
-	private OrderService servicoPedido;
+	private OrderService orderService;
 	private Scanner sc;
 	
 	public CustomerOrderMenu(Connection conn, Scanner sc) {
-		this.servicoPedido = new OrderService(conn);
+		this.orderService = new OrderService(conn);
 		this.sc = sc;		
 	}
 	
 	/**
 	 * Displays all orders that the customer has already made in the system
-	 * @param c Customer object
+	 * @param customer Customer object
 	 */
-	public void mostrarPedidosCliente(Customer c) {
+	public void displayCustomerOrders(Customer customer) {
 		int option;
 		
-		ArrayList<Order> listaPedidos = servicoPedido.returnOrdersByCustomer(c.getId());
+		ArrayList<Order> orderList = orderService.returnOrdersByCustomer(customer.getId());
 		
-		if (listaPedidos.isEmpty()) {
-			System.out.println("Você ainda não possui pedidos no sistema!");
+		if (orderList.isEmpty()) {
+			System.out.println("You haven't ordered anything on the system!");
 			return;
 		}
 		
 		while (true) {
 		
-			System.out.println("\nSEUS PEDIDOS");
+			System.out.println("\nYOUR ORDERS");
 			System.out.println("============================================================================");
 					
-			for (int i = 0; i < listaPedidos.size(); i++) {
-					System.out.println(i+1 + "-  " + listaPedidos.get(i));
+			for (int i = 0; i < orderList.size(); i++) {
+					System.out.println(i+1 + "-  " + orderList.get(i));
 			}
 			
 			System.out.println("============================================================================\n");
 			
 			System.out.println("================================================");
-			System.out.println("1- Conferir detalhes de um pedido");
-			System.out.println("2- Voltar ao menu anterior");
+			System.out.println("1- Check order details");
+			System.out.println("2- return");
 			System.out.println("================================================\n");
 			
-			System.out.print("Informe a ação desejada: ");
+			System.out.print("Select what do you want to do: ");
 			
 			while (true) {
 				try {
@@ -73,22 +73,22 @@ public class CustomerOrderMenu {
 					if (option >= 1 && option <= 2) {
 						break;
 					} else {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 			}
 			
 			switch (option) {
 				case 1:
-					this.detalharPedido(listaPedidos);
+					this.displayOrderDetails(orderList);
 					break;
 				case 2:
-					System.out.println("Voltando ao menu anterior");
+					System.out.println("Returning to the previous menu");
 					return;
 			}
 		
@@ -98,12 +98,12 @@ public class CustomerOrderMenu {
 	
 	/**
 	 * Displays all items in a specific order
-	 * @param listaPedidos list containing all orders
+	 * @param orderList list containing all orders
 	 */
-	private void detalharPedido(ArrayList<Order> listaPedidos) {
+	private void displayOrderDetails(ArrayList<Order> orderList) {
 		int index;
-		double valorTotal = 0;
-		System.out.print("Digite o índice do pedido que você deseja visualizar detalhes: ");
+		double totalValue = 0;
+		System.out.print("Enter the index of the order you want to check details: ");
 		
 		// Field for validating user input
 		while (true) {
@@ -113,52 +113,52 @@ public class CustomerOrderMenu {
 			    
 			    index--; // User sees from (1) to (N). Computer sees from (0) to (N-1)
 			    
-		        servicoPedido.checkIndex(listaPedidos, index);
+		        orderService.checkIndex(orderList, index);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
 		    } catch (Exception e) {
 		    	sc.nextLine();
-		    	System.out.print("Digite um índice válido: ");
+		    	System.out.print("Enter a valid index: ");
 		    }
 		}
 		
 		// Stores the order code to avoid code repetition
-		int codigoPedido = listaPedidos.get(index).getOrderNumber();
+		int orderNumber = orderList.get(index).getOrderNumber();
 		
 		// Stores all items from the order the user chose
-		ArrayList<OrderItemView> listaItensPedido = servicoPedido.returnOrderItems(codigoPedido);
+		ArrayList<OrderItemView> orderItemList = orderService.returnOrderItems(orderNumber);
 		
-		System.out.printf("\nEXIBINDO ITENS DO PEDIDO %d:\n", codigoPedido);
+		System.out.printf("\nSHOWING ITEMS OF THE ORDER %d:\n", orderNumber);
 		System.out.println("============================================================================");
 		
-		for (OrderItemView ip: listaItensPedido) {
-			System.out.println("Produto: " + ip.getName() + " | Quantidade: " + ip.getQuantity() + " | Preço Unidade: " + ip.getPrice());
-			valorTotal += ip.getQuantity() * ip.getPrice();
+		for (OrderItemView ip: orderItemList) {
+			System.out.println("Product: " + ip.getName() + " | Quantity: " + ip.getQuantity() + " | Unit price: " + ip.getPrice());
+			totalValue += ip.getQuantity() * ip.getPrice();
 		}
 	
 		System.out.println("============================================================================");
-		System.out.println("SUB-TOTAL");
-		System.out.printf("R$ %.2f\n", valorTotal);
+		System.out.println("SUBTOTAL");
+		System.out.printf("R$ %.2f\n", totalValue);
 		System.out.println("============================================================================");
-		System.out.println("SUB-TOTAL COM DESCONTO");
+		System.out.println("SUBTOTAL AFTER DISCOUNT");
 		
-		valorTotal = servicoPedido.calculateDiscount(valorTotal);
+		totalValue = orderService.calculateDiscount(totalValue);
 		
-		System.out.printf("R$ %.2f\n", valorTotal);
+		System.out.printf("R$ %.2f\n", totalValue);
 		System.out.println("============================================================================");
-		System.out.println("TAXA DE ENTREGA:");
-		System.out.println("R$ 8.00 adicionados ao total");
+		System.out.println("DELIVERY FEE:");
+		System.out.println("R$ 8.00 added to the total value");
 		
-		valorTotal = servicoPedido.addDeliveryFee(valorTotal);
+		totalValue = orderService.addDeliveryFee(totalValue);
 		
 		System.out.println("============================================================================");
-		System.out.println("VALOR TOTAL");
-		System.out.printf("%.2f\n", valorTotal);
+		System.out.println("TOTAL VALUE");
+		System.out.printf("%.2f\n", totalValue);
 		System.out.print("============================================================================\n\n");
 		
 		
-		System.out.println("Aperte enter para continuar");
+		System.out.println("Press any key to continue");
 		sc.nextLine();
 	}
 }

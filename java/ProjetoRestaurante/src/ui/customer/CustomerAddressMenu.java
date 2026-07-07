@@ -25,12 +25,12 @@ import services.AddressService;
 public class CustomerAddressMenu {
 	
 	private Scanner sc;
-	private Address enderecoCliente;
-	private AddressService servicoendereco;
+	private Address customerAddress;
+	private AddressService addressService;
 	
 	
 	public CustomerAddressMenu(Connection conn, Scanner sc) {
-		this.servicoendereco = new AddressService(conn);
+		this.addressService = new AddressService(conn);
 		this.sc = sc;
 	}
 
@@ -39,20 +39,20 @@ public class CustomerAddressMenu {
 	 * There are two states:
 	 * - if the customer has an address, show the edit menu
 	 * - otherwise, show the add-address menu
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	public void mostrar(Customer c) {
+	public void mostrar(Customer customer) {
 		
 		int option = 9;
 		
 		// store the customer's address
-		enderecoCliente = servicoendereco.returnCustomerAddress(c.getId());
+		customerAddress = addressService.returnCustomerAddress(customer.getId());
 		
-		if (enderecoCliente == null) {
-			System.out.println("Você não possui um endereço cadastrado!");
-			System.out.println("O que deseja fazer?");
-			System.out.println("1- Adicionar endereço");
-			System.out.println("2- Voltar ao menu anterior");
+		if (customerAddress == null) {
+			System.out.println("You don't have a registered address!");
+			System.out.println("What do you want to do?");
+			System.out.println("1- Add new address");
+			System.out.println("2- Return");
 			
 				// choice handling for menu when no address is registered
 			while (true) {
@@ -63,22 +63,22 @@ public class CustomerAddressMenu {
 					
 					// check if the user's choice is outside the allowed range
 					if (!(option > 0 && option <= 2)) {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 				
 					} catch (Exception e) {
 						sc.nextLine();
-						System.out.println("Digite apenas números: ");
+						System.out.println("Enter only numbers: ");
 						option = -1;
 					}
 			
 					switch (option) {
 					case 1:
-						this.cadastrarEndereco(c);
+						this.addAddress(customer);
 						return;
 					
 					case 2:
-						System.out.println("Voltando ao menu anterior");
+						System.out.println("Returning to the previous menu");
 						return;
 					}
 			
@@ -87,17 +87,17 @@ public class CustomerAddressMenu {
 		} else {
 			
 			while (true) {
-				System.out.println("\nENDERECO ATUAL CLIENTE:");
+				System.out.println("\nCURRENT ADDRESS:");
 				System.out.println("================================================");
-				System.out.println(enderecoCliente.formatAddress());
+				System.out.println(customerAddress.formatAddress());
 				System.out.println("================================================");
-				System.out.println("1- Atualizar CEP");
-				System.out.println("2- Atualizar nome da rua");
-				System.out.println("3- Atualizar o número da rua");
-				System.out.println("4- voltar ao menu anterior");
+				System.out.println("1- Update Postal Code");
+				System.out.println("2- Update Street Name");
+				System.out.println("3- Update Street Number");
+				System.out.println("4- Return");
 				System.out.println("================================================\n");
 				
-				System.out.print("Informe a ação desejada: ");
+				System.out.print("Select what do you want to do: ");
 				
 				// choice handling for menu when an address is already registered
 				try {
@@ -107,32 +107,32 @@ public class CustomerAddressMenu {
 					
 					// check if the user's choice is outside the allowed range
 					if (!(option > 0 && option <= 4)) {
-						System.out.println("Digite uma opção válida: ");
+						System.out.println("Enter a valid option: ");
 					}
 					
 				} catch (Exception e) {
 					sc.nextLine();
-					System.out.println("Digite apenas números: ");
+					System.out.println("Enter only numbers: ");
 					option = -1;
 				}
 
 				// access the menu options
 				switch (option) {
 					case 1:
-						this.atualizarCepCliente(enderecoCliente);
+						this.updatePostalCode(customerAddress);
 						break;
 					case 2:
-						this.atualizarNomeEnderecoCliente(enderecoCliente);
+						this.atualizarNomeEnderecoCliente(customerAddress);
 						break;
 					case 3:
-						this.atualizarNumeroEnderecoCliente(enderecoCliente);
+						this.atualizarNumeroEnderecoCliente(customerAddress);
 						break;
 					case 4:
-						System.out.println("Voltando ao menu anterior");
+						System.out.println("Returning to the previous menu");
 						return;
 						
 					default: 
-						System.out.println("Opção inválida, tente novamente: ");
+						System.out.println("Invalid option, try again: ");
 				}
 				
 			}		
@@ -144,20 +144,20 @@ public class CustomerAddressMenu {
 	
 	/**
 	 * Implements the registration of an address for a customer
-	 * @param c customer object
+	 * @param customer customer object
 	 */
-	private void cadastrarEndereco(Customer c) {
-		String cep;
-		String nome;
-		int numero;
+	private void addAddress(Customer customer) {
+		String postalCode;
+		String name;
+		int number;
 	
 		// field for CEP validation
 		while (true) {
-		    System.out.print("Digite o CEP da sua rua (8 dígitos): ");
-		    cep = sc.nextLine().trim();
+		    System.out.print("Enter your postal code (8 numbers): ");
+		    postalCode = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.checkPostalCode(cep);
+		        addressService.checkPostalCode(postalCode);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -166,11 +166,11 @@ public class CustomerAddressMenu {
 		
 		// field for street name validation
 		while (true) {
-		    System.out.print("Digite o nome da sua rua: ");
-		    nome = sc.nextLine().trim();
+		    System.out.print("Enter the name of your street: ");
+		    name = sc.nextLine().trim();
 
 		    try {
-		        servicoendereco.checkName(nome);
+		        addressService.checkName(name);
 		        break;
 		    } catch (IllegalArgumentException e) {
 		        System.out.println(e.getMessage());
@@ -179,14 +179,14 @@ public class CustomerAddressMenu {
 		
 		// validation of the customer's street number
 		while (true) {
-		    System.out.print("Digite o número da sua rua: ");
+		    System.out.print("Enter the number of your street: ");
 	
 		    try {
 		    	
-		    	numero = sc.nextInt();
+		    	number = sc.nextInt();
 			    sc.nextLine();
 			    
-		        servicoendereco.checkNumber(numero);
+		        addressService.checkNumber(number);
 		        break;
 		    } catch (Exception e) {
 		        System.out.println(e.getMessage());
@@ -194,45 +194,45 @@ public class CustomerAddressMenu {
 		    }
 		}
 		
-		System.out.println("\nCONFIRMANDO INFORMAÇÕES: ");
+		System.out.println("\nCONFIRM INFORMATIONS: ");
 		System.out.println("================================================");
-		System.out.printf("CEP: %s\n", cep);
-		System.out.printf("Nome da rua: %s\n", nome);
-		System.out.printf("Número: %d\n", numero);
+		System.out.printf("Postal code: %s\n", postalCode);
+		System.out.printf("Street name: %s\n", name);
+		System.out.printf("Street number: %d\n", number);
 		System.out.println("================================================\n");
-		System.out.print("Deseja confirmar as informações? (s para sim/n para cancelar): ");
+		System.out.print("Are these informations correct? (y-yes/c-cancel): ");
 		
 		// validation of the user's choice
 		while (true) {
 			
 			String opt = sc.next();
 			
-			if (opt.equals("s")) {
+			if (opt.equals("y")) {
 				// instantiate a new CustomerAddress and bind attributes
-				CustomerAddress ec = new CustomerAddress();
-				ec.setPostalCode(cep);
-				ec.setCustomerId(c.getId());
-				ec.setName(nome);
-				ec.setNumber(numero);
+				CustomerAddress address = new CustomerAddress();
+				address.setPostalCode(postalCode);
+				address.setCustomerId(customer.getId());
+				address.setName(name);
+				address.setNumber(number);
 				
 				
 				//chamada do método para cadastro e verificação se houve êxito na ação
-				if(servicoendereco.addCustomerAddress(ec)) {
-					System.out.println("Endereço do cliente cadastrado com sucesso!");
+				if(addressService.addCustomerAddress(address)) {
+					System.out.println("Your added has been added!");
 					return;
 					
 				} else {
-					System.out.println("Ocorreu um erro desconhecido ao cadastrar o Endereço.");
+					System.out.println("An error has occurred while trying to add your address.");
 				}
 				
 				break;
 				
 			} else if (opt.equals("n")) {
-				System.out.println("Nada foi alterado");
+				System.out.println("Nothing has changed");
 				return;
 				
 			} else {
-				System.out.print("Opção inválida, tente novamente: ");
+				System.out.print("Invalid option, try again: ");
 			}
 			
 		}
@@ -241,22 +241,22 @@ public class CustomerAddressMenu {
 
 	/**
 	 * Implements CEP update
-	 * @param ec address object
+	 * @param address address object
 	 */
-	private void atualizarCepCliente(Address ec) {
+	private void updatePostalCode(Address address) {
 		
 		// field for CEP validation
 		while (true) {
-			System.out.print("Digite o seu novo CEP (8 dígitos): ");
+			System.out.print("Enter your new postal code (8 numbers): ");
 			
-			String cep = sc.next().trim();
+			String postalCode = sc.next().trim();
 			
 			try {
-				if(servicoendereco.updatePostalCodeCustomerAddress(ec, cep)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updatePostalCodeCustomerAddress(address, postalCode)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -267,22 +267,22 @@ public class CustomerAddressMenu {
 	
 	/**
 	 * Implements update of the address name
-	 * @param ec address object
+	 * @param address address object
 	 */
-	private void atualizarNomeEnderecoCliente(Address ec) {
+	private void atualizarNomeEnderecoCliente(Address address) {
 		
 		// field for street name validation
 		while (true) {
-			System.out.print("Digite o novo nome da sua rua: ");
+			System.out.print("Enter your new street name: ");
 			
-			String nome = sc.nextLine().trim();
+			String name = sc.nextLine().trim();
 			
 			try {
-				if(servicoendereco.updateNameCustomerAddress(ec, nome)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updateNameCustomerAddress(address, name)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (IllegalArgumentException e) {
 				System.out.println(e.getMessage());
@@ -292,24 +292,24 @@ public class CustomerAddressMenu {
 	
 	/**
 	 * Implements update of the customer's address number
-	 * @param ec address object
+	 * @param address address object
 	 */
-	private void atualizarNumeroEnderecoCliente(Address ec) {
+	private void atualizarNumeroEnderecoCliente(Address address) {
 		
 		// field for street number validation
 		while (true) {
-			System.out.print("Digite o novo número da sua rua: ");
+			System.out.print("Enter your new street number: ");
 	
 			try {
 				
-				int numero = sc.nextInt();
+				int number = sc.nextInt();
 				sc.nextLine();
 				
-				if(servicoendereco.updateNumberCustomerAddress(ec, numero)) {
-					System.out.println("Informações alteradas com sucesso!");
+				if(addressService.updateNumberCustomerAddress(address, number)) {
+					System.out.println("information updated successfully!");
 					break;
 				} else {
-					System.out.println("Erro ao atualizar no banco");
+					System.out.println("Error while trying to update informations");
 				}
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
