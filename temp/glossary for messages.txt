@@ -1,7 +1,7 @@
-Digite uma opção válida  ---- > Enter a valid option: 
-Digite apenas números:  ------> Enter only numbers: 
-Informe a ação desejada ------> Select what you want to do: 
-Informações alteradas com sucesso ---> information updated successfully
-Erro ao atualizar no banco ---> Error while trying to update informations
-
-
+Digite uma opção válida  ------------------> Enter a valid option: 
+Digite apenas números:  -------------------> Enter only numbers: 
+Informe a ação desejada -------------------> Select what you want to do: 
+Informações alteradas com sucesso ---------> Information updated successfully
+Erro ao atualizar no banco ----------------> Error while trying to update informations
+Seu carrinho de compras está vazio --------> Your cart is empty
+Digite um índice válido -------------------> Enter a valid index
