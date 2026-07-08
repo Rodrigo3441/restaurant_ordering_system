@@ -172,7 +172,7 @@ public class RestaurantProductDAO {
 		return false;
 	}
 	
-	public boolean updateProductRestaurant(Connection conn, RestaurantProduct restaurantProduct) {
+	public boolean updateRestaurantProduct(Connection conn, RestaurantProduct restaurantProduct) {
 		String sqlQuery = "UPDATE restaurant_product " +
 				"SET stock_amount = ?, " +
 				"price = ? "

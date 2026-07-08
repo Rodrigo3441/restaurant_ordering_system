@@ -159,7 +159,7 @@ public class DeliveryPersonProfileMenu {
 			String lastName = sc.next().trim();
 			
 			try {
-				if(deliveryPersonService.updateLastName3(entregador, lastName)) {
+				if(deliveryPersonService.updateLastName(entregador, lastName)) {
 					System.out.println("Information updated successfully!");
 					break;
 				} else {

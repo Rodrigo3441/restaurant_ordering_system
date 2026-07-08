@@ -108,7 +108,7 @@ public class RestaurantProductService {
 		restaurantProduct.setPrice(restaurantProductView.getProductPrice());
 		restaurantProduct.setStockAmount(stockAmount);
 		
-		return restaurantProductDAO.updateProductRestaurant(conn, restaurantProduct);
+		return restaurantProductDAO.updateRestaurantProduct(conn, restaurantProduct);
 	}
 	
 	/**

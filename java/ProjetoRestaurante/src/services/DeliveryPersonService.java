@@ -129,7 +129,7 @@ public class DeliveryPersonService {
 	 * @param newLastName new last name
 	 * @return boolean indicating success
 	 */
-	public boolean updateLastName3(DeliveryPerson deliverer, String newLastName) {
+	public boolean updateLastName(DeliveryPerson deliverer, String newLastName) {
 		if (!isLastNameValid(newLastName)) {
 			throw new IllegalArgumentException("Enter a valid last name");
 		}
