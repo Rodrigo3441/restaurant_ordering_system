@@ -1,4 +1,6 @@
 # diagram files
-*.drawio
-*.dia
+*.dia~
 *.bkp
+
+# temporary files
+*.dtmp
