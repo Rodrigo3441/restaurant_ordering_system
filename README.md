@@ -4,23 +4,23 @@ A Java console application integrated with PostgreSQL for managing restaurants, 
 
 ## 📑 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Project Requirements](#project-requirements)
-- [Technologies](#technologies)
-- [Repository Structure](#repository-structure)
-- [Project Architecture](#project-architecture)
-- [Database](#database)
-- [Documentation](#documentation)
-- [How to Run](#how-to-run)
-- [Usage](#usage)
-- [Future Improvements](#future-improvements)
-- [License](#license)
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Requirements](#-project-requirements)
+- [Technologies](#-technologies)
+- [Repository Structure](#-repository-structure)
+- [Project Architecture](#-project-architecture)
+- [Database](#-database)
+- [Documentation](#-documentation)
+- [How to Run](#-how-to-run)
+- [Usage](#-usage)
+- [Future Improvements](#-future-improvements)
+- [License](#-license)
 - [About Me](#-about-me)
 
 -----------------------
 
-## Overview
+## 🔍 Overview
 
 The **Restaurant Delivery Management System** is a Java console application designed to manage the core operations of a food delivery service. The project integrates **Java** with **PostgreSQL** through **JDBC**, applying object-oriented programming principles alongside relational database design.
 
@@ -34,7 +34,7 @@ The project follows a layered architecture that separates the application into d
 
 ---
 
-## Features
+## 💎 Features
 
 ### Customer
 
@@ -61,7 +61,7 @@ The project follows a layered architecture that separates the application into d
 
 ---
 
-## Project Requirements
+## 📊 Project Requirements
 
 The objective of this project is to develop a **food delivery management system** using **Java** and **PostgreSQL**, integrating object-oriented programming concepts with a relational database.
 
@@ -91,7 +91,7 @@ When assigning a delivery person to an order, the system verifies whether the de
 
 ---
 
-## Technologies
+## 🖥 Technologies
 
 | Category                     | Technologies                    |
 | ---------------------------- | ------------------------------- |
@@ -106,7 +106,7 @@ When assigning a delivery person to an order, the system verifies whether the de
 
 ---
 
-## Repository Structure
+## 🏗 Repository Structure
 
 The repository follows this structure:
 
@@ -150,15 +150,19 @@ restaurant_ordering_system/
 
 ---
 
-## Project Architecture
+## 🛠 Project Architecture
 
-The application follows a layered architecture that separates responsibilities into distinct packages, improving code organization, maintainability, and scalability. Each layer is responsible for a specific part of the system, including application startup, database access, business logic, domain entities, and user interaction. This separation of concerns promotes a modular design and simplifies future development and maintenance.
+The application follows a layered architecture that separates responsibilities into distinct packages, improving code organization, maintainability, and scalability.
+
+Each layer is responsible for a specific part of the system, including application startup, database access, business logic, domain entities, and user interaction.
+
+This separation of concerns promotes a modular design and simplifies future development and maintenance.
 
 ![alt text](docs/application/package_architecture/package_architecture.png)
 
 ---
 
-## Database
+## 📂 Database
 
 The system uses **PostgreSQL** as its relational database management system. The database was designed to represent the core entities of a food delivery platform, including customers, restaurants, products, delivery personnel, and orders.
 
@@ -172,7 +176,7 @@ The project also includes SQL scripts for database creation, table definitions, 
 
 ---
 
-## Documentation
+## 📚 Documentation
 
 This repository includes detailed documentation covering the system design, database structure, and development decisions.
 
@@ -200,7 +204,7 @@ Available documentation:
 
 ---
 
-## How to Run
+## 💾 How to Run
 
 ### Prerequisites
 
