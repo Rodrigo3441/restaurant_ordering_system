@@ -182,11 +182,11 @@ This repository includes detailed documentation covering the system design, data
 
 Available documentation:
 
-* **Application Architecture**
+* **Application Architecture**<br>
   Overview of the system layers, package organization, and application structure.
   - [Application Architecture](docs/application/package_architecture/package_architecture.png)
 
-* **UML Class Diagrams**
+* **UML Class Diagrams**<br>
   Diagrams representing the application's classes, attributes, methods, and relationships.
   - [UI Diagram + Flow](docs/application/class_diagram/ui_diagram/ui_package_diagram.png)
   - [Services Diagram](docs/application/class_diagram/services_diagram/services_diagram.png)
@@ -194,11 +194,11 @@ Available documentation:
   - [Data Access Object Diagram](docs/application/class_diagram/dao_diagram/data_access_object_diagram.png)
 
 
-* **Entity Relationship Diagram (ERD)**
+* **Entity Relationship Diagram (ERD)**<br>
   Visual representation of the database entities, relationships, and constraints.
   - [Entity Relationship Diagram](docs/database/entity-relationship_diagram/relational-model.png)
 
-* **Data Dictionary**
+* **Data Dictionary**<br>
   Detailed description of database tables, columns, data types, and relationships.
   - [Data Dictionary](docs/database/data_dictionary.md)
 
