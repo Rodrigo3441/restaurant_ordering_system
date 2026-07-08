@@ -91,7 +91,7 @@ public class OrderDAO {
 				order.setOrderNumber(result.getInt("order_id_pk"));
 				order.setOrderStatus(result.getString("order_status"));
 				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
-				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setRestaurantId(result.getString("restaurant_id_fk"));
 				order.setCustomerId(result.getString("customer_id_fk"));
 				
 				return order;
@@ -193,7 +193,7 @@ public class OrderDAO {
 				order.setOrderNumber(result.getInt("order_id_pk"));
 				order.setOrderStatus(result.getString("order_status"));
 				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
-				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setRestaurantId(result.getString("restaurant_id_fk"));
 				order.setCustomerId(result.getString("customer_id_fk"));
 				order.setOrderDate(result.getTimestamp("order_date").toLocalDateTime());
 				
@@ -236,7 +236,7 @@ public class OrderDAO {
 				order.setOrderNumber(result.getInt("order_id_pk"));
 				order.setOrderStatus(result.getString("order_status"));
 				order.setDeliveryPersonId(result.getString("delivery_person_id_fk"));
-				order.setCnpjRestaurante(result.getString("restaurant_id_fk"));
+				order.setRestaurantId(result.getString("restaurant_id_fk"));
 				order.setCustomerId(result.getString("customer_id_fk"));
 				order.setOrderDate(result.getTimestamp("order_date").toLocalDateTime());
 				

@@ -72,7 +72,7 @@ public class Order {
 		return restaurantId;
 	}
 
-	public void setCnpjRestaurante(String restaurantId) {
+	public void setRestaurantId(String restaurantId) {
 		this.restaurantId = restaurantId;
 	}
 

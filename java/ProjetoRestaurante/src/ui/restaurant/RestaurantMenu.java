@@ -222,7 +222,7 @@ public class RestaurantMenu {
 			// verify whether the restaurant password matches the entered password
 			if (r.getPasscode().equals(senha)) {
 				System.out.println("Welcome, " + r.getName() + "!");
-				this.menuRestauranteLogado(r);
+				this.restaurantSignedInMenu(r);
 			} else {
 				System.out.println("User or password invalid.");
 			}
@@ -237,7 +237,7 @@ public class RestaurantMenu {
 	 * Responsible for offering the action menu for the logged-in restaurant
 	 * @param restaurant restaurant object
 	 */
-	private void menuRestauranteLogado(Restaurant restaurant) {
+	private void restaurantSignedInMenu(Restaurant restaurant) {
 		int option = -1;
 		
 		while (true) {
